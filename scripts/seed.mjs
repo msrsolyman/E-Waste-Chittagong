@@ -6,10 +6,11 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding E-Waste Chittagong database...");
 
-  // 1. Create Admins (Guarded for Development Only)
-  if (process.env.NODE_ENV === "production" && !process.env.SEED_ADMIN_PASSWORD) {
-    console.log("🔒 [SECURITY NOTICE] Production mode detected. Hardcoded default admin seeding bypassed.");
-    console.log("   To provision your production Super Admin, execute: node scripts/create-admin.mjs");
+  // 1. Create Admins (Guarded for Local Development Only)
+  const isProtectedEnv = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
+  if (isProtectedEnv && !process.env.SEED_ADMIN_PASSWORD) {
+    console.log("🔒 [SECURITY NOTICE] Production/Staging mode detected. Hardcoded default admin seeding bypassed.");
+    console.log("   To provision your staging/production Super Admin, execute: node scripts/create-admin.mjs");
   } else {
     const adminPass = process.env.SEED_ADMIN_PASSWORD || "Admin@EWC2026!";
     const managerPass = process.env.SEED_MANAGER_PASSWORD || "Manager@EWC2026!";

@@ -7,6 +7,8 @@ function checkEnvironment() {
   console.log("====================================================\n");
 
   const isProduction = process.env.NODE_ENV === "production";
+  const isStaging = process.env.NODE_ENV === "staging";
+  const isLiveServer = isProduction || isStaging;
   let hasErrors = false;
   let hasWarnings = false;
 
@@ -20,8 +22,8 @@ function checkEnvironment() {
   } else {
     if (dbUrl.startsWith("file:")) {
       console.log("ℹ️  DATABASE_URL: Configured for SQLite (Local/Persistent Server).");
-      if (isProduction) {
-        console.warn("⚠️  WARNING: Using SQLite in production. Ensure persistent storage/disk is enabled (not ephemeral serverless).");
+      if (isLiveServer) {
+        console.warn("⚠️  WARNING: Using SQLite in production/staging. Ensure persistent storage/disk is enabled (not ephemeral serverless).");
         hasWarnings = true;
       }
     } else if (dbUrl.startsWith("postgresql://") || dbUrl.startsWith("postgres://")) {
@@ -34,8 +36,8 @@ function checkEnvironment() {
   // 2. JWT_SECRET
   const jwtSecret = process.env.JWT_SECRET;
   if (!jwtSecret) {
-    if (isProduction) {
-      console.error("❌ CRITICAL: JWT_SECRET must be set in production! Fallback secrets are disabled.");
+    if (isLiveServer) {
+      console.error("❌ CRITICAL: JWT_SECRET must be set in staging and production! Fallback secrets are disabled.");
       hasErrors = true;
     } else {
       console.warn("⚠️  WARNING: JWT_SECRET is unset. Using development fallback secret.");
