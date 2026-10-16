@@ -66,6 +66,65 @@ export async function POST(req: NextRequest) {
   }
 }
 
+export async function PUT(req: NextRequest) {
+  try {
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await req.json();
+    const { id, titleEn, titleBn, titleZh, titleJa, imageUrl, category, isVerified, caption } =
+      body;
+
+    if (!id) {
+      return NextResponse.json({ error: "Item ID is required" }, { status: 400 });
+    }
+
+    const updateData: Record<string, unknown> = {};
+    if (titleEn !== undefined) updateData.titleEn = titleEn;
+    if (titleBn !== undefined) updateData.titleBn = titleBn;
+    if (titleZh !== undefined) updateData.titleZh = titleZh;
+    if (titleJa !== undefined) updateData.titleJa = titleJa;
+    if (category !== undefined) updateData.category = category;
+    if (isVerified !== undefined) updateData.isVerified = Boolean(isVerified);
+    if (caption !== undefined) updateData.caption = caption;
+
+    if (imageUrl !== undefined) {
+      const cleanUrl = imageUrl.trim();
+      if (!/^\/|^https?:\/\//i.test(cleanUrl) || /\.(exe|sh|bat|cmd|js|ts|php|py)$/i.test(cleanUrl)) {
+        return NextResponse.json(
+          { error: "Invalid image URL. Executable files and unsupported formats are rejected." },
+          { status: 400 }
+        );
+      }
+      updateData.imageUrl = cleanUrl;
+    }
+
+    const updated = await prisma.galleryItem.update({
+      where: { id },
+      data: updateData,
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        userId: user.id,
+        action: "GALLERY_ITEM_UPDATED",
+        details: JSON.stringify({
+          itemId: id,
+          titleEn: updated.titleEn,
+          isVerified: updated.isVerified,
+        }),
+      },
+    });
+
+    return NextResponse.json({ success: true, item: updated });
+  } catch (error) {
+    console.error("Gallery update error:", error);
+    return NextResponse.json({ error: "Failed to update gallery item" }, { status: 500 });
+  }
+}
+
 export async function DELETE(req: NextRequest) {
   try {
     const user = await getCurrentUser();
