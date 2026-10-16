@@ -10,18 +10,24 @@ import {
   Layers,
   FileClock,
   ArrowRight,
-  Clock,
   CheckCircle,
-  FileText,
-  AlertCircle,
   PlusCircle,
+  Image as ImageIcon,
+  Users,
+  Activity,
+  ShieldCheck,
+  Download,
+  ExternalLink,
+  Database,
+  Lock,
 } from "lucide-react";
 
 export default async function AdminDashboardPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/admin/login");
 
-  // Fetch real database metrics
+  // Benchmark database ping latency
+  const dbStart = Date.now();
   const [
     totalInquiries,
     newInquiries,
@@ -29,6 +35,8 @@ export default async function AdminDashboardPage() {
     totalProducts,
     publishedProducts,
     totalCategories,
+    totalGalleryItems,
+    totalUsers,
     recentInquiries,
     recentAuditLogs,
   ] = await Promise.all([
@@ -38,6 +46,8 @@ export default async function AdminDashboardPage() {
     prisma.product.count(),
     prisma.product.count({ where: { status: "PUBLISHED" } }),
     prisma.category.count(),
+    prisma.galleryItem.count(),
+    prisma.user.count(),
     prisma.inquiry.findMany({
       take: 5,
       orderBy: { createdAt: "desc" },
@@ -48,118 +58,227 @@ export default async function AdminDashboardPage() {
       include: { user: { select: { name: true, email: true } } },
     }),
   ]);
+  const dbLatency = Date.now() - dbStart;
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
+      {/* Header & Quick Action Hub */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Operations & Executive Dashboard
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Welcome back, <span className="font-semibold text-emerald-600 dark:text-emerald-400">{user.name}</span> ({user.role === "SUPER_ADMIN" ? "Super Admin" : "Content Manager"})
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2">
+            <span>
+              Welcome back, <strong className="text-emerald-600 dark:text-emerald-400">{user.name}</strong>
+            </span>
+            <span className="text-slate-300 dark:text-slate-700">•</span>
+            <span className="inline-flex items-center gap-1 font-semibold text-purple-600 dark:text-purple-400">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>{user.role === "SUPER_ADMIN" ? "Super Administrator" : "Content Manager"}</span>
+            </span>
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Quick Action Hub */}
+        <div className="flex flex-wrap items-center gap-2">
           <Link
             href="/admin/products/new"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition active:scale-[0.98]"
           >
-            <PlusCircle className="w-4 h-4" />
-            <span>Add New Product</span>
+            <PlusCircle className="w-3.5 h-3.5" />
+            <span>Add Product</span>
           </Link>
           <Link
             href="/admin/inquiries"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs transition"
           >
-            <Inbox className="w-4 h-4 text-blue-600" />
-            <span>Inquiry Pipeline</span>
+            <Inbox className="w-3.5 h-3.5 text-blue-600" />
+            <span>RFQ Pipeline</span>
+          </Link>
+          <Link
+            href="/admin/gallery"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs transition"
+          >
+            <ImageIcon className="w-3.5 h-3.5 text-amber-500" />
+            <span>Upload Media</span>
+          </Link>
+          <a
+            href="/api/admin/inquiries/export"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs transition"
+            title="Download Inquiries as CSV"
+          >
+            <Download className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Export Inquiries</span>
+          </a>
+          <Link
+            href="/en"
+            target="_blank"
+            className="inline-flex items-center gap-1 px-2.5 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition"
+            title="View Live Public Portal"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
           </Link>
         </div>
       </div>
 
-      {/* KPI Stats Grid - Clickable Navigation Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* System Health & Infrastructure Status Card */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950 text-white shadow-md border border-slate-800 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+            <Database className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-sm tracking-tight">PostgreSQL Database Connection</span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Healthy & Connected</span>
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-0.5">
+              Multi-region Supabase transaction pooler with persistent durable relational storage.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 text-xs font-mono text-slate-300 border-t md:border-t-0 md:border-l border-slate-800 pt-3 md:pt-0 md:pl-5">
+          <div>
+            <span className="text-[10px] uppercase font-bold text-slate-500 block">Ping Latency</span>
+            <span className="text-emerald-400 font-bold">{dbLatency} ms</span>
+          </div>
+          <div>
+            <span className="text-[10px] uppercase font-bold text-slate-500 block">Encryption</span>
+            <span className="text-slate-200 flex items-center gap-1">
+              <Lock className="w-3 h-3 text-emerald-400" />
+              <span>TLS / Argon2id</span>
+            </span>
+          </div>
+          <div>
+            <span className="text-[10px] uppercase font-bold text-slate-500 block">Environment</span>
+            <span className="text-slate-200">Production</span>
+          </div>
+        </div>
+      </div>
+
+      {/* KPI Stats Grid - 6 Core Management Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5">
         {/* New Leads */}
         <Link
           href="/admin/inquiries?status=NEW"
-          className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 hover:border-blue-500/50 hover:shadow-md transition-all group block"
+          className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2.5 hover:border-blue-500/50 hover:shadow-md transition-all group block"
         >
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
+          <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
             <span className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">New RFQ Inquiries</span>
-            <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 group-hover:scale-105 transition-transform">
-              <Inbox className="w-4 h-4" />
+            <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 group-hover:scale-105 transition-transform">
+              <Inbox className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+          <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
             {newInquiries}
           </div>
-          <div className="text-[11px] text-slate-400">
-            Out of {totalInquiries} total buyer submissions
+          <div className="text-[10px] text-slate-400">
+            Of {totalInquiries} total leads
           </div>
         </Link>
 
         {/* Quoted Deals */}
         <Link
           href="/admin/inquiries?status=QUOTED"
-          className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 hover:border-emerald-500/50 hover:shadow-md transition-all group block"
+          className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2.5 hover:border-emerald-500/50 hover:shadow-md transition-all group block"
         >
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            <span className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Quoted / In Negotiation</span>
-            <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 group-hover:scale-105 transition-transform">
-              <CheckCircle className="w-4 h-4" />
+          <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+            <span className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Quoted Deals</span>
+            <div className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 group-hover:scale-105 transition-transform">
+              <CheckCircle className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+          <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
             {quotedInquiries}
           </div>
-          <div className="text-[11px] text-slate-400">
-            Active commercial quotations
+          <div className="text-[10px] text-slate-400">
+            Active negotiations
           </div>
         </Link>
 
-        {/* Active Products */}
+        {/* Products */}
         <Link
           href="/admin/products"
-          className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 hover:border-amber-500/50 hover:shadow-md transition-all group block"
+          className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2.5 hover:border-amber-500/50 hover:shadow-md transition-all group block"
         >
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
+          <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
             <span className="group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Catalogue Items</span>
-            <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 group-hover:scale-105 transition-transform">
-              <Package className="w-4 h-4" />
+            <div className="p-1.5 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 group-hover:scale-105 transition-transform">
+              <Package className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+          <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
             {publishedProducts}
           </div>
-          <div className="text-[11px] text-slate-400">
-            {totalProducts - publishedProducts} draft items awaiting confirmation
+          <div className="text-[10px] text-slate-400">
+            {totalProducts - publishedProducts} drafts pending
           </div>
         </Link>
 
         {/* Categories */}
         <Link
           href="/admin/categories"
-          className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 hover:border-purple-500/50 hover:shadow-md transition-all group block"
+          className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2.5 hover:border-purple-500/50 hover:shadow-md transition-all group block"
         >
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            <span className="group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Material Taxonomies</span>
-            <div className="p-2 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-600 group-hover:scale-105 transition-transform">
-              <Layers className="w-4 h-4" />
+          <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+            <span className="group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Taxonomies</span>
+            <div className="p-1.5 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-600 group-hover:scale-105 transition-transform">
+              <Layers className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+          <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
             {totalCategories}
           </div>
-          <div className="text-[11px] text-slate-400">
-            Configured recycling streams
+          <div className="text-[10px] text-slate-400">
+            Recycling streams
+          </div>
+        </Link>
+
+        {/* Media & Gallery */}
+        <Link
+          href="/admin/gallery"
+          className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2.5 hover:border-teal-500/50 hover:shadow-md transition-all group block"
+        >
+          <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+            <span className="group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Media Assets</span>
+            <div className="p-1.5 rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-600 group-hover:scale-105 transition-transform">
+              <ImageIcon className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
+            {totalGalleryItems}
+          </div>
+          <div className="text-[10px] text-slate-400">
+            Facility photographs
+          </div>
+        </Link>
+
+        {/* Personnel / Admin Users */}
+        <Link
+          href="/admin/users"
+          className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2.5 hover:border-indigo-500/50 hover:shadow-md transition-all group block"
+        >
+          <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+            <span className="group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Admin Team</span>
+            <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 group-hover:scale-105 transition-transform">
+              <Users className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
+            {totalUsers}
+          </div>
+          <div className="text-[10px] text-slate-400">
+            Registered personnel
           </div>
         </Link>
       </div>
 
-      {/* Two-Column Section: Recent Inquiries & Audit Trail */}
+      {/* Two-Column Section: Recent Inquiries & Activity Stream */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Inquiries (2 Cols) */}
         <div className="lg:col-span-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 space-y-4">
@@ -172,7 +291,7 @@ export default async function AdminDashboardPage() {
               href="/admin/inquiries"
               className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-400 flex items-center gap-1"
             >
-              <span>View All</span>
+              <span>View All Pipeline</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -205,7 +324,9 @@ export default async function AdminDashboardPage() {
                     return (
                       <tr key={inq.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
                         <td className="py-3 px-3 font-mono font-bold text-slate-800 dark:text-slate-200">
-                          {inq.referenceNo}
+                          <Link href={`/admin/inquiries?search=${inq.referenceNo}`} className="hover:underline text-emerald-600 dark:text-emerald-400">
+                            {inq.referenceNo}
+                          </Link>
                         </td>
                         <td className="py-3 px-3">
                           <div className="font-semibold text-slate-900 dark:text-white">
@@ -235,18 +356,19 @@ export default async function AdminDashboardPage() {
           )}
         </div>
 
-        {/* Audit Log (1 Col) */}
+        {/* Audit Log Stream (1 Col) */}
         <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
               <FileClock className="w-4 h-4 text-slate-500" />
-              <span>Recent Activity Logs</span>
+              <span>Recent Activity Stream</span>
             </h3>
             <Link
               href="/admin/audit-logs"
-              className="text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+              className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-400 flex items-center gap-1"
             >
-              Full Log
+              <span>Full Log</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
@@ -255,22 +377,22 @@ export default async function AdminDashboardPage() {
               No security or audit events recorded yet.
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {recentAuditLogs.map((log) => (
                 <div
                   key={log.id}
-                  className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50 space-y-1"
+                  className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50 space-y-1 hover:border-emerald-500/30 transition"
                 >
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
                       {log.action}
                     </span>
                     <span className="text-slate-400 text-[10px]">
-                      {formatDate(log.createdAt)}
+                      {new Date(log.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </span>
                   </div>
                   <div className="text-[11px] text-slate-600 dark:text-slate-300 truncate">
-                    {log.user ? `${log.user.name} (${log.user.email})` : "System / Visitor"}
+                    {log.user ? `${log.user.name} (${log.user.email})` : "System / Automated"}
                   </div>
                 </div>
               ))}
