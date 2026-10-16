@@ -49,7 +49,7 @@ export default async function AdminUsersPage() {
         </div>
       </div>
 
-      <AdminUserManager initialUsers={users} />
+      <AdminUserManager initialUsers={users} currentUserId={user.id} />
     </div>
   );
 }

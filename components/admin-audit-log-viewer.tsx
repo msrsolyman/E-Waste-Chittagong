@@ -22,6 +22,14 @@ export function AdminAuditLogViewer({ initialLogs }: { initialLogs: AuditLogRow[
   const [searchQuery, setSearchQuery] = React.useState("");
   const [actionFilter, setActionFilter] = React.useState("ALL");
 
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get("search");
+      if (q) setSearchQuery(q);
+    }
+  }, []);
+
   const filtered = logs.filter((log) => {
     const matchesAction = actionFilter === "ALL" || log.action.includes(actionFilter);
     const q = searchQuery.toLowerCase();
