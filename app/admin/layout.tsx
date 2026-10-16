@@ -21,7 +21,15 @@ export default async function AdminLayout({
 }) {
   const user = await getCurrentUser();
 
-  // If user is on /admin/login, don't show the dashboard shell
+  // If user is unauthenticated (e.g. /admin/login), don't show the dashboard shell
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+        {children}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex flex-col md:flex-row text-slate-900 dark:text-slate-100">
       {/* Sidebar */}

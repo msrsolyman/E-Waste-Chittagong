@@ -63,8 +63,21 @@ export default function ContactPage() {
                   <div className="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-[10px]">
                     {t("phoneTitle")}
                   </div>
-                  <div className="text-slate-600 dark:text-slate-400 mt-0.5">
-                    {t("phone")}
+                  <div className="space-y-1 mt-0.5">
+                    <a
+                      href="tel:+8801800000000"
+                      className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 block"
+                    >
+                      {t("phone")}
+                    </a>
+                    <a
+                      href="https://wa.me/8801800000000"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition"
+                    >
+                      <span>{t("whatsappConnect")}</span>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -91,7 +104,7 @@ export default function ContactPage() {
               <span>{t("mapTitle")}</span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Operating within close distance of the Port of Chittagong enables direct handling of 20ft and 40ft containerized shipments, minimizing domestic drayage risks.
+              {t("mapDesc")}
             </p>
           </div>
         </div>
@@ -101,10 +114,10 @@ export default function ContactPage() {
           <div className="p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm space-y-6">
             <div className="space-y-1">
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                Send Us a Message
+                {t("formTitle")}
               </h3>
               <p className="text-xs text-slate-500">
-                Reach out for material inspections, enterprise electronics decommissioning, or bulk purchase pricing.
+                {t("formSubtitle")}
               </p>
             </div>
             <InquiryForm />

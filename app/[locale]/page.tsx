@@ -148,10 +148,10 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-white/20 dark:border-slate-700/50">
                   <div className="text-xs font-bold text-slate-900 dark:text-white">
-                    Port City Logistics Advantage
+                    {tHero("portAdvantageTitle")}
                   </div>
                   <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Chittagong Sea Port · Export Gateway to Global Refiners
+                    {tHero("portAdvantageSubtitle")}
                   </div>
                 </div>
               </div>
@@ -217,7 +217,7 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <SectionHeading
-            badge="Verified Inventory"
+            badge={tProducts("verifiedInventoryBadge")}
             title={tProducts("title")}
             subtitle={tProducts("subtitle")}
           />
@@ -225,7 +225,7 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
             href="/products"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-400 transition"
           >
-            <span>View Full Catalogue</span>
+            <span>{tProducts("viewFullCatalogue")}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -242,7 +242,7 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <SectionHeading
             centered
-            badge="Operational Standards"
+            badge={tProcess("operationalStandardsBadge")}
             title={tProcess("title")}
             subtitle={tProcess("subtitle")}
           />
@@ -280,10 +280,10 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
         <div className="rounded-3xl bg-gradient-to-r from-emerald-900 via-emerald-800 to-slate-900 text-white p-8 sm:p-12 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="space-y-3 max-w-2xl text-center lg:text-left">
             <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Ready to Source High-Grade Electronic Scrap?
+              {tHero("ctaBannerTitle")}
             </h3>
             <p className="text-sm text-emerald-100 leading-relaxed">
-              Connect directly with our export desk for trial container consignments, FOB Chittagong shipping quotations, and material inspection details.
+              {tHero("ctaBannerDesc")}
             </p>
           </div>
 

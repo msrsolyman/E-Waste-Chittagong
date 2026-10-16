@@ -21,7 +21,11 @@
     "subtitle": "Bridging regional electronic scrap collection with ethical sorting, material recovery, and international B2B circular economy standards.",
     "ctaPrimary": "Explore Products",
     "ctaSecondary": "Request Quotation",
-    "verifiedNotice": "All business records and product listings are backed by verified company inventory."
+    "verifiedNotice": "All business records and product listings are backed by verified company inventory.",
+    "portAdvantageTitle": "Port City Logistics Advantage",
+    "portAdvantageSubtitle": "Chittagong Sea Port · Export Gateway to Global Refiners",
+    "ctaBannerTitle": "Ready to Source High-Grade Electronic Scrap?",
+    "ctaBannerDesc": "Connect directly with our export desk for trial container consignments, FOB Chittagong shipping quotations, and material inspection details."
   },
   "stats": {
     "sortingTitle": "Organized Sorting",
@@ -36,6 +40,8 @@
   "products": {
     "title": "B2B Product Catalogue",
     "subtitle": "Carefully sorted electronic waste categories available for verified B2B recycling and industrial recovery.",
+    "verifiedInventoryBadge": "Verified Inventory",
+    "viewFullCatalogue": "View Full Catalogue",
     "searchPlaceholder": "Search products or grades...",
     "allCategories": "All Categories",
     "grade": "Grade",
@@ -58,6 +64,7 @@
   "process": {
     "title": "Compliant Recycling Process",
     "subtitle": "Every stage adheres to transparency, worker safety, and systematic resource recovery.",
+    "operationalStandardsBadge": "Operational Standards",
     "step1Title": "Collection & Aggregation",
     "step1Desc": "Systematic intake of retired business electronics and bulk enterprise scrap.",
     "step2Title": "Classification & Grading",
@@ -106,16 +113,23 @@
     "email": "info@ewastechittagong.com",
     "phoneTitle": "Direct Phone / WhatsApp",
     "phone": "+880 1800-000000 (Awaiting Client Confirmation)",
+    "whatsappConnect": "Connect on WhatsApp",
+    "whatsappChat": "💬 Direct WhatsApp Chat",
     "hoursTitle": "Operating Hours",
     "hours": "Saturday – Thursday: 9:00 AM – 6:00 PM (GMT+6)",
-    "mapTitle": "Port City Logistics Proximity"
+    "mapTitle": "Port City Logistics Proximity",
+    "mapDesc": "Operating within close distance of the Port of Chittagong enables direct handling of 20ft and 40ft containerized shipments, minimizing domestic drayage risks.",
+    "formTitle": "Send Us a Message",
+    "formSubtitle": "Reach out for material inspections, enterprise electronics decommissioning, or bulk purchase pricing."
   },
   "footer": {
     "about": "E-Waste Chittagong is dedicated to sustainable e-waste management, transparent material segregation, and circular economy recovery in Bangladesh.",
+    "ethicalBadge": "Ethical B2B Material Recovery",
     "quickLinks": "Quick Navigation",
     "legal": "Compliance & Privacy",
     "privacyPolicy": "Privacy Policy",
-    "allRights": "All rights reserved. Verified B2B Operations."
+    "allRights": "All rights reserved. Verified B2B Operations.",
+    "portLogisticsTag": "Export Logistics Proximity: Chittagong Sea Port, Bangladesh"
   },
   "common": {
     "loading": "Loading...",

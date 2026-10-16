@@ -37,9 +37,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const referenceNo = generateReferenceNo();
+    let validProductId: string | null = null;
+    if (productId) {
+      const matched = await prisma.product.findFirst({
+        where: {
+          OR: [{ id: productId }, { slug: productId }],
+        },
+        select: { id: true },
+      });
+      if (matched) {
+        validProductId = matched.id;
+      }
+    }
 
     // 2. Persist to Database
+    const referenceNo = generateReferenceNo();
     const inquiry = await prisma.inquiry.create({
       data: {
         referenceNo,
@@ -52,10 +64,10 @@ export async function POST(req: NextRequest) {
         interestedCategory: interestedCategory || null,
         estimatedQty: estimatedQty || null,
         message,
-        items: productId
+        items: validProductId
           ? {
               create: {
-                productId: productId,
+                productId: validProductId,
               },
             }
           : undefined,

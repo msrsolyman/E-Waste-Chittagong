@@ -21,7 +21,11 @@
     "subtitle": "连接区域企业级废旧电子设备回收，执行规范分选、材料提取与符合国际标准的循环经济解决方案。",
     "ctaPrimary": "浏览产品目录",
     "ctaSecondary": "提交询价单",
-    "verifiedNotice": "所有产品规格与业务记录均基于核实的企业库存与处理流程。"
+    "verifiedNotice": "所有产品规格与业务记录均基于核实的企业库存与处理流程。",
+    "portAdvantageTitle": "港口城市物流优势",
+    "portAdvantageSubtitle": "吉大港海港 · 通往全球精炼商的出口门户",
+    "ctaBannerTitle": "准备采购高品质电子废料？",
+    "ctaBannerDesc": "直接联系我们的出口业务部，获取试验集装箱发运、FOB吉大港海运报价及物料检验详情。"
   },
   "stats": {
     "sortingTitle": "规范精细分选",
@@ -36,6 +40,8 @@
   "products": {
     "title": "B2B 电子废料产品目录",
     "subtitle": "经过专业分拣与等级划分的电子废料，面向国际合规冶炼与资源再生企业。",
+    "verifiedInventoryBadge": "已验证库存",
+    "viewFullCatalogue": "查看完整目录",
     "searchPlaceholder": "搜索产品名称或品级...",
     "allCategories": "所有分类",
     "grade": "等级/品级",
@@ -58,6 +64,7 @@
   "process": {
     "title": "合规回收作业流程",
     "subtitle": "每一环节严格遵循环保规范、作业安全与资源系统化提取标准。",
+    "operationalStandardsBadge": "运营标准",
     "step1Title": "批量收集与归集",
     "step1Desc": "定点接收企业退役电子资产与工业废料。",
     "step2Title": "人工精选与分级",
@@ -106,16 +113,23 @@
     "email": "info@ewastechittagong.com",
     "phoneTitle": "国际商务专线",
     "phone": "+880 1800-000000 (待客户正式确认)",
+    "whatsappConnect": "微信/WhatsApp 咨询",
+    "whatsappChat": "💬 直接 WhatsApp 沟通",
     "hoursTitle": "营业时间",
     "hours": "周六至周四: 09:00 – 18:00 (GMT+6)",
-    "mapTitle": "吉大港枢纽港区邻近优势"
+    "mapTitle": "吉大港枢纽港区邻近优势",
+    "mapDesc": "紧邻吉大港港区作业，可直接装运20尺及40尺集装箱货物，最大限度降低内陆短途驳运风险。",
+    "formTitle": "给我们留言",
+    "formSubtitle": "咨询物料查验、企业退役电子设备回收或大宗采购报价。"
   },
   "footer": {
     "about": "E-Waste Chittagong 致力于在孟加拉国推动规范化电子废物分选、金属循环利用与透明可追溯的国际 B2B 商业合作。",
+    "ethicalBadge": "合规 B2B 材料回收",
     "quickLinks": "快捷导航",
     "legal": "合规与政策",
     "privacyPolicy": "隐私权保护政策",
-    "allRights": "版权所有。经核准的国际B2B业务。"
+    "allRights": "版权所有。经核准的国际B2B业务。",
+    "portLogisticsTag": "出口物流优势：孟加拉国吉大港海港"
   },
   "common": {
     "loading": "加载中...",

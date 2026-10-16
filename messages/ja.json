@@ -21,7 +21,11 @@
     "subtitle": "企業から発生する電子スクラップの回収から、厳格な手作業分別、有価金属回収、国際基準のサーキュラーエコノミーを推進。",
     "ctaPrimary": "製品カタログを見る",
     "ctaSecondary": "お見積りを依頼する",
-    "verifiedNotice": "掲載されている製品仕様および事業実績は、実際の在庫と確認済みデータに基づいています。"
+    "verifiedNotice": "掲載されている製品仕様および事業実績は、実際の在庫と確認済みデータに基づいています。",
+    "portAdvantageTitle": "港湾都市の物流拠点",
+    "portAdvantageSubtitle": "チッタゴン港 · 世界の製錬事業者への輸出ゲートウェイ",
+    "ctaBannerTitle": "高品質電子スクラップの調達をお考えですか？",
+    "ctaBannerDesc": "試行コンテナの出荷、FOBチッタゴン港の運賃見積り、原料検査の詳細について、輸出担当窓口へお気軽にお問い合わせください。"
   },
   "stats": {
     "sortingTitle": "精密な手選別・グレーディング",
@@ -36,6 +40,8 @@
   "products": {
     "title": "B2B電子スクラップ製品カタログ",
     "subtitle": "適正に選別・等級分けされたリサイクル原料。国内外の製錬所および資源再生パートナー向け。",
+    "verifiedInventoryBadge": "検証済み在庫",
+    "viewFullCatalogue": "全カタログを見る",
     "searchPlaceholder": "製品名またはグレードを検索...",
     "allCategories": "全カテゴリー",
     "grade": "グレード",
@@ -58,6 +64,7 @@
   "process": {
     "title": "適正リサイクル工程",
     "subtitle": "すべての工程で透明性、作業者の安全衛生、効率的な資源回収を徹底しています。",
+    "operationalStandardsBadge": "運用基準",
     "step1Title": "回収および集約",
     "step1Desc": "企業から排出された不要な電子機器や基板スクラップの計画的回収。",
     "step2Title": "分類とグレーディング",
@@ -106,16 +113,23 @@
     "email": "info@ewastechittagong.com",
     "phoneTitle": "直通電話 / WhatsApp",
     "phone": "+880 1800-000000 (顧客確認待ち)",
+    "whatsappConnect": "WhatsAppで相談",
+    "whatsappChat": "💬 直接 WhatsApp チャット",
     "hoursTitle": "営業時間",
     "hours": "土曜日 – 木曜日: 9:00 – 18:00 (GMT+6)",
-    "mapTitle": "チッタゴン港湾ロジスティクス利便性"
+    "mapTitle": "チッタゴン港湾ロジスティクス利便性",
+    "mapDesc": "チッタゴン港の至近距離に位置するため、20フィートおよび40フィートのコンテナ出荷を直接取り扱い、国内輸送リスクを最小化します。",
+    "formTitle": "お問い合わせ",
+    "formSubtitle": "材料検査、企業の電子機器廃棄処理、または大口購入価格についてご相談ください。"
   },
   "footer": {
     "about": "E-Waste Chittagongは、バングラデシュにおける持続可能な電子機器廃棄物管理とサーキュラーエコノミーを推進するB2B企業です。",
+    "ethicalBadge": "倫理的B2Bマテリアルリサイクル",
     "quickLinks": "クイックリンク",
     "legal": "コンプライアンス＆プライバシー",
     "privacyPolicy": "プライバシーポリシー",
-    "allRights": "無断転載を禁じます。確認済みB2B業務。"
+    "allRights": "無断転載を禁じます。確認済みB2B業務。",
+    "portLogisticsTag": "輸出物流拠点：バングラデシュ・チッタゴン海港"
   },
   "common": {
     "loading": "読み込み中...",

@@ -21,7 +21,7 @@ export function SiteFooter() {
             </p>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100/70 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Ethical B2B Material Recovery</span>
+              <span>{tFooter("ethicalBadge")}</span>
             </div>
           </div>
 
@@ -95,7 +95,22 @@ export function SiteFooter() {
               </li>
               <li className="flex items-start gap-2.5">
                 <Phone className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
-                <span>{tContact("phone")}</span>
+                <div className="flex flex-col">
+                  <a
+                    href="tel:+8801800000000"
+                    className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                  >
+                    {tContact("phone")}
+                  </a>
+                  <a
+                    href="https://wa.me/8801800000000"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold hover:underline mt-0.5"
+                  >
+                    {tContact("whatsappChat")}
+                  </a>
+                </div>
               </li>
             </ul>
           </div>
@@ -123,13 +138,13 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li className="pt-2">
-                <Link
+                <a
                   href="/admin/login"
                   className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
                 >
                   <Lock className="w-3 h-3" />
                   <span>{tNav("admin")}</span>
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
@@ -139,7 +154,7 @@ export function SiteFooter() {
         <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
           <p>© {currentYear} E-Waste Chittagong. {tFooter("allRights")}</p>
           <p className="text-[11px] text-slate-400">
-            Export Logistics Proximity: Chittagong Sea Port, Bangladesh
+            {tFooter("portLogisticsTag")}
           </p>
         </div>
       </div>
