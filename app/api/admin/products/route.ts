@@ -117,6 +117,7 @@ export async function PUT(req: NextRequest) {
       fullDescZh,
       fullDescJa,
       status,
+      isFeatured,
       imageUrl,
     } = body;
 
@@ -126,6 +127,7 @@ export async function PUT(req: NextRequest) {
 
     const updateData: Record<string, unknown> = {};
     if (status !== undefined) updateData.status = status;
+    if (isFeatured !== undefined) updateData.isFeatured = Boolean(isFeatured);
     if (titleEn !== undefined) updateData.titleEn = titleEn;
     if (titleBn !== undefined) updateData.titleBn = titleBn;
     if (titleZh !== undefined) updateData.titleZh = titleZh;

@@ -9,14 +9,20 @@ export default async function AdminProductsPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/admin/login");
 
-  const products = await prisma.product.findMany({
-    orderBy: { createdAt: "desc" },
-    include: {
-      category: {
-        select: { nameEn: true },
+  const [products, categories] = await Promise.all([
+    prisma.product.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        category: {
+          select: { id: true, nameEn: true },
+        },
       },
-    },
-  });
+    }),
+    prisma.category.findMany({
+      orderBy: { displayOrder: "asc" },
+      select: { id: true, nameEn: true },
+    }),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -27,12 +33,12 @@ export default async function AdminProductsPage() {
             <span>Product Catalogue Management</span>
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Manage electronic scrap listings, update 4-language technical descriptions, and toggle draft/published status.
+            Manage electronic scrap listings, update 4-language technical descriptions, toggle draft/published/featured status, and clone listings.
           </p>
         </div>
       </div>
 
-      <AdminProductsTable initialProducts={products} />
+      <AdminProductsTable initialProducts={products} categories={categories} />
     </div>
   );
 }
