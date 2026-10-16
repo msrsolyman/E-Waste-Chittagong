@@ -14,20 +14,15 @@ import {
   PlusCircle,
   Image as ImageIcon,
   Users,
-  Activity,
   ShieldCheck,
   Download,
   ExternalLink,
-  Database,
-  Lock,
 } from "lucide-react";
 
 export default async function AdminDashboardPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/admin/login");
 
-  // Benchmark database ping latency
-  const dbStart = Date.now();
   const [
     totalInquiries,
     newInquiries,
@@ -58,7 +53,6 @@ export default async function AdminDashboardPage() {
       include: { user: { select: { name: true, email: true } } },
     }),
   ]);
-  const dbLatency = Date.now() - dbStart;
 
   return (
     <div className="space-y-8">
@@ -119,45 +113,6 @@ export default async function AdminDashboardPage() {
           >
             <ExternalLink className="w-3.5 h-3.5" />
           </Link>
-        </div>
-      </div>
-
-      {/* System Health & Infrastructure Status Card */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950 text-white shadow-md border border-slate-800 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-            <Database className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-sm tracking-tight">PostgreSQL Database Connection</span>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Healthy & Connected</span>
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-400 mt-0.5">
-              Multi-region Supabase transaction pooler with persistent durable relational storage.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4 text-xs font-mono text-slate-300 border-t md:border-t-0 md:border-l border-slate-800 pt-3 md:pt-0 md:pl-5">
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-500 block">Ping Latency</span>
-            <span className="text-emerald-400 font-bold">{dbLatency} ms</span>
-          </div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-500 block">Encryption</span>
-            <span className="text-slate-200 flex items-center gap-1">
-              <Lock className="w-3 h-3 text-emerald-400" />
-              <span>TLS / Argon2id</span>
-            </span>
-          </div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-500 block">Environment</span>
-            <span className="text-slate-200">Production</span>
-          </div>
         </div>
       </div>
 
