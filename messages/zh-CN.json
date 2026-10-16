@@ -1,0 +1,129 @@
+{
+  "brand": {
+    "name": "吉大港电子废弃物 (E-Waste Chittagong)",
+    "tagline": "可持续电子废料回收与材料再生处理",
+    "location": "孟加拉国吉大港"
+  },
+  "nav": {
+    "home": "首页",
+    "about": "关于我们",
+    "products": "产品目录",
+    "services": "专业服务",
+    "process": "回收流程",
+    "gallery": "设施与活动",
+    "contact": "联系我们",
+    "rfq": "询价与合作",
+    "admin": "管理后台"
+  },
+  "hero": {
+    "badge": "负责任的国际 B2B 电子废料回收",
+    "title": "立足吉大港，赋能可持续电子废弃物循环利用",
+    "subtitle": "连接区域企业级废旧电子设备回收，执行规范分选、材料提取与符合国际标准的循环经济解决方案。",
+    "ctaPrimary": "浏览产品目录",
+    "ctaSecondary": "提交询价单",
+    "verifiedNotice": "所有产品规格与业务记录均基于核实的企业库存与处理流程。"
+  },
+  "stats": {
+    "sortingTitle": "规范精细分选",
+    "sortingDesc": "电路板与企业IT废料的多级精准分类",
+    "recoveryTitle": "金属与材料回收",
+    "recoveryDesc": "有色金属与贵金属电子部件的安全分离",
+    "b2bTitle": "国际 B2B 贸易",
+    "b2bDesc": "定制批量报价、集装箱发运与合规单证支持",
+    "portTitle": "战略级海港区位优势",
+    "portDesc": "毗邻吉大港国际海运集装箱出口枢纽"
+  },
+  "products": {
+    "title": "B2B 电子废料产品目录",
+    "subtitle": "经过专业分拣与等级划分的电子废料，面向国际合规冶炼与资源再生企业。",
+    "searchPlaceholder": "搜索产品名称或品级...",
+    "allCategories": "所有分类",
+    "grade": "等级/品级",
+    "origin": "来源产地",
+    "moq": "最小起订量",
+    "packaging": "包装方式",
+    "status": "状态",
+    "requestQuote": "申请报价",
+    "viewDetails": "查看详情",
+    "empty": "未找到符合筛选条件的产品记录。",
+    "specifications": "规格参数",
+    "inquireThis": "咨询该产品采购",
+    "draftNotice": "该产品规格正等待最终客户确认后执行装运放行。"
+  },
+  "services": {
+    "title": "核心服务领域",
+    "subtitle": "为大中型企业提供合规、可审计的电子废弃物全流程处理方案。",
+    "learnMore": "了解详情"
+  },
+  "process": {
+    "title": "合规回收作业流程",
+    "subtitle": "每一环节严格遵循环保规范、作业安全与资源系统化提取标准。",
+    "step1Title": "批量收集与归集",
+    "step1Desc": "定点接收企业退役电子资产与工业废料。",
+    "step2Title": "人工精选与分级",
+    "step2Desc": "专业团队对多层电路板、通信基站模块进行等级划分。",
+    "step3Title": "安全拆解与分离",
+    "step3Desc": "物理拆解外壳、变压器并安全隔离废旧蓄电池与有害组分。",
+    "step4Title": "B2B 打包与合规发运",
+    "step4Desc": "标准集装袋/托盘打包，交付至国际资质再生精炼企业。"
+  },
+  "gallery": {
+    "title": "作业实景与活动图库",
+    "subtitle": "真实展示仓库分拣、物料存储与操作现场。",
+    "verifiedBadge": "真实作业记录",
+    "illustrativeBadge": "行业概念示意",
+    "all": "全部媒体",
+    "facility": "仓储设施",
+    "material": "分类物料",
+    "dismantling": "拆解作业"
+  },
+  "inquiry": {
+    "title": "国际商务询价 (RFQ)",
+    "subtitle": "请填写您的大宗采购需求或长期合作意向，我们将在一个工作日内为您提供官方形式发票或报价详情。",
+    "fullName": "联系人姓名",
+    "companyName": "公司 / 企业全称",
+    "email": "企业商务邮箱",
+    "phone": "联系电话 / 微信 / WhatsApp (选填)",
+    "country": "所在国家或地区",
+    "selectCountry": "请选择国家",
+    "category": "意向采购品类",
+    "selectCategory": "请选择品类",
+    "quantity": "预估采购量 (如: 10公吨 / 40尺集装箱)",
+    "message": "规格与交付要求",
+    "messagePlaceholder": "请描述所需的品级、目标到港口岸 (CIF/FOB) 及交付周期要求...",
+    "submit": "提交询价单",
+    "submitting": "正在提交询价...",
+    "successTitle": "询价单已成功提交",
+    "successDesc": "您的专属查询编号为: {reference}。我们的国际贸易专员将尽快与您联系并提供详细报价单。",
+    "privacyNotice": "我们严格保护客户商业机密，所有信息仅用于业务洽谈与正式报价。"
+  },
+  "contact": {
+    "title": "联系我们",
+    "subtitle": "欢迎就国际大宗采购、现货验资与企业战略合作与吉大港总部直接接洽。",
+    "addressTitle": "办公与作业地址",
+    "address": "孟加拉国吉大港 (Chittagong, Bangladesh)",
+    "emailTitle": "商业贸易邮箱",
+    "email": "info@ewastechittagong.com",
+    "phoneTitle": "国际商务专线",
+    "phone": "+880 1800-000000 (待客户正式确认)",
+    "hoursTitle": "营业时间",
+    "hours": "周六至周四: 09:00 – 18:00 (GMT+6)",
+    "mapTitle": "吉大港枢纽港区邻近优势"
+  },
+  "footer": {
+    "about": "E-Waste Chittagong 致力于在孟加拉国推动规范化电子废物分选、金属循环利用与透明可追溯的国际 B2B 商业合作。",
+    "quickLinks": "快捷导航",
+    "legal": "合规与政策",
+    "privacyPolicy": "隐私权保护政策",
+    "allRights": "版权所有。经核准的国际B2B业务。"
+  },
+  "common": {
+    "loading": "加载中...",
+    "back": "返回",
+    "close": "关闭",
+    "confirm": "确认",
+    "cancel": "取消",
+    "save": "保存",
+    "search": "搜索"
+  }
+}

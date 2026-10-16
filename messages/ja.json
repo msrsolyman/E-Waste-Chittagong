@@ -1,0 +1,129 @@
+{
+  "brand": {
+    "name": "E-Waste Chittagong (チッタゴン電子廃棄物)",
+    "tagline": "持続可能な電子機器リサイクルと金属資源回収",
+    "location": "バングラデシュ・チッタゴン"
+  },
+  "nav": {
+    "home": "ホーム",
+    "about": "企業情報",
+    "products": "製品カタログ",
+    "services": "事業案内",
+    "process": "工程フロー",
+    "gallery": "活動実績・施設",
+    "contact": "お問い合わせ",
+    "rfq": "お見積り依頼",
+    "admin": "管理パネル"
+  },
+  "hero": {
+    "badge": "責任ある国際B2B電子廃棄物リサイクル",
+    "title": "チッタゴン発、持続可能な電子機器リサイクルと資源循環",
+    "subtitle": "企業から発生する電子スクラップの回収から、厳格な手作業分別、有価金属回収、国際基準のサーキュラーエコノミーを推進。",
+    "ctaPrimary": "製品カタログを見る",
+    "ctaSecondary": "お見積りを依頼する",
+    "verifiedNotice": "掲載されている製品仕様および事業実績は、実際の在庫と確認済みデータに基づいています。"
+  },
+  "stats": {
+    "sortingTitle": "精密な手選別・グレーディング",
+    "sortingDesc": "基板、通信機器、ITスクラップの確実な等級分け",
+    "recoveryTitle": "金属資源の回収",
+    "recoveryDesc": "非鉄金属および貴金属含有基板の適切な分別管理",
+    "b2bTitle": "国際B2B取引対応",
+    "b2bDesc": "大口ロット見積り、コンテナ積載、確実な貿易書類の提供",
+    "portTitle": "港湾都市チッタゴンの立地利便性",
+    "portDesc": "チッタゴン国際港湾ターミナルへの迅速なアクセス"
+  },
+  "products": {
+    "title": "B2B電子スクラップ製品カタログ",
+    "subtitle": "適正に選別・等級分けされたリサイクル原料。国内外の製錬所および資源再生パートナー向け。",
+    "searchPlaceholder": "製品名またはグレードを検索...",
+    "allCategories": "全カテゴリー",
+    "grade": "グレード",
+    "origin": "産地",
+    "moq": "最小発注数量 (MOQ)",
+    "packaging": "梱包形態",
+    "status": "状態",
+    "requestQuote": "見積りを依頼",
+    "viewDetails": "詳細を見る",
+    "empty": "該当する製品は見つかりませんでした。",
+    "specifications": "技術仕様・規格",
+    "inquireThis": "この製品について問い合わせる",
+    "draftNotice": "この製品仕様は最終確認中の下書き情報です。"
+  },
+  "services": {
+    "title": "事業・サービス内容",
+    "subtitle": "環境負荷を低減し、安全基準を遵守した電子機器廃棄物管理ソリューション。",
+    "learnMore": "詳細はこちら"
+  },
+  "process": {
+    "title": "適正リサイクル工程",
+    "subtitle": "すべての工程で透明性、作業者の安全衛生、効率的な資源回収を徹底しています。",
+    "step1Title": "回収および集約",
+    "step1Desc": "企業から排出された不要な電子機器や基板スクラップの計画的回収。",
+    "step2Title": "分類とグレーディング",
+    "step2Desc": "熟練スタッフによる基板種別、通信モジュール、金属パーツの目視選別。",
+    "step3Title": "安全解体と有害物分離",
+    "step3Desc": "筐体の分解と、二次電池や危険物質の安全な取り外し・隔離。",
+    "step4Title": "B2B出荷と精錬供給",
+    "step4Desc": "フレコンバッグやパレットに安全梱包し、認定精錬事業者へ出荷。"
+  },
+  "gallery": {
+    "title": "施設・作業ギャラリー",
+    "subtitle": "選別現場、保管状況、手作業解体の様子をありのままに公開。",
+    "verifiedBadge": "実績写真",
+    "illustrativeBadge": "イメージ参考",
+    "all": "すべて",
+    "facility": "保管・施設",
+    "material": "選別原料",
+    "dismantling": "手解体作業"
+  },
+  "inquiry": {
+    "title": "国際B2Bお見積り依頼 (RFQ)",
+    "subtitle": "大口調達のご要望や提携に関するお問い合わせを承ります。確認後、迅速に見積書をご案内いたします。",
+    "fullName": "ご担当者名",
+    "companyName": "貴社名・組織名",
+    "email": "会社メールアドレス",
+    "phone": "お電話番号 / WhatsApp (任意)",
+    "country": "国・地域",
+    "selectCountry": "国を選択してください",
+    "category": "希望品目・カテゴリー",
+    "selectCategory": "カテゴリーを選択",
+    "quantity": "希望数量 (例: 10 MT / 20ftコンテナ)",
+    "message": "仕様・ご要望詳細",
+    "messagePlaceholder": "ご希望のグレード、受渡条件 (FOB/CIF)、納期等をご記入ください...",
+    "submit": "お見積り依頼を送信",
+    "submitting": "送信中...",
+    "successTitle": "お見積り依頼を受け付けました",
+    "successDesc": "お問い合わせ管理番号: {reference}。弊社の国際貿易担当より折り返しご連絡申し上げます。",
+    "privacyNotice": "ご入力いただいた企業情報は機密情報として厳格に管理され、商談目的以外には使用されません。"
+  },
+  "contact": {
+    "title": "お問い合わせ窓口",
+    "subtitle": "大口調達、現地視察、事業提携に関するご相談はお気軽にご連絡ください。",
+    "addressTitle": "所在地",
+    "address": "バングラデシュ・チッタゴン (Chittagong, Bangladesh)",
+    "emailTitle": "代表メールアドレス",
+    "email": "info@ewastechittagong.com",
+    "phoneTitle": "直通電話 / WhatsApp",
+    "phone": "+880 1800-000000 (顧客確認待ち)",
+    "hoursTitle": "営業時間",
+    "hours": "土曜日 – 木曜日: 9:00 – 18:00 (GMT+6)",
+    "mapTitle": "チッタゴン港湾ロジスティクス利便性"
+  },
+  "footer": {
+    "about": "E-Waste Chittagongは、バングラデシュにおける持続可能な電子機器廃棄物管理とサーキュラーエコノミーを推進するB2B企業です。",
+    "quickLinks": "クイックリンク",
+    "legal": "コンプライアンス＆プライバシー",
+    "privacyPolicy": "プライバシーポリシー",
+    "allRights": "無断転載を禁じます。確認済みB2B業務。"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "back": "戻る",
+    "close": "閉じる",
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "search": "検索"
+  }
+}

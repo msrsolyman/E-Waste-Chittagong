@@ -1,0 +1,129 @@
+{
+  "brand": {
+    "name": "E-Waste Chittagong",
+    "tagline": "Sustainable Electronics Recycling & Material Recovery",
+    "location": "Chittagong, Bangladesh"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "products": "Products",
+    "services": "Services",
+    "process": "Work Process",
+    "gallery": "Gallery & Activities",
+    "contact": "Contact",
+    "rfq": "Request a Quote",
+    "admin": "Admin Portal"
+  },
+  "hero": {
+    "badge": "Responsible B2B Electronics Recycling",
+    "title": "Empowering Sustainable Electronics Recycling in Chittagong",
+    "subtitle": "Bridging regional electronic scrap collection with ethical sorting, material recovery, and international B2B circular economy standards.",
+    "ctaPrimary": "Explore Products",
+    "ctaSecondary": "Request Quotation",
+    "verifiedNotice": "All business records and product listings are backed by verified company inventory."
+  },
+  "stats": {
+    "sortingTitle": "Organized Sorting",
+    "sortingDesc": "Strict component grading for circuit boards and IT scrap",
+    "recoveryTitle": "Material Recovery",
+    "recoveryDesc": "Responsible segregation of non-ferrous and electronic metals",
+    "b2bTitle": "International B2B",
+    "b2bDesc": "Custom quotations, bulk dispatch, and verifiable paperwork",
+    "portTitle": "Port City Strategic Location",
+    "portDesc": "Direct proximity to Chittagong maritime export terminals"
+  },
+  "products": {
+    "title": "B2B Product Catalogue",
+    "subtitle": "Carefully sorted electronic waste categories available for verified B2B recycling and industrial recovery.",
+    "searchPlaceholder": "Search products or grades...",
+    "allCategories": "All Categories",
+    "grade": "Grade",
+    "origin": "Origin",
+    "moq": "Min. Order",
+    "packaging": "Packaging",
+    "status": "Status",
+    "requestQuote": "Request Quote",
+    "viewDetails": "View Details",
+    "empty": "No products found matching your filter criteria.",
+    "specifications": "Technical Specifications",
+    "inquireThis": "Inquire About This Product",
+    "draftNotice": "This product specification is awaiting final client confirmation before shipment clearance."
+  },
+  "services": {
+    "title": "Our Specialized Services",
+    "subtitle": "Providing structured, environmentally responsible solutions for electronic waste management.",
+    "learnMore": "Learn More"
+  },
+  "process": {
+    "title": "Compliant Recycling Process",
+    "subtitle": "Every stage adheres to transparency, worker safety, and systematic resource recovery.",
+    "step1Title": "Collection & Aggregation",
+    "step1Desc": "Systematic intake of retired business electronics and bulk enterprise scrap.",
+    "step2Title": "Classification & Grading",
+    "step2Desc": "Trained manual segregation of circuit boards, telecom modules, and ferrous metals.",
+    "step3Title": "Safe Dismantling",
+    "step3Desc": "Physical disassembly into primary components, separating hazardous batteries safely.",
+    "step4Title": "B2B Dispatch & Recovery",
+    "step4Desc": "Carefully packaged material dispatch to verified industrial recyclers and refiners."
+  },
+  "gallery": {
+    "title": "Facility Activities & Gallery",
+    "subtitle": "A transparent look at our handling practices and material sorting.",
+    "verifiedBadge": "Confirmed Operation",
+    "illustrativeBadge": "Illustrative Concept",
+    "all": "All Media",
+    "facility": "Facility",
+    "material": "Materials",
+    "dismantling": "Dismantling"
+  },
+  "inquiry": {
+    "title": "International Business Inquiry & RFQ",
+    "subtitle": "Submit your bulk purchase requirements or partnership proposal. We respond promptly with official quotation details.",
+    "fullName": "Contact Person Name",
+    "companyName": "Company / Organization Name",
+    "email": "Business Email Address",
+    "phone": "Phone / WhatsApp (Optional)",
+    "country": "Country / Territory",
+    "selectCountry": "Select your country",
+    "category": "Product Category of Interest",
+    "selectCategory": "Select a category",
+    "quantity": "Estimated Volume / Quantity (e.g. 5 MT)",
+    "message": "Requirements & Specifications",
+    "messagePlaceholder": "Please describe your required specifications, delivery terms, and target schedule...",
+    "submit": "Submit Quotation Request",
+    "submitting": "Submitting Inquiry...",
+    "successTitle": "Inquiry Received Successfully",
+    "successDesc": "Your inquiry reference number is {reference}. Our export desk will review your specifications and contact you shortly.",
+    "privacyNotice": "Your business information is strictly confidential and used solely for RFQ communication."
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "Reach our Chittagong office for commercial inquiries, material inspections, and enterprise partnerships.",
+    "addressTitle": "Facility Location",
+    "address": "Chittagong, Bangladesh",
+    "emailTitle": "Commercial Inquiries",
+    "email": "info@ewastechittagong.com",
+    "phoneTitle": "Direct Phone / WhatsApp",
+    "phone": "+880 1800-000000 (Awaiting Client Confirmation)",
+    "hoursTitle": "Operating Hours",
+    "hours": "Saturday – Thursday: 9:00 AM – 6:00 PM (GMT+6)",
+    "mapTitle": "Port City Logistics Proximity"
+  },
+  "footer": {
+    "about": "E-Waste Chittagong is dedicated to sustainable e-waste management, transparent material segregation, and circular economy recovery in Bangladesh.",
+    "quickLinks": "Quick Navigation",
+    "legal": "Compliance & Privacy",
+    "privacyPolicy": "Privacy Policy",
+    "allRights": "All rights reserved. Verified B2B Operations."
+  },
+  "common": {
+    "loading": "Loading...",
+    "back": "Back",
+    "close": "Close",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "search": "Search"
+  }
+}
