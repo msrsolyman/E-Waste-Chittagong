@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BrandLogo } from "@/components/brand-logo";
-import { Lock, Mail, ArrowRight, ShieldCheck, UserCheck, AlertCircle } from "lucide-react";
+import { Lock, Mail, ArrowRight, AlertCircle } from "lucide-react";
 
 function LoginFormContent() {
   const router = useRouter();
@@ -41,12 +41,6 @@ function LoginFormContent() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const fillCredentials = (userEmail: string, userPass: string) => {
-    setEmail(userEmail);
-    setPassword(userPass);
-    setError(null);
   };
 
   return (
@@ -107,33 +101,11 @@ function LoginFormContent() {
         </button>
       </form>
 
-      {/* Quick Test Credentials Helper */}
-      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
-        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block text-center">
-          Quick Test Credentials
-        </span>
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={() =>
-              fillCredentials("admin@ewastechittagong.com", "Admin@EWC2026!")
-            }
-            className="flex items-center justify-center gap-1.5 p-2 rounded-lg border border-emerald-200 dark:border-emerald-800/80 bg-emerald-50/50 dark:bg-emerald-950/20 text-[11px] font-medium text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100/60 transition"
-          >
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Super Admin</span>
-          </button>
-          <button
-            type="button"
-            onClick={() =>
-              fillCredentials("manager@ewastechittagong.com", "Manager@EWC2026!")
-            }
-            className="flex items-center justify-center gap-1.5 p-2 rounded-lg border border-blue-200 dark:border-blue-800/80 bg-blue-50/50 dark:bg-blue-950/20 text-[11px] font-medium text-blue-700 dark:text-blue-300 hover:bg-blue-100/60 transition"
-          >
-            <UserCheck className="w-3.5 h-3.5" />
-            <span>Content Officer</span>
-          </button>
-        </div>
+      {/* Security Notice */}
+      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
+        <p className="text-[11px] text-slate-400 dark:text-slate-500">
+          Authorized personnel only. All access attempts are recorded in the immutable security audit log.
+        </p>
       </div>
     </div>
   );

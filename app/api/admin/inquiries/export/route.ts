@@ -30,7 +30,11 @@ export async function GET() {
 
     const escapeCsv = (str: string | null | undefined) => {
       if (!str) return '""';
-      const clean = str.replace(/"/g, '""').replace(/\r?\n/g, " ");
+      let clean = str.replace(/"/g, '""').replace(/\r?\n/g, " ");
+      // Prevent spreadsheet formula injection (=, +, -, @, \t, \r)
+      if (/^[=+\-@\t\r]/.test(clean)) {
+        clean = `'${clean}`;
+      }
       return `"${clean}"`;
     };
 
@@ -50,6 +54,14 @@ export async function GET() {
     ]);
 
     const csvContent = [headers.join(","), ...rows.map((r) => r.join(","))].join("\r\n");
+
+    await prisma.auditLog.create({
+      data: {
+        userId: user.id,
+        action: "INQUIRIES_CSV_EXPORTED",
+        details: JSON.stringify({ count: inquiries.length }),
+      },
+    });
 
     return new Response(csvContent, {
       status: 200,

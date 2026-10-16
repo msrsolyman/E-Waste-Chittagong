@@ -30,6 +30,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const cleanUrl = imageUrl.trim();
+    if (!/^\/|^https?:\/\//i.test(cleanUrl) || /\.(exe|sh|bat|cmd|js|ts|php|py)$/i.test(cleanUrl)) {
+      return NextResponse.json(
+        { error: "Invalid image URL. Executable files and unsupported formats are rejected." },
+        { status: 400 }
+      );
+    }
+
     const item = await prisma.galleryItem.create({
       data: {
         titleEn,

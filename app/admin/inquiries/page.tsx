@@ -27,7 +27,9 @@ export default async function AdminInquiriesPage() {
         </div>
       </div>
 
-      <AdminInquiryPipeline initialInquiries={inquiries} />
+      <React.Suspense fallback={<div className="p-8 text-center text-xs text-slate-400">Loading inquiry pipeline...</div>}>
+        <AdminInquiryPipeline initialInquiries={inquiries} />
+      </React.Suspense>
     </div>
   );
 }

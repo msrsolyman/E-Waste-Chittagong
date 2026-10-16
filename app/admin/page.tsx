@@ -80,13 +80,16 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* KPI Stats Grid */}
+      {/* KPI Stats Grid - Clickable Navigation Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* New Leads */}
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
+        <Link
+          href="/admin/inquiries?status=NEW"
+          className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 hover:border-blue-500/50 hover:shadow-md transition-all group block"
+        >
           <div className="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            <span>New RFQ Inquiries</span>
-            <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600">
+            <span className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">New RFQ Inquiries</span>
+            <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 group-hover:scale-105 transition-transform">
               <Inbox className="w-4 h-4" />
             </div>
           </div>
@@ -96,13 +99,16 @@ export default async function AdminDashboardPage() {
           <div className="text-[11px] text-slate-400">
             Out of {totalInquiries} total buyer submissions
           </div>
-        </div>
+        </Link>
 
         {/* Quoted Deals */}
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
+        <Link
+          href="/admin/inquiries?status=QUOTED"
+          className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 hover:border-emerald-500/50 hover:shadow-md transition-all group block"
+        >
           <div className="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            <span>Quoted / In Negotiation</span>
-            <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600">
+            <span className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Quoted / In Negotiation</span>
+            <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 group-hover:scale-105 transition-transform">
               <CheckCircle className="w-4 h-4" />
             </div>
           </div>
@@ -112,13 +118,16 @@ export default async function AdminDashboardPage() {
           <div className="text-[11px] text-slate-400">
             Active commercial quotations
           </div>
-        </div>
+        </Link>
 
         {/* Active Products */}
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
+        <Link
+          href="/admin/products"
+          className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 hover:border-amber-500/50 hover:shadow-md transition-all group block"
+        >
           <div className="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            <span>Catalogue Items</span>
-            <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600">
+            <span className="group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Catalogue Items</span>
+            <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 group-hover:scale-105 transition-transform">
               <Package className="w-4 h-4" />
             </div>
           </div>
@@ -128,13 +137,16 @@ export default async function AdminDashboardPage() {
           <div className="text-[11px] text-slate-400">
             {totalProducts - publishedProducts} draft items awaiting confirmation
           </div>
-        </div>
+        </Link>
 
         {/* Categories */}
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
+        <Link
+          href="/admin/categories"
+          className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 hover:border-purple-500/50 hover:shadow-md transition-all group block"
+        >
           <div className="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            <span>Material Taxonomies</span>
-            <div className="p-2 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-600">
+            <span className="group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Material Taxonomies</span>
+            <div className="p-2 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-600 group-hover:scale-105 transition-transform">
               <Layers className="w-4 h-4" />
             </div>
           </div>
@@ -144,7 +156,7 @@ export default async function AdminDashboardPage() {
           <div className="text-[11px] text-slate-400">
             Configured recycling streams
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Two-Column Section: Recent Inquiries & Audit Trail */}
@@ -165,56 +177,62 @@ export default async function AdminDashboardPage() {
             </Link>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 uppercase tracking-wider font-semibold border-y border-slate-200/60 dark:border-slate-800">
-                <tr>
-                  <th className="py-2.5 px-3">Reference</th>
-                  <th className="py-2.5 px-3">Company / Contact</th>
-                  <th className="py-2.5 px-3">Country</th>
-                  <th className="py-2.5 px-3">Status</th>
-                  <th className="py-2.5 px-3">Date</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {recentInquiries.map((inq) => {
-                  const statusColors: Record<string, string> = {
-                    NEW: "bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300",
-                    CONTACTED: "bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300",
-                    IN_PROGRESS: "bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300",
-                    QUOTED: "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300",
-                    CLOSED: "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300",
-                  };
-                  return (
-                    <tr key={inq.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                      <td className="py-3 px-3 font-mono font-bold text-slate-800 dark:text-slate-200">
-                        {inq.referenceNo}
-                      </td>
-                      <td className="py-3 px-3">
-                        <div className="font-semibold text-slate-900 dark:text-white">
-                          {inq.companyName}
-                        </div>
-                        <div className="text-[11px] text-slate-400">
-                          {inq.name} ({inq.email})
-                        </div>
-                      </td>
-                      <td className="py-3 px-3 text-slate-600 dark:text-slate-400">
-                        {inq.country}
-                      </td>
-                      <td className="py-3 px-3">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${statusColors[inq.status] || "bg-slate-100 text-slate-700"}`}>
-                          {inq.status}
-                        </span>
-                      </td>
-                      <td className="py-3 px-3 text-slate-400 text-[11px]">
-                        {formatDate(inq.createdAt)}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+          {recentInquiries.length === 0 ? (
+            <div className="p-8 text-center rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800 text-xs text-slate-400">
+              No buyer inquiries recorded yet. Submissions from the public inquiry form will appear here.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 uppercase tracking-wider font-semibold border-y border-slate-200/60 dark:border-slate-800">
+                  <tr>
+                    <th className="py-2.5 px-3">Reference</th>
+                    <th className="py-2.5 px-3">Company / Contact</th>
+                    <th className="py-2.5 px-3">Country</th>
+                    <th className="py-2.5 px-3">Status</th>
+                    <th className="py-2.5 px-3">Date</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {recentInquiries.map((inq) => {
+                    const statusColors: Record<string, string> = {
+                      NEW: "bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300",
+                      CONTACTED: "bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300",
+                      IN_PROGRESS: "bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300",
+                      QUOTED: "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300",
+                      CLOSED: "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300",
+                    };
+                    return (
+                      <tr key={inq.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
+                        <td className="py-3 px-3 font-mono font-bold text-slate-800 dark:text-slate-200">
+                          {inq.referenceNo}
+                        </td>
+                        <td className="py-3 px-3">
+                          <div className="font-semibold text-slate-900 dark:text-white">
+                            {inq.companyName}
+                          </div>
+                          <div className="text-[11px] text-slate-400">
+                            {inq.name} ({inq.email})
+                          </div>
+                        </td>
+                        <td className="py-3 px-3 text-slate-600 dark:text-slate-400">
+                          {inq.country}
+                        </td>
+                        <td className="py-3 px-3">
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${statusColors[inq.status] || "bg-slate-100 text-slate-700"}`}>
+                            {inq.status}
+                          </span>
+                        </td>
+                        <td className="py-3 px-3 text-slate-400 text-[11px]">
+                          {formatDate(inq.createdAt)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         {/* Audit Log (1 Col) */}
@@ -232,26 +250,32 @@ export default async function AdminDashboardPage() {
             </Link>
           </div>
 
-          <div className="space-y-3">
-            {recentAuditLogs.map((log) => (
-              <div
-                key={log.id}
-                className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50 space-y-1"
-              >
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
-                    {log.action}
-                  </span>
-                  <span className="text-slate-400 text-[10px]">
-                    {formatDate(log.createdAt)}
-                  </span>
+          {recentAuditLogs.length === 0 ? (
+            <div className="p-8 text-center rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800 text-xs text-slate-400">
+              No security or audit events recorded yet.
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {recentAuditLogs.map((log) => (
+                <div
+                  key={log.id}
+                  className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50 space-y-1"
+                >
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                      {log.action}
+                    </span>
+                    <span className="text-slate-400 text-[10px]">
+                      {formatDate(log.createdAt)}
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-600 dark:text-slate-300 truncate">
+                    {log.user ? `${log.user.name} (${log.user.email})` : "System / Visitor"}
+                  </div>
                 </div>
-                <div className="text-[11px] text-slate-600 dark:text-slate-300 truncate">
-                  {log.user ? `${log.user.name} (${log.user.email})` : "System / Visitor"}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

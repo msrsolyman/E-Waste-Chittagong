@@ -34,7 +34,7 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
     titleBn: "",
     category: "MATERIAL",
     imageUrl: photoPresets[0].url,
-    isVerified: true,
+    isVerified: false,
     caption: "",
   });
 
@@ -60,7 +60,7 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
         titleBn: "",
         category: "MATERIAL",
         imageUrl: photoPresets[0].url,
-        isVerified: true,
+        isVerified: false,
         caption: "",
       });
     } catch (err: unknown) {
@@ -178,11 +178,22 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
               </label>
             </div>
 
-            {/* Photography preset selector */}
+            {/* Custom or Preset Image Selection */}
             <div className="md:col-span-2 space-y-2">
               <label className="block font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">
-                Select Photo
+                Media Asset URL (Persistent Cloud / Local Asset) *
               </label>
+              <input
+                type="text"
+                required
+                value={formData.imageUrl}
+                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                placeholder="https://... or /images/..."
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white mb-2"
+              />
+              <span className="text-[11px] text-slate-400 block mb-1">
+                Or select from verified preset photographs:
+              </span>
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                 {photoPresets.map((p) => (
                   <button

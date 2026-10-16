@@ -2,15 +2,29 @@ import * as React from "react";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { formatDate } from "@/lib/utils";
-import { FileClock, ShieldCheck } from "lucide-react";
+import { AdminAuditLogViewer } from "@/components/admin-audit-log-viewer";
+import { FileClock, ShieldAlert } from "lucide-react";
 
 export default async function AdminAuditLogsPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/admin/login");
 
+  if (user.role !== "SUPER_ADMIN") {
+    return (
+      <div className="p-8 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 text-center space-y-3">
+        <ShieldAlert className="w-10 h-10 text-amber-600 mx-auto" />
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+          Access Restricted to Super Administrators
+        </h2>
+        <p className="text-xs text-slate-600 dark:text-slate-400 max-w-md mx-auto">
+          Security audit logs contain sensitive operational tracking data and are accessible exclusively to Super Administrators.
+        </p>
+      </div>
+    );
+  }
+
   const logs = await prisma.auditLog.findMany({
-    take: 50,
+    take: 100,
     orderBy: { createdAt: "desc" },
     include: {
       user: {
@@ -33,55 +47,7 @@ export default async function AdminAuditLogsPage() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200/60 dark:border-slate-800">
-              <tr>
-                <th className="py-3 px-4">Timestamp</th>
-                <th className="py-3 px-4">Action</th>
-                <th className="py-3 px-4">Operator</th>
-                <th className="py-3 px-4">Details</th>
-                <th className="py-3 px-4">IP Address</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {logs.map((log) => (
-                <tr key={log.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                  <td className="py-3 px-4 text-slate-500 font-mono text-[11px] whitespace-nowrap">
-                    {formatDate(log.createdAt)} {new Date(log.createdAt).toLocaleTimeString()}
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded">
-                      {log.action}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    {log.user ? (
-                      <div>
-                        <div className="font-semibold text-slate-900 dark:text-white">
-                          {log.user.name}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {log.user.email} ({log.user.role})
-                        </div>
-                      </div>
-                    ) : (
-                      <span className="text-slate-400 italic">Public Visitor / System</span>
-                    )}
-                  </td>
-                  <td className="py-3 px-4 text-slate-600 dark:text-slate-300 font-mono text-[11px] max-w-xs truncate">
-                    {log.details || "-"}
-                  </td>
-                  <td className="py-3 px-4 text-slate-400 font-mono text-[11px]">
-                    {log.ipAddress || "local"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <AdminAuditLogViewer initialLogs={logs} />
     </div>
   );
 }

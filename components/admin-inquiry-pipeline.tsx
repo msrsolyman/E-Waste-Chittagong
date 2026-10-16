@@ -44,9 +44,13 @@ const statusOptions = [
   { value: "CLOSED", label: "Closed / Archived", color: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300" },
 ];
 
+import { useSearchParams } from "next/navigation";
+
 export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: InquiryData[] }) {
+  const searchParams = useSearchParams();
+  const initialStatusParam = searchParams.get("status");
   const [inquiries, setInquiries] = React.useState<InquiryData[]>(initialInquiries);
-  const [filterStatus, setFilterStatus] = React.useState<string>("ALL");
+  const [filterStatus, setFilterStatus] = React.useState<string>(initialStatusParam || "ALL");
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [expandedId, setExpandedId] = React.useState<string | null>(null);
   const [notesState, setNotesState] = React.useState<Record<string, string>>({});
