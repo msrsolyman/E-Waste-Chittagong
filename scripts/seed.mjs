@@ -6,35 +6,43 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding E-Waste Chittagong database...");
 
-  // 1. Create Admins
-  const superAdminPassword = await bcrypt.hash("Admin@EWC2026!", 12);
-  const managerPassword = await bcrypt.hash("Manager@EWC2026!", 12);
+  // 1. Create Admins (Guarded for Development Only)
+  if (process.env.NODE_ENV === "production" && !process.env.SEED_ADMIN_PASSWORD) {
+    console.log("🔒 [SECURITY NOTICE] Production mode detected. Hardcoded default admin seeding bypassed.");
+    console.log("   To provision your production Super Admin, execute: node scripts/create-admin.mjs");
+  } else {
+    const adminPass = process.env.SEED_ADMIN_PASSWORD || "Admin@EWC2026!";
+    const managerPass = process.env.SEED_MANAGER_PASSWORD || "Manager@EWC2026!";
 
-  const superAdmin = await prisma.user.upsert({
-    where: { email: "admin@ewastechittagong.com" },
-    update: {},
-    create: {
-      email: "admin@ewastechittagong.com",
-      name: "Chittagong Operations Executive",
-      passwordHash: superAdminPassword,
-      role: "SUPER_ADMIN",
-      isActive: true,
-    },
-  });
+    const superAdminPassword = await bcrypt.hash(adminPass, 12);
+    const managerPassword = await bcrypt.hash(managerPass, 12);
 
-  const contentManager = await prisma.user.upsert({
-    where: { email: "manager@ewastechittagong.com" },
-    update: {},
-    create: {
-      email: "manager@ewastechittagong.com",
-      name: "Catalogue Content Officer",
-      passwordHash: managerPassword,
-      role: "CONTENT_MANAGER",
-      isActive: true,
-    },
-  });
+    const superAdmin = await prisma.user.upsert({
+      where: { email: "admin@ewastechittagong.com" },
+      update: {},
+      create: {
+        email: "admin@ewastechittagong.com",
+        name: "Chittagong Operations Executive",
+        passwordHash: superAdminPassword,
+        role: "SUPER_ADMIN",
+        isActive: true,
+      },
+    });
 
-  console.log("Users created:", superAdmin.email, contentManager.email);
+    const contentManager = await prisma.user.upsert({
+      where: { email: "manager@ewastechittagong.com" },
+      update: {},
+      create: {
+        email: "manager@ewastechittagong.com",
+        name: "Catalogue Content Officer",
+        passwordHash: managerPassword,
+        role: "CONTENT_MANAGER",
+        isActive: true,
+      },
+    });
+
+    console.log("Users configured:", superAdmin.email, contentManager.email);
+  }
 
   // 2. Categories
   const catPCBs = await prisma.category.upsert({

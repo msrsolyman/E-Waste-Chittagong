@@ -4,16 +4,8 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Link } from "@/i18n/routing";
 import { InquiryForm } from "@/components/inquiry-form";
-import {
-  ArrowLeft,
-  ShieldCheck,
-  Package,
-  Layers,
-  MapPin,
-  Clock,
-  ArrowUpRight,
-  FileText,
-} from "lucide-react";
+import { ArrowLeft, ShieldCheck, FileText } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 export default async function ProductDetailPage({
   params,
@@ -21,6 +13,7 @@ export default async function ProductDetailPage({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: "productDetail" });
 
   const product = await prisma.product.findUnique({
     where: { slug },
@@ -68,7 +61,7 @@ export default async function ProductDetailPage({
       <div className="flex items-center gap-2 text-xs text-slate-500">
         <Link href="/products" className="hover:text-emerald-600 transition flex items-center gap-1">
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Product Catalogue</span>
+          <span>{t("backToCatalogue")}</span>
         </Link>
         <span>/</span>
         <span className="text-slate-900 dark:text-white font-medium truncate max-w-xs">{title}</span>
@@ -91,10 +84,10 @@ export default async function ProductDetailPage({
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 space-y-1.5">
             <div className="flex items-center gap-2 font-semibold text-slate-700 dark:text-slate-200">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Verified Material Lot Guarantee</span>
+              <span>{t("verifiedGuaranteeTitle")}</span>
             </div>
             <p className="leading-relaxed">
-              Every shipment is packaged and sealed under supervision in Chittagong, adhering strictly to agreed B2B assay expectations and international logistics requirements.
+              {t("verifiedGuaranteeDesc")}
             </p>
           </div>
         </div>
@@ -125,29 +118,29 @@ export default async function ProductDetailPage({
           {/* Technical Specifications Table */}
           <div className="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
             <div className="px-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-              Commercial & Technical Specifications
+              {t("specsTitle")}
             </div>
             <dl className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
               <div className="px-4 py-3 grid grid-cols-3 gap-2">
-                <dt className="text-slate-400 font-medium">Material Grade</dt>
+                <dt className="text-slate-400 font-medium">{t("gradeLabel")}</dt>
                 <dd className="col-span-2 text-slate-900 dark:text-white font-semibold">
                   {product.grade || "Standard Industrial Recycled Grade"}
                 </dd>
               </div>
               <div className="px-4 py-3 grid grid-cols-3 gap-2">
-                <dt className="text-slate-400 font-medium">Origin Port</dt>
+                <dt className="text-slate-400 font-medium">{t("originLabel")}</dt>
                 <dd className="col-span-2 text-slate-900 dark:text-white font-semibold">
                   {product.origin || "Chittagong, Bangladesh"}
                 </dd>
               </div>
               <div className="px-4 py-3 grid grid-cols-3 gap-2">
-                <dt className="text-slate-400 font-medium">Packaging</dt>
+                <dt className="text-slate-400 font-medium">{t("packagingLabel")}</dt>
                 <dd className="col-span-2 text-slate-900 dark:text-white font-semibold">
                   {product.packaging || "Jumbo Sacks / Steel Drums / Palletized"}
                 </dd>
               </div>
               <div className="px-4 py-3 grid grid-cols-3 gap-2">
-                <dt className="text-slate-400 font-medium">Minimum Order (MOQ)</dt>
+                <dt className="text-slate-400 font-medium">{t("moqLabel")}</dt>
                 <dd className="col-span-2 text-slate-900 dark:text-white font-semibold">
                   {product.minOrderQuantity || "1 Metric Ton (Trial Available)"}
                 </dd>
@@ -159,7 +152,7 @@ export default async function ProductDetailPage({
           <div className="space-y-2">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
               <FileText className="w-4 h-4 text-emerald-600" />
-              <span>Full Description & Dismantling Protocol</span>
+              <span>{t("descTitle")}</span>
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
               {fullDesc}
@@ -172,10 +165,10 @@ export default async function ProductDetailPage({
       <section className="pt-8 border-t border-slate-200 dark:border-slate-800 space-y-6">
         <div className="space-y-1">
           <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-            Request Quotation for: <span className="text-emerald-600 dark:text-emerald-400">{title}</span>
+            {t("rfqTitle", { title })}
           </h2>
           <p className="text-xs text-slate-500">
-            Submit your inquiry directly. Our commercial export desk will respond with FOB/CIF pricing, trial shipping schedule, and full documentation.
+            {t("rfqDesc")}
           </p>
         </div>
 

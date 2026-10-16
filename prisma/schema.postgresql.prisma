@@ -1,0 +1,150 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  name         String
+  passwordHash String
+  role         String      @default("CONTENT_MANAGER") // "SUPER_ADMIN" | "CONTENT_MANAGER"
+  isActive     Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  auditLogs    AuditLog[]
+}
+
+model Category {
+  id            String      @id @default(cuid())
+  slug          String      @unique
+  nameEn        String
+  nameBn        String?
+  nameZh        String?
+  nameJa        String?
+  descriptionEn String?
+  descriptionBn String?
+  descriptionZh String?
+  descriptionJa String?
+  imageUrl      String?
+  displayOrder  Int         @default(0)
+  products      Product[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Product {
+  id               String        @id @default(cuid())
+  slug             String        @unique
+  status           String        @default("DRAFT") // "DRAFT" | "PUBLISHED" | "ARCHIVED"
+  isFeatured       Boolean       @default(false)
+  categoryId       String
+  category         Category      @relation(fields: [categoryId], references: [id])
+  
+  // Localized Titles
+  titleEn          String
+  titleBn          String?
+  titleZh          String?
+  titleJa          String?
+
+  // Localized Short Descriptions
+  shortDescEn      String
+  shortDescBn      String?
+  shortDescZh      String?
+  shortDescJa      String?
+
+  // Localized Full Descriptions
+  fullDescEn       String
+  fullDescBn       String?
+  fullDescZh       String?
+  fullDescJa       String?
+
+  // B2B Attributes
+  grade            String?       // e.g. "Industrial Grade A", "Mixed Telephony"
+  origin           String?       // "Chittagong, Bangladesh"
+  packaging        String?       // "Jumbo Bags / Palletized / Steel Drums"
+  minOrderQuantity String?       // e.g. "1 Metric Ton" or "Negotiable"
+  images           String        @default("[]") // JSON stringified array of image URLs
+  
+  inquiries        InquiryItem[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+model Inquiry {
+  id                 String        @id @default(cuid())
+  referenceNo        String        @unique // e.g. "EWC-2026-1001"
+  status             String        @default("NEW") // "NEW" | "CONTACTED" | "IN_PROGRESS" | "QUOTED" | "CLOSED"
+  name               String
+  companyName        String
+  email              String
+  phoneOrWhatsApp    String?
+  country            String
+  interestedCategory String?
+  estimatedQty       String?
+  message            String
+  adminNotes         String?
+  items              InquiryItem[]
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+}
+
+model InquiryItem {
+  id          String    @id @default(cuid())
+  inquiryId   String
+  inquiry     Inquiry   @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product?  @relation(fields: [productId], references: [id])
+}
+
+model Service {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  titleEn       String
+  titleBn       String?
+  titleZh       String?
+  titleJa       String?
+  descriptionEn String
+  descriptionBn String?
+  descriptionZh String?
+  descriptionJa String?
+  iconName      String?
+  displayOrder  Int      @default(0)
+  isPublished   Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model GalleryItem {
+  id          String   @id @default(cuid())
+  titleEn     String
+  titleBn     String?
+  titleZh     String?
+  titleJa     String?
+  imageUrl    String
+  category    String   // "FACILITY" | "MATERIAL" | "DISMANTLING" | "PROCESSING"
+  isVerified  Boolean  @default(false) // Verified real activity vs illustrative
+  caption     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CompanySetting {
+  key         String   @id
+  value       String   // JSON stringified setting values
+  updatedAt   DateTime @updatedAt
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  action      String   // e.g., "PRODUCT_CREATED", "STATUS_UPDATED", "LOGIN"
+  details     String?  // JSON stringified changes
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+}

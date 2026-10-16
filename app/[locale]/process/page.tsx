@@ -1,9 +1,7 @@
 import * as React from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { SectionHeading } from "@/components/section-heading";
-import { ShieldCheck, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
-import { Link } from "@/i18n/routing";
+import { ShieldCheck } from "lucide-react";
 
 export default function ProcessPage() {
   const t = useTranslations("process");
@@ -13,36 +11,32 @@ export default function ProcessPage() {
       num: "01",
       title: t("step1Title"),
       desc: t("step1Desc"),
-      detail:
-        "Commercial lots and enterprise electronic hardware are logged and assigned traceability tracking codes upon intake at our Chittagong handling hub.",
+      detail: t("step1Detail"),
     },
     {
       num: "02",
       title: t("step2Title"),
       desc: t("step2Desc"),
-      detail:
-        "Trained sorting teams classify circuit board grades based on component density, multilayer plating, and IC architecture to ensure pure batches.",
+      detail: t("step2Detail"),
     },
     {
       num: "03",
       title: t("step3Title"),
       desc: t("step3Desc"),
-      detail:
-        "Subassemblies are physically dismantled using specialized tools. Batteries and hazardous capacitors are isolated into certified storage drums.",
+      detail: t("step3Detail"),
     },
     {
       num: "04",
       title: t("step4Title"),
       desc: t("step4Desc"),
-      detail:
-        "Graded materials are packaged into export-ready super sacks or drums, palletized, and loaded into shipping containers for maritime transit.",
+      detail: t("step4Detail"),
     },
   ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
       <SectionHeading
-        badge="Quality & Compliance"
+        badge={t("badge")}
         title={t("title")}
         subtitle={t("subtitle")}
       />
@@ -59,7 +53,7 @@ export default function ProcessPage() {
                 {step.num}
               </span>
               <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">
-                Stage {step.num}
+                {t("stage")} {step.num}
               </span>
             </div>
 
@@ -82,13 +76,13 @@ export default function ProcessPage() {
       <div className="p-8 rounded-3xl bg-slate-900 text-white border border-slate-800 space-y-4">
         <div className="flex items-center gap-2 text-emerald-400 text-xs font-semibold uppercase tracking-wider">
           <ShieldCheck className="w-4 h-4" />
-          <span>Worker Safety & Zero Informal Acid Leaching</span>
+          <span>{t("safetyBadge")}</span>
         </div>
         <h3 className="text-xl font-bold">
-          Strict Policy Against Informal Chemical Refining
+          {t("safetyTitle")}
         </h3>
         <p className="text-xs text-slate-300 max-w-3xl leading-relaxed">
-          E-Waste Chittagong operates purely on physical dismantling, sorting, and mechanical segregation principles. We strictly prohibit crude open-burning, acid bath leaching, or environmentally destructive chemical stripping. All downstream pyrometallurgical refining is conducted exclusively by licensed, accredited international smelters.
+          {t("safetyDesc")}
         </p>
       </div>
     </div>

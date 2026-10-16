@@ -54,12 +54,19 @@
     "empty": "No products found matching your filter criteria.",
     "specifications": "Technical Specifications",
     "inquireThis": "Inquire About This Product",
-    "draftNotice": "This product specification is awaiting final client confirmation before shipment clearance."
+    "draftNotice": "This product specification is awaiting final client confirmation before shipment clearance.",
+    "badge": "B2B Scrap Catalogue",
+    "pageTitle": "Electronic Scrap & Raw Material Categories",
+    "pageSubtitle": "Sorted, graded, and prepared in accordance with international circular economy and pyrometallurgical refiner guidelines."
   },
   "services": {
     "title": "Our Specialized Services",
     "subtitle": "Providing structured, environmentally responsible solutions for electronic waste management.",
-    "learnMore": "Learn More"
+    "learnMore": "Learn More",
+    "badge": "Corporate Services",
+    "pageTitle": "Comprehensive Electronic Waste & Material Solutions",
+    "pageSubtitle": "End-to-end recycling solutions tailored for telecom providers, corporations, and international commodity refiners.",
+    "requestService": "Request Service Information"
   },
   "process": {
     "title": "Compliant Recycling Process",
@@ -72,7 +79,16 @@
     "step3Title": "Safe Dismantling",
     "step3Desc": "Physical disassembly into primary components, separating hazardous batteries safely.",
     "step4Title": "B2B Dispatch & Recovery",
-    "step4Desc": "Carefully packaged material dispatch to verified industrial recyclers and refiners."
+    "step4Desc": "Carefully packaged material dispatch to verified industrial recyclers and refiners.",
+    "badge": "Quality & Compliance",
+    "stage": "Stage",
+    "step1Detail": "Commercial lots and enterprise electronic hardware are logged and assigned traceability tracking codes upon intake at our Chittagong handling hub.",
+    "step2Detail": "Trained sorting teams classify circuit board grades based on component density, multilayer plating, and IC architecture to ensure pure batches.",
+    "step3Detail": "Subassemblies are physically dismantled using specialized tools. Batteries and hazardous capacitors are isolated into certified storage drums.",
+    "step4Detail": "Graded materials are packaged into export-ready super sacks or drums, palletized, and loaded into shipping containers for maritime transit.",
+    "safetyBadge": "Worker Safety & Zero Informal Acid Leaching",
+    "safetyTitle": "Strict Policy Against Informal Chemical Refining",
+    "safetyDesc": "E-Waste Chittagong operates purely on physical dismantling, sorting, and mechanical segregation principles. We strictly prohibit crude open-burning, acid bath leaching, or environmentally destructive chemical stripping. All downstream pyrometallurgical refining is conducted exclusively by licensed, accredited international smelters."
   },
   "gallery": {
     "title": "Facility Activities & Gallery",
@@ -82,7 +98,9 @@
     "all": "All Media",
     "facility": "Facility",
     "material": "Materials",
-    "dismantling": "Dismantling"
+    "dismantling": "Dismantling",
+    "badge": "Visual Verification",
+    "transparencyNote": "E-Waste Chittagong clearly distinguishes between authentic facility handling photographs and illustrative industry concepts for complete buyer transparency."
   },
   "inquiry": {
     "title": "International Business Inquiry & RFQ",
@@ -139,5 +157,55 @@
     "cancel": "Cancel",
     "save": "Save",
     "search": "Search"
+  },
+  "about": {
+    "badge": "Company Overview",
+    "title": "About E-Waste Chittagong",
+    "subtitle": "Dedicated to responsible e-waste aggregation, systematic material separation, and international circular economy trade.",
+    "p1": "E-Waste Chittagong operates at the vital intersection of regional electronic asset retirement and global resource recovery. Based in Bangladesh's foremost maritime gateway city, our organization collects discarded computer equipment, server infrastructure, telecommunication boards, and industrial electronics from corporate enterprises.",
+    "p2": "Our core mission is to replace informal, hazardous e-waste handling with structured, transparent B2B procedures. We prioritize the safe separation of dangerous substances—such as lead solder and lithium accumulators—while maximizing the extraction yield of high-value non-ferrous and precious metal-bearing components.",
+    "p3": "All materials prepared for export or domestic industrial supply undergo systematic grading and packaging according to international industry specifications, allowing certified global smelters and refiners to process them efficiently.",
+    "policyTitle": "Verified Operational Policy",
+    "policyDesc": "E-Waste Chittagong upholds strict factual transparency. All facility specifications, material lots, and business details are verified prior to formal commercial execution.",
+    "missionTitle": "Our Mission",
+    "missionDesc": "To provide safe, ethical, and economically viable electronic waste recovery solutions that divert hazardous electronics from local landfills into the global circular supply chain.",
+    "portTitle": "Chittagong Port Proximity",
+    "portDesc": "Our strategic position near Chittagong's seaport reduces inland transportation overhead, facilitating prompt container stuffing, customs clearance, and global ocean freight dispatch.",
+    "readinessTitle": "International B2B Readiness",
+    "readinessDesc": "We cater to overseas refiners and recyclers with multilingual communication, formal Proforma Invoices, clear assay test terms, and FOB / CIF shipping arrangements."
+  },
+  "categories": {
+    "badge": "Material Taxonomies",
+    "title": "Electronic Waste Product Categories",
+    "subtitle": "Explore our specialized sorting streams for circuit boards, semiconductor microprocessors, telecom infrastructure, and industrial scrap.",
+    "itemsCount": "{count} Catalogue Items",
+    "browse": "Browse {name}"
+  },
+  "productDetail": {
+    "backToCatalogue": "Back to Product Catalogue",
+    "verifiedGuaranteeTitle": "Verified Material Lot Guarantee",
+    "verifiedGuaranteeDesc": "Every shipment is packaged and sealed under supervision in Chittagong, adhering strictly to agreed B2B assay expectations and international logistics requirements.",
+    "specsTitle": "Commercial & Technical Specifications",
+    "gradeLabel": "Material Grade",
+    "originLabel": "Origin Port",
+    "packagingLabel": "Packaging",
+    "moqLabel": "Minimum Order (MOQ)",
+    "descTitle": "Full Description & Dismantling Protocol",
+    "rfqTitle": "Request Quotation for: {title}",
+    "rfqDesc": "Submit your inquiry directly. Our commercial export desk will respond with FOB/CIF pricing, trial shipping schedule, and full documentation."
+  },
+  "privacy": {
+    "badge": "Compliance & Confidentiality",
+    "title": "Privacy & Data Protection Policy",
+    "subtitle": "How E-Waste Chittagong collects, handles, and protects information submitted by international buyers and corporate clients.",
+    "guarantee": "Strict Corporate Guarantee: We never sell, share, or disclose prospective buyer contact details or quotation specifications to third parties.",
+    "sec1Title": "1. Collection of Commercial Inquiries",
+    "sec1Desc": "When you submit a Request for Quotation (RFQ) or contact inquiry through our platform, we collect company identifiers, contact representative names, business email addresses, contact telephone numbers, and material procurement specifications.",
+    "sec2Title": "2. Purpose of Processing",
+    "sec2Desc": "Data gathered is utilized exclusively to formulate formal commercial offers, calculate FOB/CIF freight rates from the Port of Chittagong, confirm inventory readiness, and fulfill international trade documentation requirements.",
+    "sec3Title": "3. Data Security & Storage",
+    "sec3Desc": "All submitted records are encrypted in transit and stored within protected database environments with strict role-based administrative access controls.",
+    "sec4Title": "4. Inquiries & Data Rights",
+    "sec4Desc": "You may request the review, correction, or deletion of your company's commercial records at any time by contacting our compliance desk at info@ewastechittagong.com."
   }
 }

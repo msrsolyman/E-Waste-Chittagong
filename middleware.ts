@@ -5,9 +5,20 @@ import { jwtVerify } from "jose";
 
 const intlMiddleware = createMiddleware(routing);
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "ewc_chittagong_dev_jwt_secret_key_secure_2026_xyz"
-);
+function getJwtSecret(): Uint8Array {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error(
+        "FATAL SECURITY ERROR: JWT_SECRET environment variable must be set in production!"
+      );
+    }
+    return new TextEncoder().encode(
+      "ewc_chittagong_dev_jwt_secret_key_secure_2026_xyz"
+    );
+  }
+  return new TextEncoder().encode(secret);
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -27,7 +38,7 @@ export async function middleware(request: NextRequest) {
     }
 
     try {
-      await jwtVerify(sessionCookie, JWT_SECRET);
+      await jwtVerify(sessionCookie, getJwtSecret());
     } catch {
       const loginUrl = new URL("/admin/login", request.url);
       loginUrl.searchParams.set("from", pathname);

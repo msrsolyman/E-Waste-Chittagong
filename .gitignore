@@ -28,3 +28,5 @@ next-env.d.ts
 # Prisma & SQLite
 dev.db
 dev.db-journal
+*.db
+backups/

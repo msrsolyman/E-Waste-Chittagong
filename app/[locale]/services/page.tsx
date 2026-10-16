@@ -1,8 +1,9 @@
 import * as React from "react";
 import { prisma } from "@/lib/prisma";
 import { SectionHeading } from "@/components/section-heading";
-import { Truck, Cpu, Ship, ShieldCheck, CheckCircle2, ArrowRight } from "lucide-react";
+import { Truck, Cpu, Ship, ShieldCheck, ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
 
 export default async function ServicesPage({
   params,
@@ -10,6 +11,7 @@ export default async function ServicesPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "services" });
 
   const services = await prisma.service.findMany({
     where: { isPublished: true },
@@ -25,9 +27,9 @@ export default async function ServicesPage({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <SectionHeading
-        badge="Corporate Services"
-        title="Comprehensive Electronic Waste & Material Solutions"
-        subtitle="End-to-end recycling solutions tailored for telecom providers, corporations, and international commodity refiners."
+        badge={t("badge")}
+        title={t("pageTitle")}
+        subtitle={t("pageSubtitle")}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -70,7 +72,7 @@ export default async function ServicesPage({
                   href="/inquiry"
                   className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 transition"
                 >
-                  <span>Request Service Information</span>
+                  <span>{t("requestService")}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>

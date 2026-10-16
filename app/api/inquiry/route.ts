@@ -2,9 +2,24 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { inquirySchema } from "@/lib/validations/inquiry";
 import { generateReferenceNo } from "@/lib/utils";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   try {
+    const clientIp =
+      req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+      req.headers.get("x-real-ip") ||
+      "127.0.0.1";
+
+    // Rate Limiting: 15 inquiries per hour per IP
+    const rateCheck = checkRateLimit("public-inquiry", clientIp, 15, 60 * 60 * 1000);
+    if (!rateCheck.success) {
+      return NextResponse.json(
+        { error: "Too many inquiries submitted from this connection. Please try again later or contact our office directly via email." },
+        { status: 429 }
+      );
+    }
+
     const body = await req.json();
 
     // 1. Zod validation

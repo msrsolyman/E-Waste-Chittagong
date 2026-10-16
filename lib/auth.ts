@@ -2,9 +2,20 @@ import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "ewc_chittagong_dev_jwt_secret_key_secure_2026_xyz"
-);
+function getJwtSecret(): Uint8Array {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error(
+        "FATAL SECURITY ERROR: JWT_SECRET environment variable must be set in production!"
+      );
+    }
+    return new TextEncoder().encode(
+      "ewc_chittagong_dev_jwt_secret_key_secure_2026_xyz"
+    );
+  }
+  return new TextEncoder().encode(secret);
+}
 
 export const COOKIE_NAME = "ewc_admin_session";
 
@@ -33,14 +44,14 @@ export async function createSessionToken(
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("8h")
-    .sign(JWT_SECRET);
+    .sign(getJwtSecret());
 }
 
 export async function verifySessionToken(
   token: string
 ): Promise<SessionPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
+    const { payload } = await jwtVerify(token, getJwtSecret());
     return payload as unknown as SessionPayload;
   } catch {
     return null;

@@ -3,7 +3,8 @@ import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { SectionHeading } from "@/components/section-heading";
 import { Link } from "@/i18n/routing";
-import { ArrowRight, Layers, Package } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 export default async function CategoriesPage({
   params,
@@ -11,6 +12,7 @@ export default async function CategoriesPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "categories" });
 
   const categories = await prisma.category.findMany({
     orderBy: { displayOrder: "asc" },
@@ -24,9 +26,9 @@ export default async function CategoriesPage({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <SectionHeading
-        badge="Material Taxonomies"
-        title="Electronic Waste Product Categories"
-        subtitle="Explore our specialized sorting streams for circuit boards, semiconductor microprocessors, telecom infrastructure, and industrial scrap."
+        badge={t("badge")}
+        title={t("title")}
+        subtitle={t("subtitle")}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -60,7 +62,7 @@ export default async function CategoriesPage({
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-black/75 text-white backdrop-blur-md">
-                  {cat._count.products} Catalogue Items
+                  {t("itemsCount", { count: cat._count.products })}
                 </div>
               </div>
 
@@ -79,7 +81,7 @@ export default async function CategoriesPage({
                     href={`/products?category=${encodeURIComponent(cat.nameEn)}`}
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 transition"
                   >
-                    <span>Browse {name}</span>
+                    <span>{t("browse", { name })}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>

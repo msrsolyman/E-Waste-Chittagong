@@ -9,7 +9,7 @@ A premium, international-standard B2B corporate digital presence for **E-Waste C
 
 ---
 
-## Key Features
+## Key Architecture & Features
 
 1. **Brand Identity**:
    - Preserves official PNG logo (`assets-source/E-Waste-Chittagong-logo.png`).
@@ -21,7 +21,8 @@ A premium, international-standard B2B corporate digital presence for **E-Waste C
    - **Bengali (`/bn`)**: Native localized experience for regional clients and suppliers.
    - **Simplified Chinese (`/zh-CN`)**: Dedicated localization for East Asian smelters and traders.
    - **Japanese (`/ja`)**: Dedicated localization for Japanese refiners and recycling consortiums.
-   - Active page path preservation when switching languages.
+   - 100% complete parity across navigation, hero, about, services, process, gallery, product detail, inquiry forms, footer, and privacy policies.
+   - Dynamic canonical and hreflang alternate meta tags on every route.
 
 3. **Theme System (`next-themes`)**:
    - Light mode and Dark mode with system preference detection and zero-FOUC state persistence.
@@ -33,32 +34,48 @@ A premium, international-standard B2B corporate digital presence for **E-Waste C
 
 5. **International RFQ Inquiry System**:
    - Validated submission with honeypot spam protection.
-   - Generates instant inquiry tracking codes (e.g., `EWC-2026-XXXX`).
+   - IP-based rate limiting (15 requests/hour per IP).
+   - Instant inquiry tracking codes (e.g., `EWC-2026-XXXX`).
    - 5-stage status workflow: `NEW` ➔ `CONTACTED` ➔ `IN_PROGRESS` ➔ `QUOTED` ➔ `CLOSED`.
    - CSV export capability for the commercial export desk.
 
 6. **Administrative Management Panel (`/admin`)**:
    - Role-Based Access Control (`SUPER_ADMIN` and `CONTENT_MANAGER`).
+   - Brute-force protection on `/api/admin/login` (5 attempts per 15 minutes with IP lockout).
    - Real database KPI metrics dashboard.
    - Product catalogue CRUD with multi-language inputs (EN, BN, ZH, JA).
    - Category taxonomy management.
    - Media gallery manager with authentic vs illustrative verification badges.
    - Admin user creation and role configuration (Super Admin only).
-   - Security audit trail.
+   - Security audit trail logging all sensitive operations.
 
-7. **Original Photographic Assets**:
-   - High-resolution editorial photography of server motherboards, CPU processor scrap, telecommunication transceiver boards, and clean disassembly facilities.
+7. **AI Asset Transparency**:
+   - All AI-generated product and facility photography are explicitly flagged with `isVerified: false` ("Illustrative Concept / Material Representation") to maintain strict client and buyer transparency.
 
 ---
 
-## Credentials (Local Development)
+## Security & Admin Credentials
 
-- **Super Admin**:
-  - Email: `admin@ewastechittagong.com`
-  - Password: `Admin@EWC2026!`
-- **Content Manager**:
-  - Email: `manager@ewastechittagong.com`
-  - Password: `Manager@EWC2026!`
+### Provisioning the Production Administrator
+To prevent insecure default credentials in production, hardcoded admin seeding is disabled when `NODE_ENV=production`. To provision your first administrator, run:
+
+```bash
+# Interactive mode (prompts for Name, Email, and Password):
+node scripts/create-admin.mjs
+
+# Or via environment variables:
+ADMIN_NAME="Operations Executive" \
+ADMIN_EMAIL="admin@ewastechittagong.com" \
+ADMIN_PASSWORD="YourStrongPassword123!" \
+node scripts/create-admin.mjs
+```
+
+> **Password Policy**: Passwords must be at least 12 characters long and contain uppercase, lowercase, numbers, and special characters. Hashed via bcrypt with cost factor 12.
+
+### Local Development Test Accounts
+In local development only (`NODE_ENV=development`), `scripts/seed.mjs` sets up test accounts for testing convenience:
+- **Super Admin**: `admin@ewastechittagong.com` / `Admin@EWC2026!`
+- **Content Manager**: `manager@ewastechittagong.com` / `Manager@EWC2026!`
 
 ---
 
@@ -68,19 +85,40 @@ A premium, international-standard B2B corporate digital presence for **E-Waste C
 # 1. Install dependencies
 npm install
 
-# 2. Database Sync & Seeding
+# 2. Database Sync & Seeding (SQLite by default)
 npx prisma db push
 node scripts/seed.mjs
 node scripts/seed-gallery.mjs
 
-# 3. Run Development Server
+# 3. Environment Audit
+node scripts/check-env.mjs
+
+# 4. Run Development Server
 npm run dev
 # Website available on http://localhost:3000
 
-# 4. Production Build & Start
+# 5. Production Build & Start
 npm run build
 npm start
 ```
+
+---
+
+## Database Management & Backup
+
+### 1. Snapshotting the Database
+```bash
+node scripts/db-backup.mjs
+# Creates timestamped backup in ./backups/sqlite-ewc-<timestamp>.db
+```
+
+### 2. Switching to Production PostgreSQL (Serverless / Cloud)
+For serverless hosting (e.g. Vercel, Supabase, Neon) where SQLite files are ephemeral:
+1. Create a free PostgreSQL instance on [Supabase](https://supabase.com) or [Neon](https://neon.tech).
+2. Replace `prisma/schema.prisma` with `prisma/schema.postgresql.prisma` (or change `provider = "postgresql"`).
+3. Set `DATABASE_URL="postgresql://user:pass@host:5432/dbname?sslmode=require"` in `.env`.
+4. Run `npx prisma db push` to initialize tables.
+5. Provision the administrator via `node scripts/create-admin.mjs`.
 
 ---
 
@@ -96,22 +134,21 @@ node scripts/browser-audit.mjs
 
 ---
 
-## Production Deployment Guide (Budget-Conscious)
+## External Services & Production Deployment Checklist
 
-1. **Database (PostgreSQL / Supabase)**:
-   - Create a free project on [Supabase](https://supabase.com) or [Neon](https://neon.tech).
-   - Copy connection string into `.env`:
-     ```env
-     DATABASE_URL="postgresql://user:password@db.supabase.co:5432/postgres?sslmode=require"
-     ```
-   - In `prisma/schema.prisma`, change datasource provider from `"sqlite"` to `"postgresql"`.
-   - Run `npx prisma db push` and `node scripts/seed.mjs`.
+### Required External Services
+1. **Domain Registration**: e.g., `ewastechittagong.com` (~$10-12/yr via Cloudflare Registrar, Namecheap, or Google Domains).
+2. **DNS & SSL**: Cloudflare Free Tier (recommended for DDoS protection, global edge caching, and free SSL).
+3. **Application Hosting**:
+   - *Option A (Zero-cost Serverless)*: Vercel Free Hobby Tier (pair with managed PostgreSQL below).
+   - *Option B (Self-hosted / VPS)*: DigitalOcean Droplet / Hetzner Cloud (~$4-6/mo) with persistent SQLite or Dockerized Postgres.
+4. **Managed Database (If using Option A)**: Supabase Free Tier (500MB storage, pooled connections) or Neon Free Tier.
+5. **Business Email Hosting**: Google Workspace or Zoho Mail Free/Standard for `info@ewastechittagong.com`.
 
-2. **Hosting (Vercel / Cloudflare Pages / VPS)**:
-   - Connect repository to Vercel (free tier).
-   - Set environment variables:
-     - `DATABASE_URL`
-     - `JWT_SECRET` (generate 32+ random characters)
-     - `NEXT_PUBLIC_SITE_URL` (e.g. `https://ewastechittagong.com`)
-   - Build Command: `npm run build`
-   - Output Directory: `.next`
+### Client Content Signoff Checklist
+Before public DNS cutover, obtain formal client confirmation on:
+- [ ] Official corporate phone number and WhatsApp routing number (currently using placeholder with disclaimer).
+- [ ] Physical street address/plot number for the Chittagong facility.
+- [ ] Trade license, TIN, and Department of Environment (DoE) clearance document numbers.
+- [ ] Replacement of illustrative AI images with real high-resolution photographs of the physical warehouse and sorting floor as they become available.
+- [ ] Official banking coordinates for international Letter of Credit (LC) and Telegraphic Transfer (TT).

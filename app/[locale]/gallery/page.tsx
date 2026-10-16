@@ -52,7 +52,7 @@ function GalleryView({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <SectionHeading
-        badge="Visual Verification"
+        badge={t("badge")}
         title={t("title")}
         subtitle={t("subtitle")}
       />
@@ -61,7 +61,7 @@ function GalleryView({
       <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-3">
         <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
         <span>
-          E-Waste Chittagong clearly distinguishes between authentic facility handling photographs and illustrative industry concepts for complete buyer transparency.
+          {t("transparencyNote")}
         </span>
       </div>
 

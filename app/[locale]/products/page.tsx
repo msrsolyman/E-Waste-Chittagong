@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { SectionHeading } from "@/components/section-heading";
 import { ProductsCatalogueView } from "@/components/products-catalogue-view";
 import { ProductCardData } from "@/components/product-card";
+import { getTranslations } from "next-intl/server";
 
 export default async function ProductsPage({
   params,
@@ -77,12 +78,14 @@ export default async function ProductsPage({
     };
   });
 
+  const t = await getTranslations({ locale, namespace: "products" });
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
       <SectionHeading
-        badge="B2B Scrap Catalogue"
-        title="Electronic Scrap & Raw Material Categories"
-        subtitle="Sorted, graded, and prepared in accordance with international circular economy and pyrometallurgical refiner guidelines."
+        badge={t("badge")}
+        title={t("pageTitle")}
+        subtitle={t("pageSubtitle")}
       />
 
       <ProductsCatalogueView

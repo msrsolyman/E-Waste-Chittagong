@@ -54,35 +54,53 @@
     "empty": "未找到符合筛选条件的产品记录。",
     "specifications": "规格参数",
     "inquireThis": "咨询该产品采购",
-    "draftNotice": "该产品规格正等待最终客户确认后执行装运放行。"
+    "draftNotice": "该产品规格正等待最终客户确认后执行装运放行。",
+    "badge": "B2B 废料目录",
+    "pageTitle": "电子废料与再生原料品类",
+    "pageSubtitle": "严格遵照国际循环经济标准与金属精炼冶炼规范执行等级标定与打包。"
   },
   "services": {
     "title": "核心服务领域",
     "subtitle": "为大中型企业提供合规、可审计的电子废弃物全流程处理方案。",
-    "learnMore": "了解详情"
+    "learnMore": "了解详情",
+    "badge": "企业服务",
+    "pageTitle": "全流程电子废料与金属材料循环利用方案",
+    "pageSubtitle": "专为通信运营商、跨国企业及全球有色金属冶炼厂定制的合规再生服务。",
+    "requestService": "索取服务详情"
   },
   "process": {
     "title": "合规回收作业流程",
     "subtitle": "每一环节严格遵循环保规范、作业安全与资源系统化提取标准。",
     "operationalStandardsBadge": "运营标准",
-    "step1Title": "批量收集与归集",
-    "step1Desc": "定点接收企业退役电子资产与工业废料。",
-    "step2Title": "人工精选与分级",
-    "step2Desc": "专业团队对多层电路板、通信基站模块进行等级划分。",
-    "step3Title": "安全拆解与分离",
-    "step3Desc": "物理拆解外壳、变压器并安全隔离废旧蓄电池与有害组分。",
-    "step4Title": "B2B 打包与合规发运",
-    "step4Desc": "标准集装袋/托盘打包，交付至国际资质再生精炼企业。"
+    "step1Title": "批量回收与汇聚",
+    "step1Desc": "规范接收企事业单位退役电子资产及批量工业残料。",
+    "step2Title": "专业等级分选",
+    "step2Desc": "人工精细分拣通信板卡、主板芯片与金属构件。",
+    "step3Title": "环保拆解分离",
+    "step3Desc": "物理拆解各级模块，单独隔离并妥善处置电池及有害元件。",
+    "step4Title": "B2B 打包与交运",
+    "step4Desc": "标准工业包装密封，直供通过审计的全球冶炼与精炼基地。",
+    "badge": "质量与合规",
+    "stage": "工段",
+    "step1Detail": "企业退役资产进入吉大港作业中心时，立即赋予唯一溯源码与称重台账。",
+    "step2Detail": "按元器件密度、多层镀金厚度及封装工艺进行分级，保障纯度与冶炼收率。",
+    "step3Detail": "专用机械工具物理拆解，废蓄电池与电解电容严格隔离至危废储运桶。",
+    "step4Detail": "采用吨袋托盘密封打包，直接装运海运集装箱，送往国际合规精炼企业。",
+    "safetyBadge": "作业安全与杜绝非正规酸浸",
+    "safetyTitle": "严禁非正规化学冶炼与酸洗",
+    "safetyDesc": "E-Waste Chittagong 严格坚持物理拆解与机械分选原则。严禁露天焚烧、强酸浸出或有毒剥离。后续高温火法与湿法冶炼由持牌国际专业精炼厂完成。"
   },
   "gallery": {
-    "title": "作业实景与活动图库",
-    "subtitle": "真实展示仓库分拣、物料存储与操作现场。",
-    "verifiedBadge": "真实作业记录",
-    "illustrativeBadge": "行业概念示意",
+    "title": "作业现场与设施图库",
+    "subtitle": "透明展示我们的材料处置标准、工序规范与现场管理。",
+    "verifiedBadge": "真实作业影像",
+    "illustrativeBadge": "示意图景",
     "all": "全部媒体",
-    "facility": "仓储设施",
-    "material": "分类物料",
-    "dismantling": "拆解作业"
+    "facility": "作业设施",
+    "material": "材料库存",
+    "dismantling": "拆解工段",
+    "badge": "实景验证",
+    "transparencyNote": "为保障国际采购商知情权，E-Waste Chittagong 严格区分真实作业现场照片与行业示意图景。"
   },
   "inquiry": {
     "title": "国际商务询价 (RFQ)",
@@ -139,5 +157,55 @@
     "cancel": "取消",
     "save": "保存",
     "search": "搜索"
+  },
+  "about": {
+    "badge": "企业概览",
+    "title": "关于 E-Waste Chittagong",
+    "subtitle": "专注于合规电子废弃物归集、专业材料分拣与国际循环经济贸易。",
+    "p1": "E-Waste Chittagong 立足于区域企业级电子资产退役与全球资源再生的战略交汇点。我们依托孟加拉国最重要的海运门户城市吉大港，规范化回收废旧计算机、服务器网络设施、通信板卡及工业电子废料。",
+    "p2": "我们的使命是以透明、可审计的B2B作业流程替代传统非正规拆解。我们严格隔离焊锡与锂电池等有害物质，最大化提升高品位有色金属和贵金属部件的提取收率。",
+    "p3": "所有出口及工业原料均按国际公认标准执行分拣、等级评定和标准化包装，为全球合规冶炼企业提供高品质的再生原料保障。",
+    "policyTitle": "核实运营政策",
+    "policyDesc": "E-Waste Chittagong 坚持事实透明原则。所有设施指标、物料批次与商业数据均在正式贸易履约前严格核实。",
+    "missionTitle": "我们的使命",
+    "missionDesc": "提供安全、环保且具备商业可行性的电子废料回收方案，将工业废弃物转化为全球循环经济资源。",
+    "portTitle": "吉大港枢纽区位",
+    "portDesc": "紧邻吉大港国际集装箱海运港区，大幅降低内陆驳运损耗，实现快速装箱、通关与国际干线发运。",
+    "readinessTitle": "国际商务履约保障",
+    "readinessDesc": "支持多语种商贸沟通，出具标准形式发票（PI），提供清晰的化验协议与 FOB / CIF 国际海运条款支持。"
+  },
+  "categories": {
+    "badge": "物料品类分类",
+    "title": "电子废弃物商品分类",
+    "subtitle": "探索印刷电路板、半导体处理器、通信基站退役模块及工业残料的专业分流。",
+    "itemsCount": "{count} 个目录品类",
+    "browse": "浏览 {name}"
+  },
+  "productDetail": {
+    "backToCatalogue": "返回产品目录",
+    "verifiedGuaranteeTitle": "核实物料批次保障",
+    "verifiedGuaranteeDesc": "每批货物均在吉大港专人监装并密封打包，严格符合合同化验约定与国际海运货代规范。",
+    "specsTitle": "商业与技术规格参数",
+    "gradeLabel": "物料品级",
+    "originLabel": "装运港口",
+    "packagingLabel": "包装规格",
+    "moqLabel": "最小起订量 (MOQ)",
+    "descTitle": "产品详述与拆解规范",
+    "rfqTitle": "采购询价: {title}",
+    "rfqDesc": "请直接提交您的采购需求，我们的国际贸易业务部将迅速回复 FOB/CIF 报价、样单装运周期及单证要求。"
+  },
+  "privacy": {
+    "badge": "合规与保密承诺",
+    "title": "隐私权保护与数据合规政策",
+    "subtitle": "E-Waste Chittagong 如何收集、处理与保护国际买家及企业合作伙伴提交的商业信息。",
+    "guarantee": "企业严格承诺：我们绝不出售、共享或向任何无关第三方披露潜在客户的联络方式及采购询盘规格。",
+    "sec1Title": "1. 商业询盘信息收集",
+    "sec1Desc": "当您在平台提交询价单（RFQ）或商务联络时，我们将收集企业全称、联系人姓名、业务邮箱、商务电话及意向采购指标。",
+    "sec2Title": "2. 数据处理目的",
+    "sec2Desc": "所收集数据严格用于出具正式商业报价、核算吉大港出发海运运费、核查现货库存及办理国际海关出口单证。",
+    "sec3Title": "3. 数据安全与技术防护",
+    "sec3Desc": "所有提交数据均通过传输加密，并存储在具有严格基于角色访问控制（RBAC）的数据库环境中。",
+    "sec4Title": "4. 客户数据权利",
+    "sec4Desc": "您可随时联络合规部邮箱 info@ewastechittagong.com 申请查阅、更正或删除您企业的商贸档案。"
   }
 }
