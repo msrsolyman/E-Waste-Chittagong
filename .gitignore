@@ -30,3 +30,4 @@ dev.db
 dev.db-journal
 *.db
 backups/
+.neon
