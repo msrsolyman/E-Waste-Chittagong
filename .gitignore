@@ -31,3 +31,4 @@ dev.db-journal
 *.db
 backups/
 .neon
+screenshots/

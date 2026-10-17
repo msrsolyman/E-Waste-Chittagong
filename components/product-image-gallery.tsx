@@ -24,6 +24,7 @@ export function ProductImageGallery({
           alt={title}
           fill
           priority
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute top-3 left-3">
@@ -54,6 +55,7 @@ export function ProductImageGallery({
                   src={img}
                   alt={`${title} thumbnail ${idx + 1}`}
                   fill
+                  sizes="64px"
                   className="object-cover"
                 />
               </button>
