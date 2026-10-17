@@ -26,7 +26,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
       : "/images/products/pcb-motherboards.jpg";
 
   return (
-    <div className="group flex flex-col rounded-2xl border border-slate-200/80 dark:border-slate-800/90 bg-white dark:bg-slate-900/90 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-emerald-500/10 hover:border-emerald-500/50 dark:hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-300">
+    <div className="group flex flex-col rounded-2xl border border-slate-200/80 dark:border-slate-800/90 bg-white dark:bg-slate-900/90 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-emerald-950/10 dark:hover:shadow-black/50 hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-1 transition-all duration-300 ease-out">
       {/* Product Image Container */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
         <Image
@@ -34,9 +34,9 @@ export function ProductCard({ product }: { product: ProductCardData }) {
           alt={product.title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
 
         <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
           <span className="px-2.5 py-1 rounded-lg text-[11px] font-bold tracking-wide uppercase bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 backdrop-blur-md shadow-sm border border-slate-200/60 dark:border-slate-700/60">
@@ -64,7 +64,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
             {product.origin && <span className="shrink-0">{product.origin}</span>}
           </div>
 
-          <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors duration-200 line-clamp-1">
             {product.title}
           </h3>
 
@@ -77,16 +77,16 @@ export function ProductCard({ product }: { product: ProductCardData }) {
         <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
           <Link
             href={`/products/${product.slug}`}
-            className="flex-1 inline-flex items-center justify-center py-2 px-3 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+            className="flex-1 inline-flex items-center justify-center py-2 px-3 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-[0.98] transition-all duration-200"
           >
             {t("viewDetails")}
           </Link>
           <Link
             href={`/inquiry?product=${encodeURIComponent(product.slug)}`}
-            className="inline-flex items-center justify-center gap-1.5 py-2 px-3.5 rounded-lg text-xs font-semibold bg-emerald-700 hover:bg-emerald-800 text-white shadow-sm transition-colors"
+            className="inline-flex items-center justify-center gap-1.5 py-2 px-3.5 rounded-lg text-xs font-semibold bg-emerald-700 hover:bg-emerald-800 text-white shadow-sm hover:shadow active:scale-[0.98] transition-all duration-200 group/btn"
           >
             <span>{t("requestQuote")}</span>
-            <ArrowUpRight className="w-3.5 h-3.5" />
+            <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
           </Link>
         </div>
       </div>

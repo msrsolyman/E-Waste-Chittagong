@@ -18,18 +18,18 @@ export function ProductImageGallery({
   return (
     <div className="space-y-3">
       {/* Main Image */}
-      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-md group">
+      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-md hover:shadow-xl transition-all duration-300 group">
         <Image
           src={selectedImage}
           alt={title}
           fill
           priority
           sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
         />
         <div className="absolute top-3 left-3">
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-600/90 text-white backdrop-blur-md shadow-sm">
-            <ShieldCheck className="w-3.5 h-3.5" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-semibold tracking-wide bg-slate-950/80 border border-emerald-500/40 text-emerald-300 backdrop-blur-md shadow-sm">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             <span>{verifiedText}</span>
           </span>
         </div>
@@ -45,9 +45,9 @@ export function ProductImageGallery({
                 key={idx}
                 type="button"
                 onClick={() => setSelectedImage(img)}
-                className={`relative w-16 h-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
+                className={`relative w-16 h-16 rounded-xl overflow-hidden border-2 active:scale-95 transition-all duration-200 shrink-0 ${
                   isSelected
-                    ? "border-emerald-600 ring-2 ring-emerald-600/30 scale-105"
+                    ? "border-emerald-600 ring-2 ring-emerald-600/30 scale-105 opacity-100"
                     : "border-slate-200 dark:border-slate-800 hover:border-slate-400 opacity-70 hover:opacity-100"
                 }`}
               >
@@ -56,7 +56,7 @@ export function ProductImageGallery({
                   alt={`${title} thumbnail ${idx + 1}`}
                   fill
                   sizes="64px"
-                  className="object-cover"
+                  className="object-cover transition-transform duration-300 hover:scale-105"
                 />
               </button>
             );

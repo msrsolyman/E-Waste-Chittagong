@@ -137,6 +137,113 @@
   animation: shimmer 3.5s infinite;
 }
 
+/* ==========================================================================
+   CINEMATIC MOTION SYSTEM & TIMING TOKENS
+   - Micro-interactions: 180ms - 240ms
+   - Card lifts / transitions: 240ms - 320ms
+   - Section reveals: 500ms - 650ms
+   - Easing: cubic-bezier(0.16, 1, 0.3, 1) [Natural Deceleration]
+   ========================================================================== */
+
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroImageReveal {
+  0% {
+    opacity: 0;
+    transform: scale(1.035);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-hero-eyebrow {
+  animation: heroFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+  will-change: opacity, transform;
+}
+
+.animate-hero-headline {
+  animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  will-change: opacity, transform;
+}
+
+.animate-hero-subtitle {
+  animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+  will-change: opacity, transform;
+}
+
+.animate-hero-ctas {
+  animation: heroFadeUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.38s both;
+  will-change: opacity, transform;
+}
+
+.animate-hero-trust {
+  animation: heroFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.48s both;
+  will-change: opacity, transform;
+}
+
+.animate-hero-image {
+  animation: heroImageReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  will-change: opacity, transform;
+}
+
+/* Scroll-triggered reveal state */
+.motion-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.motion-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.motion-reveal-fade {
+  opacity: 0;
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+.motion-reveal-fade.is-visible {
+  opacity: 1;
+}
+
+/* Stagger delay helpers */
+.stagger-1 { transition-delay: 60ms; }
+.stagger-2 { transition-delay: 120ms; }
+.stagger-3 { transition-delay: 180ms; }
+.stagger-4 { transition-delay: 240ms; }
+.stagger-5 { transition-delay: 300ms; }
+
+/* Interactive button & micro-interaction helpers */
+.btn-micro {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-micro:active {
+  transform: scale(0.98);
+}
+
+.card-micro {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-micro:hover {
+  transform: translateY(-4px);
+}
+
 /* Accessibility: Honor reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
@@ -147,5 +254,18 @@
     scroll-behavior: auto !important;
     transition-duration: 0s !important;
     transition-delay: 0s !important;
+  }
+  .motion-reveal,
+  .motion-reveal-fade,
+  .animate-hero-eyebrow,
+  .animate-hero-headline,
+  .animate-hero-subtitle,
+  .animate-hero-ctas,
+  .animate-hero-trust,
+  .animate-hero-image {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
   }
 }
