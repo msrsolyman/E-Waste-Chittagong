@@ -1,5 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
+import { headers } from "next/headers";
 import { getCurrentUser } from "@/lib/auth";
 import { BrandLogo } from "@/components/brand-logo";
 import { AdminLogoutButton } from "@/components/admin-logout-button";
@@ -20,9 +21,11 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const user = await getCurrentUser();
+  const headerList = await headers();
+  const adminPathname = headerList.get("x-admin-pathname") || "";
 
-  // If user is unauthenticated (e.g. /admin/login), don't show the dashboard shell
-  if (!user) {
+  // If user is unauthenticated or on /admin/login, don't show the dashboard shell
+  if (!user || adminPathname.startsWith("/admin/login")) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
         {children}

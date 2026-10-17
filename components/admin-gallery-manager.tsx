@@ -591,26 +591,41 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
       </div>
 
       {/* ------------------------------------------------------------- */}
-      {/* FULL-SCREEN IMAGE LIGHTBOX MODAL                              */}
+      {/* FULL-SCREEN IMAGE / VIDEO LIGHTBOX MODAL                      */}
       {/* ------------------------------------------------------------- */}
       {lightboxItem && (
-        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="relative max-w-4xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl animate-in zoom-in-95">
-            {/* Lightbox Media Container */}
-            <div className="relative aspect-[16/10] w-full bg-black flex items-center justify-center overflow-hidden">
+        <div
+          className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6"
+          onClick={() => setLightboxItem(null)}
+        >
+          <div
+            className="relative max-w-4xl w-full max-h-[92vh] bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl animate-in zoom-in-95 flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Lightbox Media Container with Ambient Glow */}
+            <div className="relative w-full bg-slate-950 flex items-center justify-center overflow-hidden min-h-[300px] max-h-[68vh] p-2 sm:p-4">
+              {/* Soft ambient blur from image */}
+              <div
+                className="absolute inset-0 bg-cover bg-center blur-3xl opacity-25 scale-125 pointer-events-none select-none transition-all duration-700"
+                style={{
+                  backgroundImage: `url(${isVideoUrl(lightboxItem.imageUrl) ? getVideoPoster(lightboxItem.imageUrl) : lightboxItem.imageUrl})`,
+                }}
+              />
+              <div className="absolute inset-0 bg-radial from-transparent via-slate-950/50 to-slate-950/90 pointer-events-none" />
+
               {isVideoUrl(lightboxItem.imageUrl) ? (
                 <video
                   controls
                   autoPlay
                   playsInline
                   src={lightboxItem.imageUrl}
-                  className="w-full h-full max-h-[70vh] object-contain"
+                  className="relative z-10 max-h-[64vh] max-w-full w-auto h-auto object-contain rounded-xl shadow-2xl"
                 />
               ) : (
                 <img
                   src={lightboxItem.imageUrl}
                   alt={lightboxItem.titleEn}
-                  className="w-full h-full max-h-[70vh] object-contain"
+                  className="relative z-10 max-h-[64vh] max-w-full w-auto h-auto object-contain rounded-xl shadow-2xl transition-all duration-300"
                   onError={(e) => {
                     e.currentTarget.src = "/images/products/pcb-motherboards.jpg";
                   }}

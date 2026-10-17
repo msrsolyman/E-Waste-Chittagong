@@ -291,24 +291,34 @@ export function GalleryClientView({
               </button>
             </div>
 
-            {/* Media Player Container */}
-            <div className="relative bg-black flex items-center justify-center flex-1 overflow-hidden min-h-[300px] max-h-[65vh]">
+            {/* Media Player Container with Ambient Backdrop */}
+            <div className="relative bg-slate-950 flex items-center justify-center flex-1 overflow-hidden min-h-[300px] max-h-[68vh] p-2 sm:p-4">
+              {/* Soft ambient blur from image or video poster */}
+              <div
+                className="absolute inset-0 bg-cover bg-center blur-3xl opacity-25 scale-125 pointer-events-none select-none transition-all duration-700"
+                style={{
+                  backgroundImage: `url(${isVideo(activeModalItem.imageUrl) ? getVideoPoster(activeModalItem.imageUrl) : activeModalItem.imageUrl})`,
+                }}
+              />
+              <div className="absolute inset-0 bg-radial from-transparent via-slate-950/50 to-slate-950/90 pointer-events-none" />
+
               {isVideo(activeModalItem.imageUrl) ? (
                 <video
                   controls
                   autoPlay
                   playsInline
                   src={activeModalItem.imageUrl}
-                  className="w-full h-full max-h-[65vh] object-contain"
+                  className="relative z-10 max-h-[64vh] max-w-full w-auto h-auto object-contain rounded-xl shadow-2xl"
                 />
               ) : (
-                <div className="relative w-full h-full max-h-[65vh] flex items-center justify-center p-4">
-                  <img
-                    src={activeModalItem.imageUrl}
-                    alt={activeModalItem.title}
-                    className="max-w-full max-h-[60vh] object-contain rounded-lg"
-                  />
-                </div>
+                <img
+                  src={activeModalItem.imageUrl}
+                  alt={activeModalItem.title}
+                  className="relative z-10 max-h-[64vh] max-w-full w-auto h-auto object-contain rounded-xl shadow-2xl transition-all duration-300"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/products/pcb-motherboards.jpg";
+                  }}
+                />
               )}
 
               {/* Prev / Next Navigation Arrows */}

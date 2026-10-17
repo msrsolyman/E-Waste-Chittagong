@@ -25,8 +25,22 @@ export async function middleware(request: NextRequest) {
 
   // Admin Routes (Completely separate from multilingual public routes)
   if (pathname.startsWith("/admin")) {
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-admin-pathname", pathname);
+
     if (pathname.startsWith("/admin/login")) {
-      return NextResponse.next();
+      const sessionCookie = request.cookies.get("ewc_admin_session")?.value;
+      if (sessionCookie) {
+        try {
+          await jwtVerify(sessionCookie, getJwtSecret());
+          return NextResponse.redirect(new URL("/admin", request.url));
+        } catch {
+          const res = NextResponse.next({ request: { headers: requestHeaders } });
+          res.cookies.delete("ewc_admin_session");
+          return res;
+        }
+      }
+      return NextResponse.next({ request: { headers: requestHeaders } });
     }
 
     const sessionCookie = request.cookies.get("ewc_admin_session")?.value;
@@ -47,7 +61,7 @@ export async function middleware(request: NextRequest) {
       return res;
     }
 
-    return NextResponse.next();
+    return NextResponse.next({ request: { headers: requestHeaders } });
   }
 
   // Handle locale routing for public pages
