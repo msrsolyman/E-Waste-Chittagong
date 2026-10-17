@@ -61,18 +61,18 @@ export function OperationsReel() {
     {
       id: "reel-3",
       type: "video",
-      title: "Lot Weighing & Transparent Quality Check",
-      subtitle: "Certified weighing terminals documenting exact gross and tare tonnage.",
+      title: "Lot Weighing & Physical Tonnage Check",
+      subtitle: "Commercial lot weighing documenting exact gross and tare tonnage.",
       mediaUrl: "https://res.cloudinary.com/jpzhmh1r/video/upload/v1792259186/ewaste-chittagong/videos/a4eks71bqyiggbz0ul3k.mp4",
       posterUrl: "https://res.cloudinary.com/jpzhmh1r/video/upload/v1792259186/ewaste-chittagong/videos/a4eks71bqyiggbz0ul3k.jpg",
       duration: "0:16",
-      tag: "QA WEIGHING",
+      tag: "WEIGHING & DISPATCH",
     },
     {
       id: "reel-4",
       type: "video",
       title: "Copper Wire Stripping & Metal Segregation",
-      subtitle: "Mechanical conductor stripping without chemical solvents or burning.",
+      subtitle: "Mechanical conductor stripping and non-ferrous metal separation.",
       mediaUrl: "https://res.cloudinary.com/jpzhmh1r/video/upload/v1792259227/ewaste-chittagong/videos/ukmi01yqkcmnmr5ssr5t.mp4",
       posterUrl: "https://res.cloudinary.com/jpzhmh1r/video/upload/v1792259227/ewaste-chittagong/videos/ukmi01yqkcmnmr5ssr5t.jpg",
       duration: "1:07",
@@ -90,7 +90,7 @@ export function OperationsReel() {
         />
         <Link
           href="/gallery"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-400 transition shrink-0"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-800 dark:text-emerald-400 transition shrink-0"
         >
           <span>{t("viewAll")}</span>
           <ArrowRight className="w-4 h-4" />
@@ -103,25 +103,24 @@ export function OperationsReel() {
           <div
             key={item.id}
             onClick={() => setActiveVideo(item)}
-            className="group cursor-pointer rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+            className="group cursor-pointer rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm hover:shadow-md hover:border-emerald-600/40 transition-all flex flex-col justify-between"
           >
             <div className="relative aspect-[9/14] sm:aspect-[4/5] w-full overflow-hidden bg-slate-950">
               <img
                 src={item.posterUrl}
                 alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102 opacity-90 group-hover:opacity-100"
                 loading="lazy"
               />
 
               {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/30 to-black/40 group-hover:via-slate-950/20 transition-all flex flex-col justify-between p-4">
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-black/30 flex flex-col justify-between p-4">
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-emerald-600 text-white shadow-sm border border-emerald-500/30">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                    <span>Real Facility</span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-slate-900/80 text-emerald-400 border border-slate-700/60">
+                    Video Reel
                   </span>
                   {item.duration && (
-                    <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-black/70 text-white backdrop-blur-md border border-white/10">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-black/70 text-slate-300 border border-white/10">
                       {item.duration}
                     </span>
                   )}
@@ -129,8 +128,8 @@ export function OperationsReel() {
 
                 {/* Center Play Button */}
                 <div className="flex items-center justify-center">
-                  <div className="w-14 h-14 rounded-full bg-emerald-600/90 group-hover:bg-emerald-500 text-white flex items-center justify-center shadow-xl shadow-emerald-950/50 ring-4 ring-emerald-500/30 group-hover:ring-emerald-400/60 group-hover:scale-110 transition-all duration-300">
-                    <Play className="w-6 h-6 ml-0.5 fill-white" />
+                  <div className="w-12 h-12 rounded-full bg-emerald-700/90 group-hover:bg-emerald-600 text-white flex items-center justify-center shadow-lg transition-transform duration-200 group-hover:scale-105">
+                    <Play className="w-5 h-5 ml-0.5 fill-white" />
                   </div>
                 </div>
 

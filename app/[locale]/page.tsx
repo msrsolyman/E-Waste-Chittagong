@@ -90,109 +90,75 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
   const tNav = useTranslations("nav");
 
   return (
-    <div className="space-y-16 lg:space-y-28 pb-20">
-      {/* 1. FUTURISTIC SIGNATURE HERO SECTION */}
-      <section className="relative overflow-hidden pt-10 pb-16 lg:pt-20 lg:pb-28 border-b border-slate-200/70 dark:border-slate-800/80 bg-gradient-to-b from-emerald-50/60 via-slate-50/40 to-white dark:from-slate-950 dark:via-slate-900/50 dark:to-slate-950">
-        {/* Subtle Cyber Grid Background with Radial Mask */}
-        <div className="absolute inset-0 bg-grid-tech mask-radial pointer-events-none opacity-70 dark:opacity-90" />
-
-        {/* Ambient Eco-Tech Radial Glows */}
-        <div className="absolute top-1/4 -left-28 w-96 h-96 bg-emerald-500/15 dark:bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 -right-28 w-96 h-96 bg-sky-500/10 dark:bg-sky-500/20 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="space-y-16 lg:space-y-24 pb-20">
+      {/* 1. PREMIUM INDUSTRIAL EDITORIAL HERO (55/45 ASYMMETRICAL LAYOUT) */}
+      <section className="relative overflow-hidden pt-8 pb-16 lg:pt-16 lg:pb-24 border-b border-slate-200/80 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/60">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-            {/* Left Column (7 cols): Authoritative B2B Corporate Messaging */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            {/* Left Column (55% on Desktop - 7 of 12 cols): Refined Executive Messaging */}
             <div className="lg:col-span-7 space-y-6 text-left">
-              {/* Eyebrow Pill with Pulsing Live Status Dot */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/25 shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>{tHero("signatureTagline")}</span>
+              {/* Business Category Label */}
+              <div className="text-xs font-bold tracking-widest uppercase text-emerald-800 dark:text-emerald-400">
+                {tHero("signatureTagline")}
               </div>
 
-              {/* Masterpiece Signature Headline */}
-              <div className="space-y-3">
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.12]">
-                  {tHero("signatureHeadline")}
-                </h1>
-                <p className="text-sm font-semibold tracking-wide uppercase text-emerald-700 dark:text-emerald-400">
-                  {tHero("title")}
-                </p>
-              </div>
+              {/* Authoritative Editorial Headline */}
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.15] whitespace-pre-line">
+                {tHero("signatureHeadline")}
+              </h1>
 
-              {/* Concise Supporting Narrative */}
-              <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
+              {/* Concise Supporting Copy */}
+              <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-xl font-normal">
                 {tHero("subtitle")}
               </p>
 
-              {/* CTAs with Micro-Interactions */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+              {/* CTAs: Primary Explore Products + Secondary Request a Quote */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
                 <Link
                   href="/products"
-                  className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold text-sm shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/40 hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-sm shadow-sm hover:shadow transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   <span>{tHero("ctaPrimary")}</span>
-                  <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
 
                 <Link
                   href="/inquiry"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl border border-slate-300/80 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md text-slate-800 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800 font-bold text-sm hover:-translate-y-0.5 transition-all duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-400 group"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/80 font-semibold text-sm transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-slate-400"
                 >
                   <span>{tHero("ctaSecondary")}</span>
-                  <ArrowUpRight className="w-4 h-4 text-emerald-600 dark:text-emerald-400 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  <ArrowUpRight className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
                 </Link>
               </div>
 
-              {/* Verified Trust Strip */}
-              <div className="pt-4 flex items-center gap-2.5 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200/60 dark:border-slate-800/60">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              {/* Trust & Verifiability Line */}
+              <div className="pt-3 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200/80 dark:border-slate-800/80">
+                <ShieldCheck className="w-4 h-4 text-emerald-700 dark:text-emerald-400 shrink-0" />
                 <span>{tHero("verifiedNotice")}</span>
               </div>
             </div>
 
-            {/* Right Column (5 cols): Signature Futuristic Visual Showcase */}
+            {/* Right Column (45% on Desktop - 5 of 12 cols): Authentic Industrial Material Showcase */}
             <div className="lg:col-span-5 relative">
-              {/* Precision Viewfinder Framing Accents */}
-              <div className="relative rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-emerald-950/20 bg-slate-950 aspect-[4/3] group">
+              <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm aspect-[4/3] group">
                 <Image
-                  src="/images/concepts/circular-hero.jpg"
-                  alt="Sustainable Circular Electronics Material Recovery"
+                  src="/images/products/pcb-motherboards.jpg"
+                  alt="Industrial Electronic Circuit Scrap Sorting in Chittagong"
                   fill
                   priority
-                  className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                  sizes="(max-width: 1024px) 100vw, 45vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-102"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none" />
 
-                {/* Floating Top-Right Glass Badge: Port Logistics */}
-                <div className="absolute top-4 right-4 p-2.5 rounded-xl bg-slate-950/80 backdrop-blur-md border border-white/10 text-white shadow-xl flex items-center gap-2.5 max-w-[230px]">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-600/90 flex items-center justify-center shrink-0">
-                    <Ship className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="space-y-0.5">
-                    <div className="text-[11px] font-bold leading-tight">
-                      {tHero("portAdvantageTitle")}
-                    </div>
-                    <div className="text-[10px] text-emerald-300 leading-tight">
-                      FOB / CIF Maritime Export
-                    </div>
-                  </div>
-                </div>
-
-                {/* Floating Bottom-Left Glass Badge: Pure Physical Sorting */}
-                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-white/30 dark:border-slate-700/60 shadow-xl flex items-center justify-between gap-3">
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 dark:text-white">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                      <span>{tHero("taglineMechanical")}</span>
-                    </div>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                      {tHero("taglineSmelter")}
-                    </div>
-                  </div>
-                  <div className="hidden sm:block shrink-0 px-2 py-1 rounded-md bg-emerald-100 dark:bg-emerald-950/80 text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-300">
-                    99.8% Pure
-                  </div>
+                {/* Minimalist Authentic Caption Strip */}
+                <div className="absolute bottom-3 left-3 right-3 px-3.5 py-2 rounded-lg bg-slate-950/80 backdrop-blur-md border border-white/10 text-white flex items-center justify-between text-xs">
+                  <span className="font-medium text-slate-200 truncate">
+                    {tHero("taglineMechanical")}
+                  </span>
+                  <span className="text-[11px] text-emerald-400 font-mono shrink-0 pl-2">
+                    Chittagong
+                  </span>
                 </div>
               </div>
             </div>
@@ -203,9 +169,9 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
       {/* 2. FOUR PILLARS / STRATEGIC METRICS STRIP */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm hover:shadow-xl hover:shadow-emerald-500/10 hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-300 space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shadow-inner">
-              <Layers className="w-6 h-6" />
+          <div className="p-6 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900 shadow-sm hover:border-emerald-600/40 transition-colors space-y-3">
+            <div className="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
+              <Layers className="w-5 h-5" />
             </div>
             <h3 className="font-bold text-base text-slate-900 dark:text-white">
               {tStats("sortingTitle")}
@@ -215,9 +181,9 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-500/50 hover:-translate-y-1 transition-all duration-300 space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 flex items-center justify-center shadow-inner">
-              <Cpu className="w-6 h-6" />
+          <div className="p-6 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900 shadow-sm hover:border-emerald-600/40 transition-colors space-y-3">
+            <div className="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
+              <Cpu className="w-5 h-5" />
             </div>
             <h3 className="font-bold text-base text-slate-900 dark:text-white">
               {tStats("recoveryTitle")}
@@ -227,9 +193,9 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm hover:shadow-xl hover:shadow-amber-500/10 hover:border-amber-500/50 hover:-translate-y-1 transition-all duration-300 space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 flex items-center justify-center shadow-inner">
-              <Truck className="w-6 h-6" />
+          <div className="p-6 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900 shadow-sm hover:border-emerald-600/40 transition-colors space-y-3">
+            <div className="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
+              <Truck className="w-5 h-5" />
             </div>
             <h3 className="font-bold text-base text-slate-900 dark:text-white">
               {tStats("b2bTitle")}
@@ -239,9 +205,9 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm hover:shadow-xl hover:shadow-purple-500/10 hover:border-purple-500/50 hover:-translate-y-1 transition-all duration-300 space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 flex items-center justify-center shadow-inner">
-              <Ship className="w-6 h-6" />
+          <div className="p-6 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900 shadow-sm hover:border-emerald-600/40 transition-colors space-y-3">
+            <div className="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
+              <Ship className="w-5 h-5" />
             </div>
             <h3 className="font-bold text-base text-slate-900 dark:text-white">
               {tStats("portTitle")}
@@ -294,19 +260,11 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
           />
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
-            {/* Connected horizontal accent line for desktop */}
-            <div className="hidden md:block absolute top-10 left-12 right-12 h-[2px] bg-gradient-to-r from-emerald-500/20 via-emerald-500/50 to-emerald-500/20 z-0" />
-
             {/* Step 1 */}
-            <div className="p-7 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-300 space-y-3 relative z-10">
-              <div className="flex items-center justify-between">
-                <span className="w-10 h-10 rounded-xl bg-emerald-600 text-white font-mono font-extrabold text-sm flex items-center justify-center shadow-md shadow-emerald-600/30">
-                  01
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full">
-                  Intake
-                </span>
-              </div>
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 relative z-10">
+              <span className="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-mono font-bold text-sm flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
+                01
+              </span>
               <h4 className="font-bold text-base text-slate-900 dark:text-white pt-1">
                 {tProcess("step1Title")}
               </h4>
@@ -316,15 +274,10 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
             </div>
 
             {/* Step 2 */}
-            <div className="p-7 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-300 space-y-3 relative z-10">
-              <div className="flex items-center justify-between">
-                <span className="w-10 h-10 rounded-xl bg-emerald-600 text-white font-mono font-extrabold text-sm flex items-center justify-center shadow-md shadow-emerald-600/30">
-                  02
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full">
-                  Grading
-                </span>
-              </div>
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 relative z-10">
+              <span className="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-mono font-bold text-sm flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
+                02
+              </span>
               <h4 className="font-bold text-base text-slate-900 dark:text-white pt-1">
                 {tProcess("step2Title")}
               </h4>
@@ -334,15 +287,10 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
             </div>
 
             {/* Step 3 */}
-            <div className="p-7 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-300 space-y-3 relative z-10">
-              <div className="flex items-center justify-between">
-                <span className="w-10 h-10 rounded-xl bg-emerald-600 text-white font-mono font-extrabold text-sm flex items-center justify-center shadow-md shadow-emerald-600/30">
-                  03
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full">
-                  Disassembly
-                </span>
-              </div>
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 relative z-10">
+              <span className="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-mono font-bold text-sm flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
+                03
+              </span>
               <h4 className="font-bold text-base text-slate-900 dark:text-white pt-1">
                 {tProcess("step3Title")}
               </h4>
@@ -352,15 +300,10 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
             </div>
 
             {/* Step 4 */}
-            <div className="p-7 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-300 space-y-3 relative z-10">
-              <div className="flex items-center justify-between">
-                <span className="w-10 h-10 rounded-xl bg-emerald-600 text-white font-mono font-extrabold text-sm flex items-center justify-center shadow-md shadow-emerald-600/30">
-                  04
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full">
-                  Dispatch
-                </span>
-              </div>
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 relative z-10">
+              <span className="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-mono font-bold text-sm flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
+                04
+              </span>
               <h4 className="font-bold text-base text-slate-900 dark:text-white pt-1">
                 {tProcess("step4Title")}
               </h4>
@@ -374,34 +317,30 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
 
       {/* 6. DEDICATED INTERNATIONAL RFQ PROMPT BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-950 via-emerald-900 to-slate-950 text-white p-8 sm:p-14 shadow-2xl border border-emerald-500/20 flex flex-col lg:flex-row items-center justify-between gap-8">
-          {/* Subtle cyber grid */}
-          <div className="absolute inset-0 bg-grid-tech mask-radial opacity-30 pointer-events-none" />
-
-          <div className="relative space-y-3 max-w-2xl text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-              <Sparkles className="w-3 h-3 text-emerald-400" />
-              <span>International Procurement</span>
+        <div className="relative overflow-hidden rounded-2xl bg-slate-900 text-white p-8 sm:p-12 shadow-sm border border-slate-800 flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="relative space-y-2 max-w-2xl text-center lg:text-left">
+            <div className="text-xs font-bold tracking-widest uppercase text-emerald-400">
+              International Procurement
             </div>
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
+            <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
               {tHero("ctaBannerTitle")}
             </h3>
-            <p className="text-sm text-emerald-100/80 leading-relaxed max-w-xl">
+            <p className="text-sm text-slate-300 leading-relaxed max-w-xl font-normal">
               {tHero("ctaBannerDesc")}
             </p>
           </div>
 
-          <div className="relative flex flex-col sm:flex-row gap-3.5 shrink-0">
+          <div className="relative flex flex-col sm:flex-row gap-3 shrink-0">
             <Link
               href="/inquiry"
-              className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white text-emerald-950 font-bold text-sm shadow-lg hover:bg-emerald-50 hover:-translate-y-0.5 transition-all duration-200"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm shadow-sm transition-colors"
             >
               <span>{tNav("rfq")}</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl border border-white/20 bg-white/5 backdrop-blur-md text-white font-semibold text-sm hover:bg-white/15 transition-all duration-200"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-800 text-slate-200 font-semibold text-sm transition-colors"
             >
               <span>{tNav("contact")}</span>
             </Link>

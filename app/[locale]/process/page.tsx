@@ -46,17 +46,11 @@ export default function ProcessPage() {
         {steps.map((step) => (
           <div
             key={step.num}
-            className="group p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-300 space-y-4 relative overflow-hidden"
+            className="p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:border-emerald-600/40 transition-colors space-y-3"
           >
-            {/* Subtle corner glow on hover */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 group-hover:bg-emerald-500/10 rounded-bl-full transition-all duration-300 pointer-events-none" />
-
             <div className="flex items-center justify-between">
-              <span className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
+              <span className="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-mono font-bold text-sm flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
                 {step.num}
-              </span>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/20 px-3 py-1 rounded-full">
-                {t("stage")} {step.num}
               </span>
             </div>
 

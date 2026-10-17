@@ -24,14 +24,11 @@ export function SectionHeading({
       )}
     >
       {badge && (
-        <div className={cn("inline-flex items-center gap-2", centered && "justify-center")}>
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/25 shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>{badge}</span>
-          </span>
+        <div className={cn("text-xs font-bold tracking-widest uppercase text-emerald-800 dark:text-emerald-400", centered && "text-center")}>
+          {badge}
         </div>
       )}
-      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.18]">
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.2]">
         {title}
       </h2>
       {subtitle && (

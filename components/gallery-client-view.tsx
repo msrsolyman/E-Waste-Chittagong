@@ -121,16 +121,13 @@ export function GalleryClientView({
   return (
     <div className="space-y-8">
       {/* Transparency Note */}
-      <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-xs text-emerald-900 dark:text-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
-        <div className="flex items-center gap-3">
-          <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+      <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
           <span className="font-medium leading-relaxed">{t("transparencyNote")}</span>
         </div>
-        <div className="flex items-center gap-2 shrink-0 text-[11px] font-bold">
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-emerald-600 text-white">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>34 {t("verifiedBadge")}</span>
-          </span>
+        <div className="flex items-center gap-2 shrink-0 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+          <span>{galleryItems.length} {t("all").toLowerCase()} ({videoCount} {t("videos").toLowerCase()}, {photoCount} {t("photos").toLowerCase()})</span>
         </div>
       </div>
 
@@ -144,7 +141,7 @@ export function GalleryClientView({
               onClick={() => setActiveTab(tab.key)}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all shadow-sm ${
                 isActive
-                  ? "bg-emerald-600 text-white shadow-emerald-600/20"
+                  ? "bg-slate-900 text-white dark:bg-emerald-600 dark:text-white shadow-sm"
                   : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
               }`}
             >
@@ -184,7 +181,7 @@ export function GalleryClientView({
                     </div>
                     {/* Video badge */}
                     <div className="absolute bottom-3 right-3">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-black/75 text-white backdrop-blur-md">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-semibold tracking-wider bg-slate-950/75 border border-white/10 text-slate-200 backdrop-blur-md">
                         <Film className="w-3 h-3 text-emerald-400" />
                         <span>{t("videoBadge")}</span>
                       </span>
@@ -206,7 +203,7 @@ export function GalleryClientView({
                     </div>
                     {/* Photo badge */}
                     <div className="absolute bottom-3 right-3">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-black/75 text-white backdrop-blur-md">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-semibold tracking-wider bg-slate-950/75 border border-white/10 text-slate-200 backdrop-blur-md">
                         <Camera className="w-3 h-3 text-emerald-400" />
                         <span>{t("photoBadge")}</span>
                       </span>
@@ -217,15 +214,15 @@ export function GalleryClientView({
                 {/* Top Verification Badge */}
                 <div className="absolute top-3 left-3">
                   <span
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider backdrop-blur-md shadow-sm ${
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-semibold tracking-wide backdrop-blur-md ${
                       item.isVerified
-                        ? "bg-emerald-600/90 text-white"
-                        : "bg-slate-900/80 text-slate-200"
+                        ? "bg-slate-950/80 border border-emerald-500/40 text-emerald-300"
+                        : "bg-slate-950/80 border border-white/10 text-slate-300"
                     }`}
                   >
                     {item.isVerified ? (
                       <>
-                        <ShieldCheck className="w-3 h-3" />
+                        <ShieldCheck className="w-3 h-3 text-emerald-400" />
                         <span>{t("verifiedBadge")}</span>
                       </>
                     ) : (

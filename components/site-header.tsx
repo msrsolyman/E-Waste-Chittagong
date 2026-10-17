@@ -46,15 +46,15 @@ export function SiteHeader() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "px-3.5 py-2 text-sm font-medium rounded-xl transition-all duration-200 relative group",
+                    "px-3 py-1.5 text-sm transition-colors duration-150 relative",
                     isActive
-                      ? "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/15 font-semibold"
-                      : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60"
+                      ? "text-slate-900 dark:text-white font-semibold"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-normal"
                   )}
                 >
                   <span>{link.label}</span>
                   {isActive && (
-                    <span className="absolute bottom-1 left-3.5 right-3.5 h-[2px] bg-emerald-600 dark:bg-emerald-400 rounded-full" />
+                    <span className="absolute -bottom-2 left-3 right-3 h-[2px] bg-emerald-600 dark:bg-emerald-400 rounded-full" />
                   )}
                 </Link>
               );
@@ -67,10 +67,10 @@ export function SiteHeader() {
             <ThemeToggle />
             <Link
               href="/inquiry"
-              className="group relative overflow-hidden inline-flex items-center gap-1.5 px-4.5 py-2.5 text-xs font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white shadow-md shadow-emerald-600/20 hover:shadow-emerald-600/35 hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white shadow-sm hover:shadow transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
               <span>{t("rfq")}</span>
-              <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 

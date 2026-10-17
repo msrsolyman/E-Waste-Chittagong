@@ -113,18 +113,18 @@ export default async function ProductDetailPage({
           </div>
 
           {/* Technical Specifications Table */}
-          <div className="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+          <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
             <div className="px-5 py-3.5 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200/80 dark:border-slate-800 text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center justify-between">
               <span>{t("specsTitle")}</span>
-              <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">
-                Assayed Physical Form
+              <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold">
+                Commercial Parameters
               </span>
             </div>
             <dl className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
               <div className="px-5 py-3.5 grid grid-cols-3 gap-2 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
                 <dt className="text-slate-400 font-medium">{t("gradeLabel")}</dt>
                 <dd className="col-span-2 text-slate-900 dark:text-white font-semibold flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
                   <span>{product.grade || "Standard Industrial Recycled Grade"}</span>
                 </dd>
               </div>
