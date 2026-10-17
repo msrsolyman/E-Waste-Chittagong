@@ -5,6 +5,7 @@ import { Link } from "@/i18n/routing";
 import { prisma } from "@/lib/prisma";
 import { ProductCard, ProductCardData } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
+import { OperationsReel } from "@/components/operations-reel";
 import {
   ArrowRight,
   ShieldCheck,
@@ -237,7 +238,10 @@ function HomeView({ localizedProducts }: { localizedProducts: ProductCardData[] 
         </div>
       </section>
 
-      {/* 4. WORKFLOW / COMPLIANT PROCESS */}
+      {/* 4. LIVE OPERATIONS VIDEO REEL */}
+      <OperationsReel />
+
+      {/* 5. WORKFLOW / COMPLIANT PROCESS */}
       <section className="bg-slate-50 dark:bg-slate-900/60 py-16 border-y border-slate-200/80 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <SectionHeading

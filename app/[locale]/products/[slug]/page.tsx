@@ -6,6 +6,7 @@ import { Link } from "@/i18n/routing";
 import { InquiryForm } from "@/components/inquiry-form";
 import { ArrowLeft, ShieldCheck, FileText } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { ProductImageGallery } from "@/components/product-image-gallery";
 
 export default async function ProductDetailPage({
   params,
@@ -49,10 +50,10 @@ export default async function ProductDetailPage({
     if (product.category.nameJa) categoryName = product.category.nameJa;
   }
 
-  let imageUrl = "/images/products/pcb-motherboards.jpg";
+  let imagesList: string[] = ["/images/products/pcb-motherboards.jpg"];
   try {
     const parsed = JSON.parse(product.images);
-    if (Array.isArray(parsed) && parsed[0]) imageUrl = parsed[0];
+    if (Array.isArray(parsed) && parsed.length > 0) imagesList = parsed;
   } catch {}
 
   return (
@@ -69,17 +70,13 @@ export default async function ProductDetailPage({
 
       {/* Main Product Showcase (2 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Left: Product Image (5 cols) */}
+        {/* Left: Product Image Gallery (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-md">
-            <Image
-              src={imageUrl}
-              alt={title}
-              fill
-              priority
-              className="object-cover"
-            />
-          </div>
+          <ProductImageGallery
+            images={imagesList}
+            title={title}
+            verifiedText={t("verifiedGuaranteeTitle")}
+          />
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 space-y-1.5">
             <div className="flex items-center gap-2 font-semibold text-slate-700 dark:text-slate-200">

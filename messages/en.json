@@ -99,8 +99,21 @@
     "facility": "Facility",
     "material": "Materials",
     "dismantling": "Dismantling",
+    "processing": "Processing",
+    "videos": "Videos",
+    "photos": "Photos",
+    "playVideo": "Play Video",
+    "viewPhoto": "View Photo",
+    "videoBadge": "Operational Video",
+    "photoBadge": "Facility Photo",
     "badge": "Visual Verification",
     "transparencyNote": "E-Waste Chittagong clearly distinguishes between authentic facility handling photographs and illustrative industry concepts for complete buyer transparency."
+  },
+  "operationsReel": {
+    "badge": "Live Operations",
+    "title": "Chittagong Facility Live Operations",
+    "subtitle": "Direct video footage showing manual sorting, hardware dismantling, and export staging at our Chittagong handling hub.",
+    "viewAll": "Explore Complete Gallery & All Videos"
   },
   "inquiry": {
     "title": "International Business Inquiry & RFQ",

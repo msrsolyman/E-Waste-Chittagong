@@ -99,8 +99,21 @@
     "facility": "作业设施",
     "material": "材料库存",
     "dismantling": "拆解工段",
+    "processing": "物理处理",
+    "videos": "实景视频",
+    "photos": "实拍图片",
+    "playVideo": "播放视频",
+    "viewPhoto": "查看大图",
+    "videoBadge": "作业视频",
+    "photoBadge": "现场实拍",
     "badge": "实景验证",
     "transparencyNote": "为保障国际采购商知情权，E-Waste Chittagong 严格区分真实作业现场照片与行业示意图景。"
+  },
+  "operationsReel": {
+    "badge": "实地动态",
+    "title": "吉大港车间实录与规范作业直击",
+    "subtitle": "来自我们吉大港处理车间的未剪辑实录视频，全方位展现手工分选、机箱拆解与海运出口前打包。",
+    "viewAll": "浏览全部高清图库与实操视频"
   },
   "inquiry": {
     "title": "国际商务询价 (RFQ)",

@@ -99,8 +99,21 @@
     "facility": "作業施設",
     "material": "原料・材料",
     "dismantling": "解体工程",
+    "processing": "物理処理",
+    "videos": "動画ギャラリー",
+    "photos": "現場写真",
+    "playVideo": "動画を再生",
+    "viewPhoto": "拡大表示",
+    "videoBadge": "現場作業動画",
+    "photoBadge": "現場実写写真",
     "badge": "視覚的検証",
     "transparencyNote": "国際バイヤーへの透明性確保のため、E-Waste Chittagongは実際の作業現場と概念イメージを厳格に区別して掲載しています。"
+  },
+  "operationsReel": {
+    "badge": "現場オペレーション",
+    "title": "チッタゴン工場 現場オペレーション動画",
+    "subtitle": "チッタゴンの拠点で行われている基板選別、機器解体、輸出用梱包の様子を動画でご覧いただけます。",
+    "viewAll": "すべての写真・動画ギャラリーを見る"
   },
   "inquiry": {
     "title": "国際B2Bお見積り依頼 (RFQ)",
