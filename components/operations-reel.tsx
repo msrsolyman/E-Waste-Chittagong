@@ -21,6 +21,22 @@ export function OperationsReel() {
   const t = useTranslations("operationsReel");
   const [activeVideo, setActiveVideo] = React.useState<ReelItem | null>(null);
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setActiveVideo(null);
+      }
+    };
+    if (activeVideo) {
+      window.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "unset";
+    };
+  }, [activeVideo]);
+
   const reelItems: ReelItem[] = [
     {
       id: "reel-1",
@@ -87,25 +103,25 @@ export function OperationsReel() {
           <div
             key={item.id}
             onClick={() => setActiveVideo(item)}
-            className="group cursor-pointer rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+            className="group cursor-pointer rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
           >
             <div className="relative aspect-[9/14] sm:aspect-[4/5] w-full overflow-hidden bg-slate-950">
               <img
                 src={item.posterUrl}
                 alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-90 group-hover:opacity-100"
                 loading="lazy"
               />
 
               {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-black/40 group-hover:via-slate-950/20 transition-all flex flex-col justify-between p-4">
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/30 to-black/40 group-hover:via-slate-950/20 transition-all flex flex-col justify-between p-4">
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-600 text-white shadow-sm">
-                    <ShieldCheck className="w-3 h-3" />
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-emerald-600 text-white shadow-sm border border-emerald-500/30">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                     <span>Real Facility</span>
                   </span>
                   {item.duration && (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-black/60 text-white backdrop-blur-md">
+                    <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-black/70 text-white backdrop-blur-md border border-white/10">
                       {item.duration}
                     </span>
                   )}
@@ -113,7 +129,7 @@ export function OperationsReel() {
 
                 {/* Center Play Button */}
                 <div className="flex items-center justify-center">
-                  <div className="w-14 h-14 rounded-full bg-emerald-600/90 group-hover:bg-emerald-500 text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-full bg-emerald-600/90 group-hover:bg-emerald-500 text-white flex items-center justify-center shadow-xl shadow-emerald-950/50 ring-4 ring-emerald-500/30 group-hover:ring-emerald-400/60 group-hover:scale-110 transition-all duration-300">
                     <Play className="w-6 h-6 ml-0.5 fill-white" />
                   </div>
                 </div>
@@ -130,7 +146,7 @@ export function OperationsReel() {
               </div>
             </div>
 
-            <div className="p-4 space-y-1 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+            <div className="p-4.5 space-y-1.5 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
               <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
                 {item.subtitle}
               </p>

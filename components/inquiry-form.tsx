@@ -110,35 +110,43 @@ function InquiryFormInner({ defaultProductSlug }: { defaultProductSlug?: string 
 
   if (successReference) {
     return (
-      <div className="rounded-2xl border border-emerald-200 dark:border-emerald-800/80 bg-emerald-50/50 dark:bg-emerald-950/20 p-8 text-center space-y-5 animate-in fade-in duration-300">
-        <div className="w-16 h-16 mx-auto rounded-full bg-emerald-100 dark:bg-emerald-900/60 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+      <div className="rounded-3xl border border-emerald-500/30 bg-emerald-50/60 dark:bg-emerald-950/30 p-8 sm:p-12 text-center space-y-6 shadow-xl animate-in fade-in duration-300">
+        <div className="w-16 h-16 mx-auto rounded-2xl bg-emerald-100 dark:bg-emerald-900/60 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-inner">
           <CheckCircle2 className="w-10 h-10" />
         </div>
         <div className="space-y-2">
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+          <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white">
             {t("successTitle")}
           </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+          <p className="text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto leading-relaxed">
             {t("successDesc", { reference: successReference })}
           </p>
         </div>
 
-        <div className="inline-flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <span className="text-xs text-slate-500 uppercase tracking-wider font-medium">Reference Code:</span>
-          <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400 text-sm">
+        <div className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md">
+          <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Reference Code:</span>
+          <span className="font-mono font-extrabold text-emerald-700 dark:text-emerald-400 text-base">
             {successReference}
           </span>
           <button
             type="button"
             onClick={copyReference}
-            className="p-1 rounded-md text-slate-500 hover:text-slate-900 dark:hover:text-white transition"
+            className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
             title="Copy reference code"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
           </button>
         </div>
 
-        <div className="pt-4">
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a
+            href={`https://wa.me/8801800000000?text=${encodeURIComponent(`Hello E-Waste Chittagong, I submitted inquiry ${successReference} regarding material procurement.`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition"
+          >
+            <span>💬 Instant WhatsApp Confirmation</span>
+          </a>
           <button
             type="button"
             onClick={() => {
@@ -156,7 +164,7 @@ function InquiryFormInner({ defaultProductSlug }: { defaultProductSlug?: string 
                 website_field_hp: "",
               });
             }}
-            className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
+            className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
           >
             Submit Another Inquiry
           </button>
@@ -330,7 +338,7 @@ function InquiryFormInner({ defaultProductSlug }: { defaultProductSlug?: string 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-60"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold text-sm shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/40 hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-60"
         >
           {isSubmitting ? (
             <span>{t("submitting")}</span>

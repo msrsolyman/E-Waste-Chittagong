@@ -26,14 +26,14 @@ export function BrandLogo({
   const content = (
     <div className={cn("inline-flex items-center gap-3 group select-none", className)}>
       {/* Logo container with dedicated contrast treatment in dark mode */}
-      <div className="relative p-1 rounded-xl bg-white shadow-sm ring-1 ring-slate-900/5 dark:ring-emerald-500/30 flex items-center justify-center transition-transform group-hover:scale-105">
+      <div className="relative p-1.5 rounded-xl bg-white shadow-sm ring-1 ring-slate-900/10 dark:ring-emerald-500/30 group-hover:ring-emerald-500/60 dark:group-hover:ring-emerald-400/60 group-hover:shadow-glow-subtle flex items-center justify-center transition-all duration-300">
         <Image
           src="/brand/logo.png"
           alt="E-Waste Chittagong Official Logo"
           width={img}
           height={img}
           priority
-          className="object-contain"
+          className="object-contain transition-transform duration-300 group-hover:scale-105"
         />
       </div>
 

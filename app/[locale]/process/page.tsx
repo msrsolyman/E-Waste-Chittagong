@@ -46,22 +46,25 @@ export default function ProcessPage() {
         {steps.map((step) => (
           <div
             key={step.num}
-            className="p-8 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm space-y-4"
+            className="group p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-300 space-y-4 relative overflow-hidden"
           >
+            {/* Subtle corner glow on hover */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 group-hover:bg-emerald-500/10 rounded-bl-full transition-all duration-300 pointer-events-none" />
+
             <div className="flex items-center justify-between">
               <span className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
                 {step.num}
               </span>
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/20 px-3 py-1 rounded-full">
                 {t("stage")} {step.num}
               </span>
             </div>
 
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
               {step.title}
             </h3>
 
-            <p className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold">
+            <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400">
               {step.desc}
             </p>
 
