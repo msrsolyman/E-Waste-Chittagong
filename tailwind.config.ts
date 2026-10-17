@@ -64,6 +64,31 @@ const config: Config = {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         bengali: ["var(--font-bengali)", "system-ui", "sans-serif"],
       },
+      boxShadow: {
+        "glow-emerald": "0 0 35px -5px rgba(16, 185, 129, 0.25)",
+        "glow-techblue": "0 0 35px -5px rgba(14, 165, 233, 0.25)",
+        "glow-subtle": "0 4px 20px -2px rgba(16, 185, 129, 0.15)",
+        "glass": "0 8px 32px 0 rgba(0, 0, 0, 0.08)",
+        "glass-dark": "0 8px 32px 0 rgba(0, 0, 0, 0.35)",
+      },
+      keyframes: {
+        floatSlow: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-8px)" },
+        },
+        pulseGlow: {
+          "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
+          "50%": { opacity: "0.8", transform: "scale(1.05)" },
+        },
+        shimmer: {
+          "100%": { transform: "translateX(100%)" },
+        },
+      },
+      animation: {
+        "float-slow": "floatSlow 6s ease-in-out infinite",
+        "pulse-glow": "pulseGlow 4s ease-in-out infinite",
+        "shimmer": "shimmer 2.5s infinite",
+      },
     },
   },
   plugins: [],

@@ -113,30 +113,34 @@ export default async function ProductDetailPage({
           </div>
 
           {/* Technical Specifications Table */}
-          <div className="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-            <div className="px-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-              {t("specsTitle")}
+          <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+            <div className="px-5 py-3.5 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200/80 dark:border-slate-800 text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center justify-between">
+              <span>{t("specsTitle")}</span>
+              <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold">
+                Commercial Parameters
+              </span>
             </div>
             <dl className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
-              <div className="px-4 py-3 grid grid-cols-3 gap-2">
+              <div className="px-5 py-3.5 grid grid-cols-3 gap-2 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
                 <dt className="text-slate-400 font-medium">{t("gradeLabel")}</dt>
-                <dd className="col-span-2 text-slate-900 dark:text-white font-semibold">
-                  {product.grade || "Standard Industrial Recycled Grade"}
+                <dd className="col-span-2 text-slate-900 dark:text-white font-semibold flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                  <span>{product.grade || "Standard Industrial Recycled Grade"}</span>
                 </dd>
               </div>
-              <div className="px-4 py-3 grid grid-cols-3 gap-2">
+              <div className="px-5 py-3.5 grid grid-cols-3 gap-2 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
                 <dt className="text-slate-400 font-medium">{t("originLabel")}</dt>
                 <dd className="col-span-2 text-slate-900 dark:text-white font-semibold">
                   {product.origin || "Chittagong, Bangladesh"}
                 </dd>
               </div>
-              <div className="px-4 py-3 grid grid-cols-3 gap-2">
+              <div className="px-5 py-3.5 grid grid-cols-3 gap-2 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
                 <dt className="text-slate-400 font-medium">{t("packagingLabel")}</dt>
                 <dd className="col-span-2 text-slate-900 dark:text-white font-semibold">
                   {product.packaging || "Jumbo Sacks / Steel Drums / Palletized"}
                 </dd>
               </div>
-              <div className="px-4 py-3 grid grid-cols-3 gap-2">
+              <div className="px-5 py-3.5 grid grid-cols-3 gap-2 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
                 <dt className="text-slate-400 font-medium">{t("moqLabel")}</dt>
                 <dd className="col-span-2 text-slate-900 dark:text-white font-semibold">
                   {product.minOrderQuantity || "1 Metric Ton (Trial Available)"}
@@ -146,9 +150,9 @@ export default async function ProductDetailPage({
           </div>
 
           {/* Full Description */}
-          <div className="space-y-2">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
-              <FileText className="w-4 h-4 text-emerald-600" />
+          <div className="space-y-2.5 p-6 rounded-2xl bg-slate-50/70 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
+              <FileText className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>{t("descTitle")}</span>
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
@@ -159,17 +163,17 @@ export default async function ProductDetailPage({
       </div>
 
       {/* Embedded Request Quotation Form */}
-      <section className="pt-8 border-t border-slate-200 dark:border-slate-800 space-y-6">
-        <div className="space-y-1">
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+      <section className="pt-10 border-t border-slate-200 dark:border-slate-800 space-y-6">
+        <div className="space-y-1.5">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">
             {t("rfqTitle", { title })}
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             {t("rfqDesc")}
           </p>
         </div>
 
-        <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm max-w-4xl">
+        <div className="p-6 sm:p-10 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xl max-w-4xl">
           <InquiryForm defaultProductSlug={product.slug} />
         </div>
       </section>

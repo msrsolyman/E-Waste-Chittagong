@@ -121,16 +121,13 @@ export function GalleryClientView({
   return (
     <div className="space-y-8">
       {/* Transparency Note */}
-      <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-xs text-emerald-900 dark:text-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
-        <div className="flex items-center gap-3">
-          <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+      <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
           <span className="font-medium leading-relaxed">{t("transparencyNote")}</span>
         </div>
-        <div className="flex items-center gap-2 shrink-0 text-[11px] font-bold">
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-emerald-600 text-white">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>34 {t("verifiedBadge")}</span>
-          </span>
+        <div className="flex items-center gap-2 shrink-0 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+          <span>{galleryItems.length} {t("all").toLowerCase()} ({videoCount} {t("videos").toLowerCase()}, {photoCount} {t("photos").toLowerCase()})</span>
         </div>
       </div>
 
@@ -142,9 +139,9 @@ export function GalleryClientView({
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all shadow-sm ${
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap active:scale-[0.98] transition-all duration-200 shadow-sm ${
                 isActive
-                  ? "bg-emerald-600 text-white shadow-emerald-600/20"
+                  ? "bg-slate-900 text-white dark:bg-emerald-600 dark:text-white shadow-sm"
                   : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
               }`}
             >
@@ -164,7 +161,7 @@ export function GalleryClientView({
             <div
               key={item.id}
               onClick={() => setActiveModalItem(item)}
-              className="group cursor-pointer rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+              className="group cursor-pointer rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm hover:shadow-xl hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-1 transition-all duration-300 ease-out flex flex-col justify-between"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-900">
                 {itemIsVideo ? (
@@ -173,18 +170,18 @@ export function GalleryClientView({
                     <img
                       src={posterUrl}
                       alt={item.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                       loading="lazy"
                     />
                     {/* Video play overlay button */}
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                      <div className="w-14 h-14 rounded-full bg-emerald-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                      <div className="w-14 h-14 rounded-full bg-emerald-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                         <Play className="w-6 h-6 ml-0.5 fill-white" />
                       </div>
                     </div>
                     {/* Video badge */}
                     <div className="absolute bottom-3 right-3">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-black/75 text-white backdrop-blur-md">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-semibold tracking-wider bg-slate-950/75 border border-white/10 text-slate-200 backdrop-blur-md">
                         <Film className="w-3 h-3 text-emerald-400" />
                         <span>{t("videoBadge")}</span>
                       </span>
@@ -196,16 +193,17 @@ export function GalleryClientView({
                       src={item.imageUrl}
                       alt={item.title}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <div className="w-10 h-10 rounded-full bg-white/90 text-slate-900 flex items-center justify-center shadow-md">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full bg-white/90 text-slate-900 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-200">
                         <Maximize2 className="w-5 h-5" />
                       </div>
                     </div>
                     {/* Photo badge */}
                     <div className="absolute bottom-3 right-3">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-black/75 text-white backdrop-blur-md">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-semibold tracking-wider bg-slate-950/75 border border-white/10 text-slate-200 backdrop-blur-md">
                         <Camera className="w-3 h-3 text-emerald-400" />
                         <span>{t("photoBadge")}</span>
                       </span>
@@ -216,15 +214,15 @@ export function GalleryClientView({
                 {/* Top Verification Badge */}
                 <div className="absolute top-3 left-3">
                   <span
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider backdrop-blur-md shadow-sm ${
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-semibold tracking-wide backdrop-blur-md ${
                       item.isVerified
-                        ? "bg-emerald-600/90 text-white"
-                        : "bg-slate-900/80 text-slate-200"
+                        ? "bg-slate-950/80 border border-emerald-500/40 text-emerald-300"
+                        : "bg-slate-950/80 border border-white/10 text-slate-300"
                     }`}
                   >
                     {item.isVerified ? (
                       <>
-                        <ShieldCheck className="w-3 h-3" />
+                        <ShieldCheck className="w-3 h-3 text-emerald-400" />
                         <span>{t("verifiedBadge")}</span>
                       </>
                     ) : (
@@ -243,7 +241,7 @@ export function GalleryClientView({
                   <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                     {item.category}
                   </span>
-                  <h3 className="font-bold text-sm text-slate-900 dark:text-white line-clamp-2 mt-0.5 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-white line-clamp-2 mt-0.5 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-200">
                     {item.title}
                   </h3>
                   {item.caption && (
@@ -255,7 +253,7 @@ export function GalleryClientView({
 
                 <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
                   <span>{itemIsVideo ? t("playVideo") : t("viewPhoto")}</span>
-                  <span className="text-slate-400 group-hover:translate-x-1 transition-transform">→</span>
+                  <span className="text-slate-400 group-hover:translate-x-1 transition-transform duration-200">→</span>
                 </div>
               </div>
             </div>
@@ -266,18 +264,18 @@ export function GalleryClientView({
       {/* Lightbox / Video Player Modal */}
       {activeModalItem && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 sm:p-6"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 sm:p-6 animate-in fade-in duration-200"
           onClick={() => setActiveModalItem(null)}
         >
           <div
-            className="relative w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+            className="relative w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header bar */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/60">
               <div className="flex items-center gap-3">
                 <span className="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-emerald-600 text-white flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3" />
+                  <ShieldCheck className="w-3 h-3 text-white" />
                   <span>{t("verifiedBadge")}</span>
                 </span>
                 <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
@@ -286,7 +284,7 @@ export function GalleryClientView({
               </div>
               <button
                 onClick={() => setActiveModalItem(null)}
-                className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition"
+                className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 flex items-center justify-center transition-all duration-150"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
@@ -316,14 +314,14 @@ export function GalleryClientView({
               {/* Prev / Next Navigation Arrows */}
               <button
                 onClick={handlePrev}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-emerald-600 text-white flex items-center justify-center transition shadow-lg backdrop-blur-sm"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-emerald-600 active:scale-95 text-white flex items-center justify-center transition-all duration-150 shadow-lg backdrop-blur-sm"
                 aria-label="Previous"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={handleNext}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-emerald-600 text-white flex items-center justify-center transition shadow-lg backdrop-blur-sm"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-emerald-600 active:scale-95 text-white flex items-center justify-center transition-all duration-150 shadow-lg backdrop-blur-sm"
                 aria-label="Next"
               >
                 <ChevronRight className="w-6 h-6" />

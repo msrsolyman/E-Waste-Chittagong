@@ -15,10 +15,11 @@ export default async function CategoriesPage({
   const t = await getTranslations({ locale, namespace: "categories" });
 
   const categories = await prisma.category.findMany({
+    where: { products: { some: { status: "PUBLISHED" } } },
     orderBy: { displayOrder: "asc" },
     include: {
       _count: {
-        select: { products: true },
+        select: { products: { where: { status: "PUBLISHED" } } },
       },
     },
   });

@@ -21,6 +21,7 @@ export default async function ProductsPage({
       },
     }),
     prisma.category.findMany({
+      where: { products: { some: { status: "PUBLISHED" } } },
       orderBy: { displayOrder: "asc" },
     }),
   ]);
