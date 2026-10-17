@@ -20,6 +20,7 @@ import {
   Layers,
   Check,
 } from "lucide-react";
+import { MediaUploader } from "@/components/media-uploader";
 
 export interface GalleryItemData {
   id: string;
@@ -808,70 +809,53 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                     </p>
                   </div>
 
-                  {/* Current Selected Image Preview */}
+                  {/* Image / Video Media Upload via Cloudinary */}
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                      Selected Image Preview
-                    </label>
-                    <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
-                      <div className="relative w-20 h-14 rounded-lg overflow-hidden bg-slate-200 shrink-0 border border-slate-300 dark:border-slate-700">
-                        <Image src={formData.imageUrl} alt="Preview" fill className="object-cover" />
-                      </div>
-                      <div className="font-mono text-xs text-slate-500 break-all">
-                        {formData.imageUrl}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Presets */}
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                      Choose Preset Image
-                    </label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                      {PRESET_IMAGES.map((preset) => {
-                        const isSelected = formData.imageUrl === preset.url;
-                        return (
-                          <button
-                            key={preset.url}
-                            type="button"
-                            onClick={() =>
-                              setFormData({
-                                ...formData,
-                                imageUrl: preset.url,
-                                category: preset.category,
-                              })
-                            }
-                            className={`p-2 rounded-xl border text-left flex items-center gap-2.5 transition ${
-                              isSelected
-                                ? "border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 ring-1 ring-emerald-500"
-                                : "border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
-                            }`}
-                          >
-                            <div className="relative w-10 h-8 rounded-lg overflow-hidden bg-slate-100 shrink-0">
-                              <Image src={preset.url} alt={preset.label} fill className="object-cover" />
-                            </div>
-                            <span className="text-[11px] font-medium text-slate-700 dark:text-slate-200 line-clamp-1">
-                              {preset.label}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Custom URL */}
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                      Or Custom Image URL
-                    </label>
-                    <input
-                      type="text"
+                    <MediaUploader
                       value={formData.imageUrl}
-                      onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                      placeholder="/images/products/... or https://..."
-                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono"
+                      onChange={(url) => setFormData({ ...formData, imageUrl: url })}
+                      folder="gallery"
+                      label="Facility Photograph / Video Asset *"
+                      acceptVideo
+                      helperText="Upload real facility photos (JPG, PNG, WebP) or video (MP4, WebM) to Cloudinary CDN"
                     />
+
+                    {/* Presets */}
+                    <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+                      <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                        Or pick from facility media presets:
+                      </label>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {PRESET_IMAGES.map((preset) => {
+                          const isSelected = formData.imageUrl === preset.url;
+                          return (
+                            <button
+                              key={preset.url}
+                              type="button"
+                              onClick={() =>
+                                setFormData({
+                                  ...formData,
+                                  imageUrl: preset.url,
+                                  category: preset.category,
+                                })
+                              }
+                              className={`p-2 rounded-xl border text-left flex items-center gap-2.5 transition ${
+                                isSelected
+                                  ? "border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 ring-1 ring-emerald-500"
+                                  : "border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
+                              }`}
+                            >
+                              <div className="relative w-10 h-8 rounded-lg overflow-hidden bg-slate-100 shrink-0">
+                                <Image src={preset.url} alt={preset.label} fill className="object-cover" />
+                              </div>
+                              <span className="text-[11px] font-medium text-slate-700 dark:text-slate-200 line-clamp-1">
+                                {preset.label}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}

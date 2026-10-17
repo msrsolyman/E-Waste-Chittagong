@@ -22,6 +22,7 @@ import {
   Layers,
   Sparkles,
 } from "lucide-react";
+import { MediaUploader } from "@/components/media-uploader";
 
 export interface ProductRow {
   id: string;
@@ -1156,36 +1157,21 @@ export function AdminProductsTable({
               {/* TAB 6: MEDIA & IMAGES */}
               {activeTab === "media" && (
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                      Current Selected Image Preview
-                    </label>
-                    <div className="flex items-center gap-4 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
-                      <div className="relative w-24 h-16 rounded-lg overflow-hidden bg-slate-200 border border-slate-300 dark:border-slate-700 shrink-0">
-                        <Image
-                          src={formData.imageUrl || "/images/products/pcb-motherboards.jpg"}
-                          alt="Preview"
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      <div className="text-xs space-y-1">
-                        <div className="font-mono text-[11px] text-slate-500 break-all">
-                          {formData.imageUrl}
-                        </div>
-                        <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">
-                          Illustrative representation badge automatically rendered on public pages.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <MediaUploader
+                    value={formData.imageUrl}
+                    onChange={(url) => setFormData({ ...formData, imageUrl: url })}
+                    folder="products"
+                    label="Product Showcase Photography / Video"
+                    acceptVideo
+                    helperText="Upload high-res photos (JPG, PNG, WebP) or video (MP4, WebM) directly to Cloudinary CDN"
+                  />
 
-                  {/* Preset Library */}
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                      Choose from Verified Media Presets
+                  {/* Preset Library as secondary choice */}
+                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                      Or pick from verified media presets:
                     </label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                       {PRESET_IMAGES.map((preset) => {
                         const isSelected = formData.imageUrl === preset.url;
                         return (
@@ -1209,20 +1195,6 @@ export function AdminProductsTable({
                         );
                       })}
                     </div>
-                  </div>
-
-                  {/* Custom URL Input */}
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                      Or Enter Custom Image URL / Path
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.imageUrl}
-                      onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                      placeholder="/images/products/my-custom-image.jpg or https://..."
-                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono"
-                    />
                   </div>
                 </div>
               )}

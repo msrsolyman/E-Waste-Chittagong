@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Save, ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
 import Link from "next/link";
+import { MediaUploader } from "@/components/media-uploader";
 
 interface Category {
   id: string;
@@ -174,34 +175,45 @@ export function AdminProductForm({ categories }: { categories: Category[] }) {
           </div>
         </div>
 
-        {/* Image Selection */}
+        {/* Image / Video Selection via Cloudinary */}
         <div className="pt-2">
-          <label className="block font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2 text-xs">
-            Product Showcase Photography
-          </label>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {availableImages.map((img) => {
-              const isSelected = formData.imageUrl === img.url;
-              return (
-                <button
-                  type="button"
-                  key={img.url}
-                  onClick={() => setFormData({ ...formData, imageUrl: img.url })}
-                  className={`relative rounded-xl overflow-hidden border-2 text-left transition ${
-                    isSelected
-                      ? "border-emerald-600 ring-2 ring-emerald-500/30"
-                      : "border-slate-200 dark:border-slate-800 opacity-70 hover:opacity-100"
-                  }`}
-                >
-                  <div className="relative aspect-[16/10] w-full">
-                    <Image src={img.url} alt={img.label} fill className="object-cover" />
-                  </div>
-                  <div className="p-2 text-[10px] font-medium text-slate-700 dark:text-slate-300 truncate bg-white dark:bg-slate-900">
-                    {img.label}
-                  </div>
-                </button>
-              );
-            })}
+          <MediaUploader
+            value={formData.imageUrl}
+            onChange={(url) => setFormData({ ...formData, imageUrl: url })}
+            folder="products"
+            label="Product Showcase Media (Photo or Video) *"
+            required
+            helperText="Drag & drop or browse high-res product photo or video (Cloudinary CDN)"
+          />
+
+          <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mb-2">
+              Or pick from default photography presets:
+            </span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              {availableImages.map((img) => {
+                const isSelected = formData.imageUrl === img.url;
+                return (
+                  <button
+                    type="button"
+                    key={img.url}
+                    onClick={() => setFormData({ ...formData, imageUrl: img.url })}
+                    className={`relative rounded-xl overflow-hidden border-2 text-left transition ${
+                      isSelected
+                        ? "border-emerald-600 ring-2 ring-emerald-500/30"
+                        : "border-slate-200 dark:border-slate-800 opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <div className="relative aspect-[16/10] w-full">
+                      <Image src={img.url} alt={img.label} fill className="object-cover" />
+                    </div>
+                    <div className="p-1.5 text-[10px] font-medium text-slate-700 dark:text-slate-300 truncate bg-white dark:bg-slate-900">
+                      {img.label}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
