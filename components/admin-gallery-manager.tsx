@@ -19,6 +19,9 @@ import {
   Clock,
   Layers,
   Check,
+  Play,
+  Film,
+  Camera,
 } from "lucide-react";
 import { MediaUploader } from "@/components/media-uploader";
 
@@ -43,7 +46,18 @@ const PRESET_IMAGES = [
   { url: "/images/concepts/circular-hero.jpg", label: "Circular Resource Recovery", category: "PROCESSING" },
 ];
 
-const CATEGORIES = ["ALL", "MATERIAL", "FACILITY", "DISMANTLING", "PROCESSING"];
+const CATEGORIES = ["ALL", "VIDEOS", "PHOTOS", "MATERIAL", "FACILITY", "DISMANTLING", "PROCESSING"];
+
+export const isVideoUrl = (url: string) => {
+  return /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(url) || url.includes("/video/upload/");
+};
+
+export const getVideoPoster = (url: string) => {
+  if (url.includes("/video/upload/")) {
+    return url.replace(/\.mp4$/i, ".jpg");
+  }
+  return url;
+};
 
 export function AdminGalleryManager({ initialItems }: { initialItems: GalleryItemData[] }) {
   const [items, setItems] = React.useState<GalleryItemData[]>(initialItems);
@@ -89,11 +103,15 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
 
   // Category counts
   const counts = React.useMemo(() => {
-    const res: Record<string, number> = { ALL: items.length };
-    CATEGORIES.forEach((cat) => {
-      if (cat !== "ALL") {
-        res[cat] = items.filter((i) => i.category.toUpperCase() === cat).length;
-      }
+    const videoCount = items.filter((i) => isVideoUrl(i.imageUrl)).length;
+    const photoCount = items.length - videoCount;
+    const res: Record<string, number> = {
+      ALL: items.length,
+      VIDEOS: videoCount,
+      PHOTOS: photoCount,
+    };
+    ["MATERIAL", "FACILITY", "DISMANTLING", "PROCESSING"].forEach((cat) => {
+      res[cat] = items.filter((i) => i.category.toUpperCase() === cat).length;
     });
     return res;
   }, [items]);
@@ -245,9 +263,14 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
 
   // Filtered Items
   const filtered = items.filter((item) => {
-    const matchesCat =
-      selectedCategory === "ALL" ||
-      item.category.toUpperCase() === selectedCategory.toUpperCase();
+    let matchesCat = true;
+    if (selectedCategory === "VIDEOS") {
+      matchesCat = isVideoUrl(item.imageUrl);
+    } else if (selectedCategory === "PHOTOS") {
+      matchesCat = !isVideoUrl(item.imageUrl);
+    } else if (selectedCategory !== "ALL") {
+      matchesCat = item.category.toUpperCase() === selectedCategory.toUpperCase();
+    }
 
     const q = searchQuery.toLowerCase().trim();
     const matchesSearch =
@@ -373,7 +396,7 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
       {/* Showing count indicator */}
       <div className="flex items-center justify-between text-xs text-slate-500 px-1">
         <span>
-          Showing <b>{filtered.length}</b> of <b>{items.length}</b> registered gallery photographs
+          Showing <b>{filtered.length}</b> of <b>{items.length}</b> registered media assets ({counts.VIDEOS ?? 0} videos, {counts.PHOTOS ?? 0} photos)
         </span>
         {(searchQuery || selectedCategory !== "ALL") && (
           <button
@@ -398,6 +421,8 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
         ) : (
           filtered.map((item) => {
             const isVerified = Boolean(item.isVerified);
+            const isVideo = isVideoUrl(item.imageUrl);
+            const posterSrc = isVideo ? getVideoPoster(item.imageUrl) : item.imageUrl;
 
             return (
               <div
@@ -405,18 +430,62 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                 className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition flex flex-col justify-between group"
               >
                 <div>
-                  {/* Image Thumbnail Banner */}
-                  <div className="relative aspect-[16/10] w-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.titleEn}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                      onClick={() => setLightboxItem(item)}
-                    />
+                  {/* Image / Video Thumbnail Banner */}
+                  <div
+                    className="relative aspect-[16/10] w-full bg-slate-950 overflow-hidden cursor-pointer"
+                    onClick={() => setLightboxItem(item)}
+                  >
+                    {isVideo ? (
+                      <div className="relative w-full h-full">
+                        <img
+                          src={posterSrc}
+                          alt={item.titleEn}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                          onError={(e) => {
+                            e.currentTarget.src = "/images/products/pcb-motherboards.jpg";
+                          }}
+                        />
+                        {/* Video Play Overlay */}
+                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center pointer-events-none">
+                          <div className="w-11 h-11 rounded-full bg-emerald-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <Play className="w-5 h-5 ml-0.5 fill-white" />
+                          </div>
+                        </div>
+                        {/* Video Badge */}
+                        <div className="absolute bottom-2.5 right-2.5 pointer-events-none">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider bg-slate-950/80 border border-white/10 text-slate-200 backdrop-blur-md">
+                            <Film className="w-3 h-3 text-emerald-400" />
+                            <span>VIDEO</span>
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="relative w-full h-full">
+                        <img
+                          src={item.imageUrl}
+                          alt={item.titleEn}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                          onError={(e) => {
+                            e.currentTarget.src = "/images/products/pcb-motherboards.jpg";
+                          }}
+                        />
+                        {/* Photo Badge */}
+                        <div className="absolute bottom-2.5 right-2.5 pointer-events-none">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider bg-slate-950/80 border border-white/10 text-slate-200 backdrop-blur-md">
+                            <Camera className="w-3 h-3 text-emerald-400" />
+                            <span>PHOTO</span>
+                          </span>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Top-Left: Interactive Authenticity Badge */}
-                    <div className="absolute top-2.5 left-2.5">
+                    <div
+                      className="absolute top-2.5 left-2.5 z-10"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <button
                         type="button"
                         disabled={togglingId === item.id}
@@ -445,9 +514,12 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                     {/* Top-Right: Zoom / Lightbox Button */}
                     <button
                       type="button"
-                      onClick={() => setLightboxItem(item)}
-                      className="absolute top-2.5 right-2.5 p-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-900 text-white backdrop-blur-xs transition shadow-sm opacity-90 hover:opacity-100"
-                      title="View Full Resolution"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLightboxItem(item);
+                      }}
+                      className="absolute top-2.5 right-2.5 z-10 p-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-900 text-white backdrop-blur-xs transition shadow-sm opacity-90 hover:opacity-100 cursor-pointer"
+                      title={isVideo ? "Play Full Video" : "View Full Resolution"}
                     >
                       <Maximize2 className="w-3.5 h-3.5" />
                     </button>
@@ -459,12 +531,12 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                       <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                         {item.category}
                       </span>
-                      <span className="text-[10px] font-mono text-slate-400">
-                        {item.imageUrl.slice(0, 30)}...
+                      <span className="text-[10px] font-mono font-medium text-slate-400">
+                        {isVideo ? "Cloudinary Video" : "Cloudinary Photo"}
                       </span>
                     </div>
 
-                    <h4 className="font-bold text-xs text-slate-900 dark:text-white line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                    <h4 className="font-bold text-xs text-slate-900 dark:text-white line-clamp-2 min-h-[32px] group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                       {item.titleEn}
                     </h4>
 
@@ -524,14 +596,26 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
       {lightboxItem && (
         <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
           <div className="relative max-w-4xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl animate-in zoom-in-95">
-            {/* Lightbox Image */}
-            <div className="relative aspect-[16/10] w-full bg-black">
-              <Image
-                src={lightboxItem.imageUrl}
-                alt={lightboxItem.titleEn}
-                fill
-                className="object-contain"
-              />
+            {/* Lightbox Media Container */}
+            <div className="relative aspect-[16/10] w-full bg-black flex items-center justify-center overflow-hidden">
+              {isVideoUrl(lightboxItem.imageUrl) ? (
+                <video
+                  controls
+                  autoPlay
+                  playsInline
+                  src={lightboxItem.imageUrl}
+                  className="w-full h-full max-h-[70vh] object-contain"
+                />
+              ) : (
+                <img
+                  src={lightboxItem.imageUrl}
+                  alt={lightboxItem.titleEn}
+                  className="w-full h-full max-h-[70vh] object-contain"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/products/pcb-motherboards.jpg";
+                  }}
+                />
+              )}
             </div>
 
             {/* Lightbox Footer */}
@@ -540,6 +624,9 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-slate-800 text-emerald-400">
                     {lightboxItem.category}
+                  </span>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-slate-800 text-slate-300">
+                    {isVideoUrl(lightboxItem.imageUrl) ? "Cloudinary Video" : "High-Res Photo"}
                   </span>
                   <span
                     className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
