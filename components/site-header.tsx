@@ -6,7 +6,7 @@ import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { BrandLogo } from "@/components/brand-logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Menu, X, ArrowUpRight, Check } from "lucide-react";
+import { Menu, X, ArrowUpRight, Check, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const languages = [
@@ -41,6 +41,10 @@ export function SiteHeader() {
     { href: "/process", label: t("process") },
     { href: "/gallery", label: t("gallery") },
     { href: "/contact", label: t("contact") },
+  ];
+
+  const mobileNavLinks = [
+    ...navLinks,
     { href: "/track", label: t("track") },
   ];
 
@@ -92,8 +96,23 @@ export function SiteHeader() {
             })}
           </nav>
 
-          {/* Action Tools: Lang, Theme, RFQ */}
-          <div className="hidden lg:flex items-center gap-2.5 xl:gap-3 shrink-0">
+          {/* Action Tools: Track RFQ, Lang, Theme, RFQ */}
+          <div className="hidden lg:flex items-center gap-2 xl:gap-2.5 shrink-0">
+            {/* Sleek Glass-Pill Track RFQ Button */}
+            <Link
+              href="/track"
+              className={cn(
+                "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs xl:text-[13px] font-semibold rounded-full border transition-all duration-200 select-none whitespace-nowrap",
+                pathname.startsWith("/track")
+                  ? "bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500/50 text-emerald-700 dark:text-emerald-300 shadow-xs"
+                  : "bg-slate-100/80 dark:bg-slate-900/70 border-slate-200/60 dark:border-slate-800/60 text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-500/40 hover:bg-white dark:hover:bg-slate-850"
+              )}
+              title={t("track")}
+            >
+              <Search className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <span>{t("track")}</span>
+            </Link>
+
             {/* Utility cluster (Lang + Theme) */}
             <div className="flex items-center gap-1 p-1 bg-slate-100/80 dark:bg-slate-900/70 rounded-full border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-md shadow-xs">
               <LanguageSwitcher />
@@ -103,7 +122,7 @@ export function SiteHeader() {
             {/* High-Converting CTA Button */}
             <Link
               href="/inquiry"
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs xl:text-sm font-semibold rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-sm hover:shadow-md hover:shadow-emerald-500/20 active:scale-[0.98] transition-all duration-200 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 group/rfq"
+              className="inline-flex items-center gap-1.5 px-3.5 xl:px-4 py-2 text-xs xl:text-sm font-semibold rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-sm hover:shadow-md hover:shadow-emerald-500/20 active:scale-[0.98] transition-all duration-200 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 group/rfq"
             >
               <span>{t("rfq")}</span>
               <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/rfq:translate-x-0.5 group-hover/rfq:-translate-y-0.5" />
@@ -136,7 +155,7 @@ export function SiteHeader() {
         <div className="lg:hidden border-b border-slate-200/80 dark:border-slate-800/80 bg-white/98 dark:bg-slate-950/98 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-200 shadow-xl max-h-[85vh] overflow-y-auto">
           {/* Nav links */}
           <div className="space-y-1">
-            {navLinks.map((link) => {
+            {mobileNavLinks.map((link) => {
               const isActive =
                 link.href === "/"
                   ? pathname === "/"
@@ -147,13 +166,18 @@ export function SiteHeader() {
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "block px-3.5 py-2.5 text-sm rounded-xl transition-all duration-150 active:scale-[0.99] whitespace-nowrap",
+                    "flex items-center justify-between px-3.5 py-2.5 text-sm rounded-xl transition-all duration-150 active:scale-[0.99] whitespace-nowrap",
                     isActive
                       ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-bold shadow-xs"
                       : "text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-900 font-medium"
                   )}
                 >
-                  {link.label}
+                  <span>{link.label}</span>
+                  {link.href === "/track" && (
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
+                      Live
+                    </span>
+                  )}
                 </Link>
               );
             })}
