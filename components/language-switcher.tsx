@@ -4,6 +4,7 @@ import * as React from "react";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { Globe, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const languages = [
   { code: "en", label: "English", native: "English" },
@@ -12,7 +13,11 @@ const languages = [
   { code: "ja", label: "Japanese", native: "日本語" },
 ];
 
-export function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+  compact?: boolean;
+}
+
+export function LanguageSwitcher({ compact = false }: LanguageSwitcherProps) {
   const currentLocale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
@@ -40,17 +45,26 @@ export function LanguageSwitcher() {
 
   const activeLang = languages.find((l) => l.code === currentLocale) || languages[0];
 
+  const shortCode = activeLang.code === "zh-CN" ? "ZH" : activeLang.code.toUpperCase();
+
   return (
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 hover:shadow-xs active:scale-95 transition-all duration-200 focus:outline-none select-none whitespace-nowrap"
+        className={cn(
+          "flex items-center gap-1.5 rounded-full font-medium text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 hover:shadow-xs active:scale-95 transition-all duration-200 focus:outline-none select-none whitespace-nowrap",
+          compact ? "px-2 py-1 text-xs" : "px-2.5 py-1 text-xs"
+        )}
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
-        <Globe className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-        <span>{activeLang.native}</span>
+        <Globe className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+        {compact ? (
+          <span className="font-semibold uppercase tracking-wider text-[11px]">{shortCode}</span>
+        ) : (
+          <span>{activeLang.native}</span>
+        )}
       </button>
 
       {isOpen && (
