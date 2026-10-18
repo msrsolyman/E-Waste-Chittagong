@@ -1,6 +1,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { prisma } from "@/lib/prisma";
 import { Link } from "@/i18n/routing";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import {
@@ -16,36 +17,122 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  let bannerUrl =
+    "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792327290/ewaste-chittagong/banners/about-hero-banner.jpg";
+
+  try {
+    const bannerSetting = await prisma.companySetting.findUnique({
+      where: { key: "about_banner" },
+    });
+    if (bannerSetting?.value) {
+      const parsed = JSON.parse(bannerSetting.value);
+      if (parsed.url) {
+        bannerUrl = parsed.url;
+      }
+    }
+  } catch (err) {
+    console.error("Failed to load about_banner setting:", err);
+  }
+
+  return <AboutView bannerUrl={bannerUrl} />;
+}
+
+function AboutView({ bannerUrl }: { bannerUrl: string }) {
   const t = useTranslations("about");
 
   return (
     <div className="space-y-16 lg:space-y-24 pb-20 overflow-hidden">
-      {/* 1. CINEMATIC EXECUTIVE HERO BANNER */}
-      <section className="relative pt-12 pb-16 lg:pt-20 lg:pb-24 border-b border-slate-200/80 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-950/70 overflow-hidden">
+      {/* 1. CINEMATIC EXECUTIVE SPLIT-HERO BANNER */}
+      <section className="relative pt-8 pb-14 lg:pt-16 lg:pb-20 border-b border-slate-200/80 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-950/70 overflow-hidden">
         {/* Subtle Tech Grid Backdrop */}
         <div className="absolute inset-0 bg-grid-tech mask-radial opacity-60 pointer-events-none" />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl space-y-6">
-            {/* Live Operational Status Pill */}
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase bg-white/95 dark:bg-slate-900/90 text-emerald-700 dark:text-emerald-400 border border-slate-200/80 dark:border-slate-800 shadow-2xs backdrop-blur-md">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-              </span>
-              <span>{t("liveBadge")}</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            
+            {/* Left Column (7 cols): Authoritative Executive Narrative */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              {/* Live Operational Status Pill */}
+              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase bg-white/95 dark:bg-slate-900/90 text-emerald-700 dark:text-emerald-400 border border-slate-200/80 dark:border-slate-800 shadow-2xs backdrop-blur-md">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                <span>{t("liveBadge")}</span>
+              </div>
+
+              {/* Authoritative Page Headline */}
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.16]">
+                {t("title")}
+              </h1>
+
+              {/* Subtitle with High-Legibility Typography */}
+              <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal max-w-2xl">
+                {t("subtitle")}
+              </p>
+
+              {/* Quick Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                <Link
+                  href="/inquiry"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-emerald-500/20 active:scale-[0.98] transition-all duration-200 group/btn"
+                >
+                  <span>{t("ctaButton")}</span>
+                  <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                </Link>
+
+                <Link
+                  href="/products"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold text-xs sm:text-sm active:scale-[0.98] transition-all duration-200"
+                >
+                  <span>{t("exploreButton")}</span>
+                  <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                </Link>
+              </div>
             </div>
 
-            {/* Authoritative Page Headline */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.18]">
-              {t("title")}
-            </h1>
+            {/* Right Column (5 cols): Dynamic Cloudinary Hero Banner with Metallic Glow & Floating Badges */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative aspect-[16/10] sm:aspect-[16/9] lg:aspect-[4/3] rounded-2xl lg:rounded-3xl overflow-hidden border border-emerald-500/20 dark:border-emerald-500/30 shadow-2xl bg-slate-950 transition-all duration-500 group">
+                <Image
+                  src={bannerUrl}
+                  alt="E-Waste Chittagong High-Tech Circular Electronics Recovery Facility"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 42vw"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                  unoptimized={bannerUrl.startsWith("http")}
+                />
+                {/* Soft Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/20 pointer-events-none" />
 
-            {/* Subtitle with High-Legibility Typography */}
-            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal max-w-2xl">
-              {t("subtitle")}
-            </p>
+                {/* Floating Live Operations Pill (Top-Left) */}
+                <div className="absolute top-3.5 left-3.5 px-3 py-1.5 rounded-xl bg-slate-950/85 backdrop-blur-md border border-white/15 text-white flex items-center gap-2 text-xs shadow-lg">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                  <span className="font-semibold tracking-wide">Chittagong Staging Hub</span>
+                </div>
+
+                {/* Floating Operational Badge (Top-Right) */}
+                <div className="hidden sm:inline-flex absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg bg-emerald-950/85 backdrop-blur-md border border-emerald-500/30 text-emerald-300 text-[11px] font-bold">
+                  Verified Facility
+                </div>
+
+                {/* Bottom Caption Bar */}
+                <div className="absolute bottom-3.5 left-3.5 right-3.5 px-3.5 py-2.5 rounded-xl bg-slate-950/85 backdrop-blur-md border border-white/10 text-white flex items-center justify-between text-xs">
+                  <span className="font-medium text-slate-200 truncate pr-2">
+                    High-Tech Circular Electronics & Sorting
+                  </span>
+                  <span className="text-[11px] text-emerald-400 font-mono font-bold shrink-0">
+                    100% Mechanical
+                  </span>
+                </div>
+              </div>
+
+              {/* Decorative Corner Glow */}
+              <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+            </div>
+
           </div>
         </div>
       </section>
