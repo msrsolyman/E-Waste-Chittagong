@@ -77,6 +77,14 @@ export function SiteFooter() {
                   {tNav("gallery")}
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/track"
+                  className="text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition font-medium"
+                >
+                  {tNav("track")}
+                </Link>
+              </li>
             </ul>
           </div>
 

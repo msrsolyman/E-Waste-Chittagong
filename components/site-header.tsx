@@ -41,6 +41,7 @@ export function SiteHeader() {
     { href: "/process", label: t("process") },
     { href: "/gallery", label: t("gallery") },
     { href: "/contact", label: t("contact") },
+    { href: "/track", label: t("track") },
   ];
 
   return (

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
+import { Link } from "@/i18n/routing";
 import {
   Send,
   CheckCircle2,
@@ -17,6 +18,7 @@ import {
   Package,
   Layers,
   FileText,
+  ArrowRight,
 } from "lucide-react";
 
 const countries = [
@@ -139,13 +141,20 @@ function InquiryFormInner({ defaultProductSlug }: { defaultProductSlug?: string 
         </div>
 
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link
+            href={`/track?ref=${encodeURIComponent(successReference)}`}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md transition group"
+          >
+            <span>Track Status Now</span>
+            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
           <a
             href={`https://wa.me/8801352328093?text=${encodeURIComponent(`Hello E-Waste Chittagong, I submitted inquiry ${successReference} regarding material procurement.`)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition"
           >
-            <span>💬 Instant WhatsApp Confirmation</span>
+            <span>💬 WhatsApp Desk</span>
           </a>
           <button
             type="button"
