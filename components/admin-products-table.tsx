@@ -260,7 +260,7 @@ export function AdminProductsTable({
       origin: "Chittagong, Bangladesh",
       packaging: "Jumbo Bags / Palletized Crated",
       minOrderQuantity: "1 Metric Ton",
-      imageUrl: "/images/products/pcb-motherboards.jpg",
+      imageUrl: "",
     });
     setModalError(null);
     setActiveTab("en");
