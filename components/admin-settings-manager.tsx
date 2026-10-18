@@ -15,11 +15,13 @@ import {
   ImageIcon,
   Package,
   Layers,
+  Wrench,
 } from "lucide-react";
 
 interface AdminSettingsManagerProps {
   initialAboutBannerUrl?: string;
   initialProductsBannerUrl?: string;
+  initialServicesBannerUrl?: string;
 }
 
 const DEFAULT_ABOUT_BANNER =
@@ -28,17 +30,24 @@ const DEFAULT_ABOUT_BANNER =
 const DEFAULT_PRODUCTS_BANNER =
   "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792328119/ewaste-chittagong/banners/products-hero-banner.jpg";
 
+const DEFAULT_SERVICES_BANNER =
+  "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792329707/ewaste-chittagong/banners/services-hero-banner.jpg";
+
 export function AdminSettingsManager({
   initialAboutBannerUrl = DEFAULT_ABOUT_BANNER,
   initialProductsBannerUrl = DEFAULT_PRODUCTS_BANNER,
+  initialServicesBannerUrl = DEFAULT_SERVICES_BANNER,
 }: AdminSettingsManagerProps) {
-  const [activeTab, setActiveTab] = React.useState<"about" | "products">("products");
+  const [activeTab, setActiveTab] = React.useState<"services" | "products" | "about">("services");
 
   const [aboutBannerUrl, setAboutBannerUrl] = React.useState<string>(
     initialAboutBannerUrl || DEFAULT_ABOUT_BANNER
   );
   const [productsBannerUrl, setProductsBannerUrl] = React.useState<string>(
     initialProductsBannerUrl || DEFAULT_PRODUCTS_BANNER
+  );
+  const [servicesBannerUrl, setServicesBannerUrl] = React.useState<string>(
+    initialServicesBannerUrl || DEFAULT_SERVICES_BANNER
   );
 
   const [isSaving, setIsSaving] = React.useState(false);
@@ -47,9 +56,64 @@ export function AdminSettingsManager({
     message: string;
   } | null>(null);
 
-  const currentUrl = activeTab === "about" ? aboutBannerUrl : productsBannerUrl;
-  const currentKey = activeTab === "about" ? "about_banner" : "products_banner";
-  const defaultUrl = activeTab === "about" ? DEFAULT_ABOUT_BANNER : DEFAULT_PRODUCTS_BANNER;
+  const getCurrentState = () => {
+    switch (activeTab) {
+      case "about":
+        return {
+          url: aboutBannerUrl,
+          key: "about_banner",
+          defaultUrl: DEFAULT_ABOUT_BANNER,
+          title: "About Us Page Hero Banner",
+          desc: "Upload and manage the split-hero banner image displayed on the public About Us page.",
+          liveLink: "/en/about",
+          liveLabel: "About Page",
+          mockBadge: "Verified Chittagong Facility",
+          mockTitle: "About E-Waste Chittagong",
+          mockDesc:
+            "Dedicated to responsible e-waste aggregation, systematic material separation, and international circular economy trade.",
+          btn1: "Request a Quote",
+          btn2: "Explore Catalogue",
+          caption: "Physical Material Staging",
+        };
+      case "products":
+        return {
+          url: productsBannerUrl,
+          key: "products_banner",
+          defaultUrl: DEFAULT_PRODUCTS_BANNER,
+          title: "Products & Catalogue Hero Banner",
+          desc: "Upload and manage the high-tech sorted scrap banner displayed on the public Products Catalogue page.",
+          liveLink: "/en/products",
+          liveLabel: "Products Catalogue",
+          mockBadge: "Verified Inventory Streams",
+          mockTitle: "Electronic Scrap & Raw Material Categories",
+          mockDesc:
+            "Sorted, graded, and prepared in accordance with international circular economy and pyrometallurgical refiner guidelines.",
+          btn1: "Explore Categories",
+          btn2: "Inquiry Form",
+          caption: "High-Grade Scrap Assortment",
+        };
+      case "services":
+      default:
+        return {
+          url: servicesBannerUrl,
+          key: "services_banner",
+          defaultUrl: DEFAULT_SERVICES_BANNER,
+          title: "Corporate Services Hero Banner",
+          desc: "Upload and manage the enterprise decommissioning and recovery facility banner displayed on the public Corporate Services page.",
+          liveLink: "/en/services",
+          liveLabel: "Services Page",
+          mockBadge: "Chittagong Decommissioning Hub",
+          mockTitle: "Comprehensive Electronic Waste & Material Solutions",
+          mockDesc:
+            "End-to-end recycling solutions tailored for telecom providers, corporations, and international commodity refiners.",
+          btn1: "Request Consultation",
+          btn2: "View Services",
+          caption: "Enterprise Decommissioning Hub",
+        };
+    }
+  };
+
+  const current = getCurrentState();
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -60,9 +124,9 @@ export function AdminSettingsManager({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          key: currentKey,
+          key: current.key,
           value: {
-            url: currentUrl,
+            url: current.url,
             updatedAt: new Date().toISOString(),
           },
         }),
@@ -75,9 +139,7 @@ export function AdminSettingsManager({
 
       setSaveStatus({
         type: "success",
-        message: `${
-          activeTab === "about" ? "About Us" : "Products Catalogue"
-        } banner saved successfully! Live changes are now active.`,
+        message: `${current.title} saved successfully! Live changes are now active.`,
       });
     } catch (err) {
       setSaveStatus({
@@ -91,14 +153,31 @@ export function AdminSettingsManager({
 
   const handleResetToDefault = () => {
     if (activeTab === "about") setAboutBannerUrl(DEFAULT_ABOUT_BANNER);
-    else setProductsBannerUrl(DEFAULT_PRODUCTS_BANNER);
+    else if (activeTab === "products") setProductsBannerUrl(DEFAULT_PRODUCTS_BANNER);
+    else setServicesBannerUrl(DEFAULT_SERVICES_BANNER);
     setSaveStatus(null);
   };
 
   return (
     <div className="space-y-6 max-w-4xl">
-      {/* Tab Switcher */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-200/60 dark:bg-slate-800/60 w-fit">
+      {/* 3-Tab Switcher */}
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-200/60 dark:bg-slate-800/60 w-fit">
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab("services");
+            setSaveStatus(null);
+          }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            activeTab === "services"
+              ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+          }`}
+        >
+          <Wrench className="w-3.5 h-3.5 text-emerald-600" />
+          <span>Corporate Services Banner</span>
+        </button>
+
         <button
           type="button"
           onClick={() => {
@@ -111,7 +190,7 @@ export function AdminSettingsManager({
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
-          <Package className="w-3.5 h-3.5 text-emerald-600" />
+          <Package className="w-3.5 h-3.5 text-blue-600" />
           <span>Products Catalogue Banner</span>
         </button>
 
@@ -127,7 +206,7 @@ export function AdminSettingsManager({
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
-          <Layers className="w-3.5 h-3.5 text-blue-600" />
+          <Layers className="w-3.5 h-3.5 text-purple-600" />
           <span>About Us Page Banner</span>
         </button>
       </div>
@@ -158,28 +237,18 @@ export function AdminSettingsManager({
               <Sliders className="w-3.5 h-3.5" />
               <span>Public Visual Experience Settings</span>
             </div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              {activeTab === "about"
-                ? "About Us Page Hero Banner"
-                : "Products & Catalogue Hero Banner"}
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              {activeTab === "about"
-                ? "Upload and manage the split-hero banner image displayed on the public About page."
-                : "Upload and manage the high-tech sorted scrap banner displayed on the public Products Catalogue page."}
-            </p>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">{current.title}</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{current.desc}</p>
           </div>
 
           <div className="flex items-center gap-2.5">
             <Link
-              href={activeTab === "about" ? "/en/about" : "/en/products"}
+              href={current.liveLink}
               target="_blank"
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
             >
               <Eye className="w-3.5 h-3.5" />
-              <span>
-                View Live {activeTab === "about" ? "About Page" : "Catalogue"}
-              </span>
+              <span>View Live {current.liveLabel}</span>
               <ExternalLink className="w-3 h-3 text-slate-400" />
             </Link>
           </div>
@@ -189,16 +258,15 @@ export function AdminSettingsManager({
         <div className="space-y-4">
           <MediaUploader
             key={activeTab}
-            value={currentUrl}
+            value={current.url}
             onChange={(url) => {
               if (activeTab === "about") setAboutBannerUrl(url);
-              else setProductsBannerUrl(url);
+              else if (activeTab === "products") setProductsBannerUrl(url);
+              else setServicesBannerUrl(url);
               setSaveStatus(null);
             }}
             folder="general"
-            label={`${
-              activeTab === "about" ? "About Hero" : "Products Catalogue"
-            } Banner Media`}
+            label={`${current.title} Media`}
             acceptVideo={false}
             required
             helperText="Recommended aspect ratio 16:9 or 16:10. High-resolution PNG, JPG or WebP up to 10MB."
@@ -221,28 +289,20 @@ export function AdminSettingsManager({
               <div className="md:col-span-6 space-y-3">
                 <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-slate-900 border border-slate-800 text-emerald-400">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>
-                    {activeTab === "about"
-                      ? "Verified Chittagong Facility"
-                      : "Verified Inventory Streams"}
-                  </span>
+                  <span>{current.mockBadge}</span>
                 </div>
                 <div className="text-lg sm:text-xl font-extrabold text-white leading-tight">
-                  {activeTab === "about"
-                    ? "About E-Waste Chittagong"
-                    : "Electronic Scrap & Raw Material Categories"}
+                  {current.mockTitle}
                 </div>
                 <div className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-                  {activeTab === "about"
-                    ? "Dedicated to responsible e-waste aggregation, systematic material separation, and international circular economy trade."
-                    : "Sorted, graded, and prepared in accordance with international circular economy and pyrometallurgical refiner guidelines."}
+                  {current.mockDesc}
                 </div>
                 <div className="flex items-center gap-2 pt-1">
                   <span className="px-3 py-1.5 rounded-lg bg-emerald-600 text-[11px] font-bold text-white">
-                    {activeTab === "about" ? "Request a Quote" : "Explore Categories"}
+                    {current.btn1}
                   </span>
                   <span className="px-3 py-1.5 rounded-lg border border-slate-700 text-[11px] font-medium text-slate-300">
-                    {activeTab === "about" ? "Explore Catalogue" : "Inquiry Form"}
+                    {current.btn2}
                   </span>
                 </div>
               </div>
@@ -250,13 +310,13 @@ export function AdminSettingsManager({
               {/* Right Column Simulated Banner Frame */}
               <div className="md:col-span-6">
                 <div className="relative aspect-[16/10] rounded-xl overflow-hidden border border-emerald-500/30 bg-slate-900 shadow-xl group">
-                  {currentUrl ? (
+                  {current.url ? (
                     <Image
-                      src={currentUrl}
+                      src={current.url}
                       alt="Banner Preview"
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      unoptimized={currentUrl.startsWith("http")}
+                      unoptimized={current.url.startsWith("http")}
                     />
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 text-xs">
@@ -272,11 +332,7 @@ export function AdminSettingsManager({
                   </div>
 
                   <div className="absolute bottom-2 left-2 right-2 px-2.5 py-1.5 rounded-lg bg-slate-950/80 backdrop-blur-md border border-white/10 text-white flex items-center justify-between text-[10px]">
-                    <span className="text-slate-300 font-medium">
-                      {activeTab === "about"
-                        ? "Physical Material Staging"
-                        : "High-Grade Scrap Assortment"}
-                    </span>
+                    <span className="text-slate-300 font-medium">{current.caption}</span>
                     <span className="text-emerald-400 font-mono">100% Verified</span>
                   </div>
                 </div>
@@ -301,15 +357,11 @@ export function AdminSettingsManager({
             <button
               type="button"
               onClick={handleSave}
-              disabled={isSaving || !currentUrl}
+              disabled={isSaving || !current.url}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-md shadow-emerald-950/20 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none"
             >
               <Save className="w-3.5 h-3.5" />
-              <span>
-                {isSaving
-                  ? "Saving Banner..."
-                  : `Save ${activeTab === "about" ? "About" : "Products"} Banner`}
-              </span>
+              <span>{isSaving ? "Saving Banner..." : `Save ${current.title}`}</span>
             </button>
           </div>
         </div>
