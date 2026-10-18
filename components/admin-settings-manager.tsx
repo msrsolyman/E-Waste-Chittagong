@@ -17,6 +17,7 @@ import {
   Layers,
   Wrench,
   Workflow,
+  Camera,
 } from "lucide-react";
 
 interface AdminSettingsManagerProps {
@@ -24,6 +25,7 @@ interface AdminSettingsManagerProps {
   initialProductsBannerUrl?: string;
   initialServicesBannerUrl?: string;
   initialProcessBannerUrl?: string;
+  initialGalleryBannerUrl?: string;
 }
 
 const DEFAULT_ABOUT_BANNER =
@@ -38,13 +40,19 @@ const DEFAULT_SERVICES_BANNER =
 const DEFAULT_PROCESS_BANNER =
   "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792330610/ewaste-chittagong/banners/process-hero-banner.jpg";
 
+const DEFAULT_GALLERY_BANNER =
+  "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792331523/ewaste-chittagong/banners/gallery-hero-banner.jpg";
+
 export function AdminSettingsManager({
   initialAboutBannerUrl = DEFAULT_ABOUT_BANNER,
   initialProductsBannerUrl = DEFAULT_PRODUCTS_BANNER,
   initialServicesBannerUrl = DEFAULT_SERVICES_BANNER,
   initialProcessBannerUrl = DEFAULT_PROCESS_BANNER,
+  initialGalleryBannerUrl = DEFAULT_GALLERY_BANNER,
 }: AdminSettingsManagerProps) {
-  const [activeTab, setActiveTab] = React.useState<"process" | "services" | "products" | "about">("process");
+  const [activeTab, setActiveTab] = React.useState<
+    "gallery" | "process" | "services" | "products" | "about"
+  >("gallery");
 
   const [aboutBannerUrl, setAboutBannerUrl] = React.useState<string>(
     initialAboutBannerUrl || DEFAULT_ABOUT_BANNER
@@ -57,6 +65,9 @@ export function AdminSettingsManager({
   );
   const [processBannerUrl, setProcessBannerUrl] = React.useState<string>(
     initialProcessBannerUrl || DEFAULT_PROCESS_BANNER
+  );
+  const [galleryBannerUrl, setGalleryBannerUrl] = React.useState<string>(
+    initialGalleryBannerUrl || DEFAULT_GALLERY_BANNER
   );
 
   const [isSaving, setIsSaving] = React.useState(false);
@@ -119,7 +130,6 @@ export function AdminSettingsManager({
           caption: "Enterprise Decommissioning Hub",
         };
       case "process":
-      default:
         return {
           url: processBannerUrl,
           key: "process_banner",
@@ -135,6 +145,24 @@ export function AdminSettingsManager({
           btn1: "Facility Audit",
           btn2: "Explore Journey",
           caption: "Mechanical Sorting Pipeline",
+        };
+      case "gallery":
+      default:
+        return {
+          url: galleryBannerUrl,
+          key: "gallery_banner",
+          defaultUrl: DEFAULT_GALLERY_BANNER,
+          title: "Media Gallery & Activities Hero Banner",
+          desc: "Upload and manage the operational documentation and inspection floor banner displayed on the public Gallery page.",
+          liveLink: "/en/gallery",
+          liveLabel: "Gallery Page",
+          mockBadge: "Chittagong Recovery Logs",
+          mockTitle: "Verified Facility Activities & Operational Gallery",
+          mockDesc:
+            "A transparent look at our handling practices, physical dismantling, and container staging at our Chittagong hub.",
+          btn1: "Live Video Audit",
+          btn2: "Browse Media",
+          caption: "Chittagong Inspection Station",
         };
     }
   };
@@ -181,14 +209,31 @@ export function AdminSettingsManager({
     if (activeTab === "about") setAboutBannerUrl(DEFAULT_ABOUT_BANNER);
     else if (activeTab === "products") setProductsBannerUrl(DEFAULT_PRODUCTS_BANNER);
     else if (activeTab === "services") setServicesBannerUrl(DEFAULT_SERVICES_BANNER);
-    else setProcessBannerUrl(DEFAULT_PROCESS_BANNER);
+    else if (activeTab === "process") setProcessBannerUrl(DEFAULT_PROCESS_BANNER);
+    else setGalleryBannerUrl(DEFAULT_GALLERY_BANNER);
     setSaveStatus(null);
   };
 
   return (
     <div className="space-y-6 max-w-4xl">
-      {/* 4-Tab Switcher */}
+      {/* 5-Tab Switcher */}
       <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-200/60 dark:bg-slate-800/60 w-fit">
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab("gallery");
+            setSaveStatus(null);
+          }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            activeTab === "gallery"
+              ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+          }`}
+        >
+          <Camera className="w-3.5 h-3.5 text-emerald-600" />
+          <span>Media Gallery Banner</span>
+        </button>
+
         <button
           type="button"
           onClick={() => {
@@ -201,7 +246,7 @@ export function AdminSettingsManager({
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
-          <Workflow className="w-3.5 h-3.5 text-emerald-600" />
+          <Workflow className="w-3.5 h-3.5 text-teal-600" />
           <span>Work Process Banner</span>
         </button>
 
@@ -217,7 +262,7 @@ export function AdminSettingsManager({
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
-          <Wrench className="w-3.5 h-3.5 text-teal-600" />
+          <Wrench className="w-3.5 h-3.5 text-cyan-600" />
           <span>Corporate Services Banner</span>
         </button>
 
@@ -306,7 +351,8 @@ export function AdminSettingsManager({
               if (activeTab === "about") setAboutBannerUrl(url);
               else if (activeTab === "products") setProductsBannerUrl(url);
               else if (activeTab === "services") setServicesBannerUrl(url);
-              else setProcessBannerUrl(url);
+              else if (activeTab === "process") setProcessBannerUrl(url);
+              else setGalleryBannerUrl(url);
               setSaveStatus(null);
             }}
             folder="general"

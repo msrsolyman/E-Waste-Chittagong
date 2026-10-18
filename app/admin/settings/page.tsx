@@ -21,14 +21,18 @@ export default async function AdminSettingsPage() {
     "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792329707/ewaste-chittagong/banners/services-hero-banner.jpg";
   let processBannerUrl =
     "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792330610/ewaste-chittagong/banners/process-hero-banner.jpg";
+  let galleryBannerUrl =
+    "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792331523/ewaste-chittagong/banners/gallery-hero-banner.jpg";
 
   try {
-    const [aboutSetting, productsSetting, servicesSetting, processSetting] = await Promise.all([
-      prisma.companySetting.findUnique({ where: { key: "about_banner" } }),
-      prisma.companySetting.findUnique({ where: { key: "products_banner" } }),
-      prisma.companySetting.findUnique({ where: { key: "services_banner" } }),
-      prisma.companySetting.findUnique({ where: { key: "process_banner" } }),
-    ]);
+    const [aboutSetting, productsSetting, servicesSetting, processSetting, gallerySetting] =
+      await Promise.all([
+        prisma.companySetting.findUnique({ where: { key: "about_banner" } }),
+        prisma.companySetting.findUnique({ where: { key: "products_banner" } }),
+        prisma.companySetting.findUnique({ where: { key: "services_banner" } }),
+        prisma.companySetting.findUnique({ where: { key: "process_banner" } }),
+        prisma.companySetting.findUnique({ where: { key: "gallery_banner" } }),
+      ]);
 
     if (aboutSetting?.value) {
       const parsed = JSON.parse(aboutSetting.value);
@@ -48,6 +52,11 @@ export default async function AdminSettingsPage() {
     if (processSetting?.value) {
       const parsed = JSON.parse(processSetting.value);
       if (parsed.url) processBannerUrl = parsed.url;
+    }
+
+    if (gallerySetting?.value) {
+      const parsed = JSON.parse(gallerySetting.value);
+      if (parsed.url) galleryBannerUrl = parsed.url;
     }
   } catch (err) {
     console.error("Failed to read banner settings:", err);
@@ -72,6 +81,7 @@ export default async function AdminSettingsPage() {
         initialProductsBannerUrl={productsBannerUrl}
         initialServicesBannerUrl={servicesBannerUrl}
         initialProcessBannerUrl={processBannerUrl}
+        initialGalleryBannerUrl={galleryBannerUrl}
       />
     </div>
   );
