@@ -32,7 +32,7 @@ export function MediaUploader({
   label = "Upload Image",
   acceptVideo = false,
   required = false,
-  helperText = "Direct file upload to Cloudinary. JPG, PNG, WebP up to 10MB.",
+  helperText = "Direct file upload. JPG, PNG, WebP up to 10MB.",
 }: MediaUploaderProps) {
   const [isUploading, setIsUploading] = React.useState(false);
   const [uploadProgress, setUploadProgress] = React.useState<number | null>(null);
@@ -130,8 +130,8 @@ export function MediaUploader({
           <span>{label}</span>
           {required && <span className="text-red-500">*</span>}
         </label>
-        <span className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
-          Cloudinary Direct Upload
+        <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+          Direct Device Upload
         </span>
       </div>
 
@@ -182,15 +182,16 @@ export function MediaUploader({
 
               <div className="min-w-0 flex-1 space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                    {isVideoUrl(activeMedia) ? "Cloud Video" : "Cloud Photo"}
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                    <CheckCircle className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                    {isVideoUrl(activeMedia) ? "Video Ready" : "Photo Ready"}
                   </span>
-                  <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400">
-                    Cloudinary Verified
+                  <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                    Active Media Attached
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-500 truncate font-mono" title={activeMedia}>
-                  {activeMedia}
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                  {isVideoUrl(activeMedia) ? "High-definition video loaded" : "High-resolution photo loaded"}
                 </div>
                 {uploadProgress !== null && (
                   <div className="w-full bg-slate-200 dark:bg-slate-700 h-1 rounded-full overflow-hidden">

@@ -524,7 +524,7 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                         {item.category}
                       </span>
                       <span className="text-[10px] font-mono font-medium text-slate-400">
-                        {isVideo ? "Cloudinary Video" : "Cloudinary Photo"}
+                        {isVideo ? "Video" : "Photo"}
                       </span>
                     </div>
 
@@ -633,7 +633,7 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                     {lightboxItem.category}
                   </span>
                   <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-slate-800 text-slate-300">
-                    {isVideoUrl(lightboxItem.imageUrl) ? "Cloudinary Video" : "High-Res Photo"}
+                    {isVideoUrl(lightboxItem.imageUrl) ? "Video Asset" : "High-Res Photo"}
                   </span>
                   <span
                     className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
@@ -911,7 +911,7 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                       folder="gallery"
                       label="Facility Photograph / Video Asset *"
                       acceptVideo
-                      helperText="Upload real facility photos (JPG, PNG, WebP) or video (MP4, WebM) to Cloudinary CDN"
+                      helperText="Upload authentic facility photos (JPG, PNG, WebP) or video (MP4, WebM)"
                     />
                   </div>
                 </div>

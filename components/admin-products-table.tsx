@@ -1155,7 +1155,7 @@ export function AdminProductsTable({
                     folder="products"
                     label="Product Showcase Photography / Video"
                     acceptVideo
-                    helperText="Upload high-res photos (JPG, PNG, WebP) or video (MP4, WebM) directly to Cloudinary CDN"
+                    helperText="Upload high-res photos (JPG, PNG, WebP) or video (MP4, WebM)"
                   />
                 </div>
               )}

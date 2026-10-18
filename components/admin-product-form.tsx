@@ -176,7 +176,7 @@ export function AdminProductForm({ categories }: { categories: Category[] }) {
             folder="products"
             label="Product Showcase Media (Photo or Video) *"
             required
-            helperText="Drag & drop or browse high-res product photo or video (Cloudinary CDN)"
+            helperText="Drag & drop or browse high-resolution product photo or video"
           />
         </div>
       </div>

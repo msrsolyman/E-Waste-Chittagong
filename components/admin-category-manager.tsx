@@ -785,7 +785,7 @@ export function AdminCategoryManager({
                       folder="categories"
                       label="Category Showcase Photography"
                       acceptVideo={false}
-                      helperText="Upload category thumbnail or banner (JPG, PNG, WebP) to Cloudinary CDN"
+                      helperText="Upload category thumbnail or banner (JPG, PNG, WebP)"
                     />
                   </div>
                 </div>
