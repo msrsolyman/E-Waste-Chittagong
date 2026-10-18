@@ -61,8 +61,8 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        bengali: ["var(--font-bengali)", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "var(--font-bengali)", "system-ui", "sans-serif"],
+        bengali: ["var(--font-bengali)", "var(--font-sans)", "system-ui", "sans-serif"],
       },
       boxShadow: {
         "glow-emerald": "0 0 35px -5px rgba(16, 185, 129, 0.25)",

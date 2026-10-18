@@ -269,3 +269,34 @@
     animation: none !important;
   }
 }
+
+/* Optical Tuning for Bengali Typography (Anek Bangla) */
+html[lang="bn"],
+.font-bengali {
+  letter-spacing: 0em;
+  word-spacing: 0.05em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html[lang="bn"] h1,
+html[lang="bn"] h2,
+html[lang="bn"] h3,
+html[lang="bn"] h4,
+html[lang="bn"] h5,
+html[lang="bn"] h6,
+.font-bengali h1,
+.font-bengali h2,
+.font-bengali h3,
+.font-bengali h4,
+.font-bengali h5,
+.font-bengali h6 {
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+html[lang="bn"] p,
+.font-bengali p {
+  line-height: 1.7;
+}

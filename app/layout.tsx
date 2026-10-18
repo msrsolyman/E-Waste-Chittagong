@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Hind_Siliguri } from "next/font/google";
+import { Plus_Jakarta_Sans, Anek_Bangla } from "next/font/google";
 import "./globals.css";
 
 const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
-const fontBengali = Hind_Siliguri({
+const fontBengali = Anek_Bangla({
   subsets: ["bengali"],
   variable: "--font-bengali",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {

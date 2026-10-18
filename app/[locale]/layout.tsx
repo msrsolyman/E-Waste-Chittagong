@@ -89,7 +89,7 @@ export default async function LocaleLayout({
         enableSystem
         disableTransitionOnChange
       >
-        <div className="flex min-h-screen flex-col">
+        <div className={`flex min-h-screen flex-col ${locale === "bn" ? "font-bengali tracking-normal" : "font-sans"}`}>
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
