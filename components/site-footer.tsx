@@ -103,13 +103,13 @@ export function SiteFooter() {
                 <Phone className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
                 <div className="flex flex-col">
                   <a
-                    href="tel:+8801800000000"
+                    href="tel:+8801352328093"
                     className="hover:text-emerald-600 dark:hover:text-emerald-400"
                   >
                     {tContact("phone")}
                   </a>
                   <a
-                    href="https://wa.me/8801800000000"
+                    href="https://wa.me/8801352328093"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold hover:underline mt-0.5"

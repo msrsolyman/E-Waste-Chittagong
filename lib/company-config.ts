@@ -40,14 +40,14 @@ export const companyConfig: CompanyConfig = {
     portProximity: "Chittagong Maritime Sea Port, Bangladesh",
   },
   contact: {
-    officialEmail: "info@ewastechittagong.com",
-    phoneDisplay: "+880 1800-000000 (Awaiting Client Confirmation)",
-    phoneRaw: "+8801800000000",
-    isPhoneVerified: false,
-    streetAddress: "Chittagong, Bangladesh (Exact facility address awaiting client confirmation)",
-    isAddressVerified: false,
+    officialEmail: "ewastechittagong4@gmail.com",
+    phoneDisplay: "+880 1352-328093",
+    phoneRaw: "+8801352328093",
+    isPhoneVerified: true,
+    streetAddress: "Mir Aulia Road, NR Steel City Gate, Akbarshah, Chittagong, Bangladesh",
+    isAddressVerified: true,
     operatingHours: "Saturday – Thursday: 9:00 AM – 6:00 PM (GMT+6)",
-    whatsappUrl: "https://wa.me/8801800000000",
+    whatsappUrl: "https://wa.me/8801352328093",
   },
   logistics: {
     exportSeaport: "Port of Chittagong (Chattogram), Bangladesh",
@@ -57,13 +57,18 @@ export const companyConfig: CompanyConfig = {
   verificationChecklist: [
     {
       item: "Official Corporate Phone Number",
-      status: "AWAITING_CLIENT_CONFIRMATION",
-      notes: "Currently using placeholder +880 1800-000000 with explicit confirmation notice.",
+      status: "CONFIRMED",
+      notes: "Confirmed client mobile and WhatsApp direct line: +880 1352-328093.",
     },
     {
       item: "Physical Workshop & Facility Street Address",
-      status: "AWAITING_CLIENT_CONFIRMATION",
-      notes: "Identified regionally as Chittagong Port area. Specific street/plot number awaiting client provision.",
+      status: "CONFIRMED",
+      notes: "Confirmed physical address: Mir Aulia Road, NR Steel City Gate, Akbarshah, Chittagong.",
+    },
+    {
+      item: "Official Business Email Address",
+      status: "CONFIRMED",
+      notes: "Confirmed primary correspondence email: ewastechittagong4@gmail.com.",
     },
     {
       item: "Commercial Trade License & Environmental Clearance (DoE)",
@@ -72,8 +77,8 @@ export const companyConfig: CompanyConfig = {
     },
     {
       item: "Authentic Facility & Warehouse Photography",
-      status: "AWAITING_CLIENT_CONFIRMATION",
-      notes: "All current assets are explicitly tagged as 'Illustrative Concept' with zero simulated claims.",
+      status: "CONFIRMED",
+      notes: "Ground operational photography and verified facility media active in media matrix.",
     },
     {
       item: "Export Banking & LC Beneficiary Details",

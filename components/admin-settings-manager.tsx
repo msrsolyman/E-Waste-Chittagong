@@ -18,56 +18,65 @@ import {
   Wrench,
   Workflow,
   Camera,
+  PhoneCall,
 } from "lucide-react";
 
 interface AdminSettingsManagerProps {
-  initialAboutBannerUrl?: string;
-  initialProductsBannerUrl?: string;
-  initialServicesBannerUrl?: string;
-  initialProcessBannerUrl?: string;
+  initialContactBannerUrl?: string;
   initialGalleryBannerUrl?: string;
+  initialProcessBannerUrl?: string;
+  initialServicesBannerUrl?: string;
+  initialProductsBannerUrl?: string;
+  initialAboutBannerUrl?: string;
 }
 
-const DEFAULT_ABOUT_BANNER =
-  "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792327290/ewaste-chittagong/banners/about-hero-banner.jpg";
-
-const DEFAULT_PRODUCTS_BANNER =
-  "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792328119/ewaste-chittagong/banners/products-hero-banner.jpg";
-
-const DEFAULT_SERVICES_BANNER =
-  "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792329707/ewaste-chittagong/banners/services-hero-banner.jpg";
-
-const DEFAULT_PROCESS_BANNER =
-  "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792330610/ewaste-chittagong/banners/process-hero-banner.jpg";
+const DEFAULT_CONTACT_BANNER =
+  "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792340096/ewaste-chittagong/banners/contact-hero-banner.jpg";
 
 const DEFAULT_GALLERY_BANNER =
   "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792331523/ewaste-chittagong/banners/gallery-hero-banner.jpg";
 
+const DEFAULT_PROCESS_BANNER =
+  "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792330610/ewaste-chittagong/banners/process-hero-banner.jpg";
+
+const DEFAULT_SERVICES_BANNER =
+  "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792329707/ewaste-chittagong/banners/services-hero-banner.jpg";
+
+const DEFAULT_PRODUCTS_BANNER =
+  "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792328119/ewaste-chittagong/banners/products-hero-banner.jpg";
+
+const DEFAULT_ABOUT_BANNER =
+  "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792327290/ewaste-chittagong/banners/about-hero-banner.jpg";
+
 export function AdminSettingsManager({
-  initialAboutBannerUrl = DEFAULT_ABOUT_BANNER,
-  initialProductsBannerUrl = DEFAULT_PRODUCTS_BANNER,
-  initialServicesBannerUrl = DEFAULT_SERVICES_BANNER,
-  initialProcessBannerUrl = DEFAULT_PROCESS_BANNER,
+  initialContactBannerUrl = DEFAULT_CONTACT_BANNER,
   initialGalleryBannerUrl = DEFAULT_GALLERY_BANNER,
+  initialProcessBannerUrl = DEFAULT_PROCESS_BANNER,
+  initialServicesBannerUrl = DEFAULT_SERVICES_BANNER,
+  initialProductsBannerUrl = DEFAULT_PRODUCTS_BANNER,
+  initialAboutBannerUrl = DEFAULT_ABOUT_BANNER,
 }: AdminSettingsManagerProps) {
   const [activeTab, setActiveTab] = React.useState<
-    "gallery" | "process" | "services" | "products" | "about"
-  >("gallery");
+    "contact" | "gallery" | "process" | "services" | "products" | "about"
+  >("contact");
 
-  const [aboutBannerUrl, setAboutBannerUrl] = React.useState<string>(
-    initialAboutBannerUrl || DEFAULT_ABOUT_BANNER
+  const [contactBannerUrl, setContactBannerUrl] = React.useState<string>(
+    initialContactBannerUrl || DEFAULT_CONTACT_BANNER
   );
-  const [productsBannerUrl, setProductsBannerUrl] = React.useState<string>(
-    initialProductsBannerUrl || DEFAULT_PRODUCTS_BANNER
-  );
-  const [servicesBannerUrl, setServicesBannerUrl] = React.useState<string>(
-    initialServicesBannerUrl || DEFAULT_SERVICES_BANNER
+  const [galleryBannerUrl, setGalleryBannerUrl] = React.useState<string>(
+    initialGalleryBannerUrl || DEFAULT_GALLERY_BANNER
   );
   const [processBannerUrl, setProcessBannerUrl] = React.useState<string>(
     initialProcessBannerUrl || DEFAULT_PROCESS_BANNER
   );
-  const [galleryBannerUrl, setGalleryBannerUrl] = React.useState<string>(
-    initialGalleryBannerUrl || DEFAULT_GALLERY_BANNER
+  const [servicesBannerUrl, setServicesBannerUrl] = React.useState<string>(
+    initialServicesBannerUrl || DEFAULT_SERVICES_BANNER
+  );
+  const [productsBannerUrl, setProductsBannerUrl] = React.useState<string>(
+    initialProductsBannerUrl || DEFAULT_PRODUCTS_BANNER
+  );
+  const [aboutBannerUrl, setAboutBannerUrl] = React.useState<string>(
+    initialAboutBannerUrl || DEFAULT_ABOUT_BANNER
   );
 
   const [isSaving, setIsSaving] = React.useState(false);
@@ -147,7 +156,6 @@ export function AdminSettingsManager({
           caption: "Mechanical Sorting Pipeline",
         };
       case "gallery":
-      default:
         return {
           url: galleryBannerUrl,
           key: "gallery_banner",
@@ -163,6 +171,24 @@ export function AdminSettingsManager({
           btn1: "Live Video Audit",
           btn2: "Browse Media",
           caption: "Chittagong Inspection Station",
+        };
+      case "contact":
+      default:
+        return {
+          url: contactBannerUrl,
+          key: "contact_banner",
+          defaultUrl: DEFAULT_CONTACT_BANNER,
+          title: "Contact Page Hero Banner",
+          desc: "Upload and manage the reception and dispatch logistics desk banner displayed on the public Contact Us page.",
+          liveLink: "/en/contact",
+          liveLabel: "Contact Page",
+          mockBadge: "Chittagong Operations Hub",
+          mockTitle: "Chittagong Facility & Logistics Gateway",
+          mockDesc:
+            "Connect directly with our Akbarshah operations desk for bulk material inspections, enterprise electronics decommissioning, and global export inquiries.",
+          btn1: "WhatsApp Desk",
+          btn2: "Inquiry Form",
+          caption: "Akbarshah Operations & Dispatch Hub",
         };
     }
   };
@@ -206,18 +232,35 @@ export function AdminSettingsManager({
   };
 
   const handleResetToDefault = () => {
-    if (activeTab === "about") setAboutBannerUrl(DEFAULT_ABOUT_BANNER);
-    else if (activeTab === "products") setProductsBannerUrl(DEFAULT_PRODUCTS_BANNER);
-    else if (activeTab === "services") setServicesBannerUrl(DEFAULT_SERVICES_BANNER);
+    if (activeTab === "contact") setContactBannerUrl(DEFAULT_CONTACT_BANNER);
+    else if (activeTab === "gallery") setGalleryBannerUrl(DEFAULT_GALLERY_BANNER);
     else if (activeTab === "process") setProcessBannerUrl(DEFAULT_PROCESS_BANNER);
-    else setGalleryBannerUrl(DEFAULT_GALLERY_BANNER);
+    else if (activeTab === "services") setServicesBannerUrl(DEFAULT_SERVICES_BANNER);
+    else if (activeTab === "products") setProductsBannerUrl(DEFAULT_PRODUCTS_BANNER);
+    else setAboutBannerUrl(DEFAULT_ABOUT_BANNER);
     setSaveStatus(null);
   };
 
   return (
     <div className="space-y-6 max-w-4xl">
-      {/* 5-Tab Switcher */}
+      {/* 6-Tab Switcher */}
       <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-200/60 dark:bg-slate-800/60 w-fit">
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab("contact");
+            setSaveStatus(null);
+          }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            activeTab === "contact"
+              ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+          }`}
+        >
+          <PhoneCall className="w-3.5 h-3.5 text-emerald-600" />
+          <span>Contact Page Banner</span>
+        </button>
+
         <button
           type="button"
           onClick={() => {
@@ -348,11 +391,12 @@ export function AdminSettingsManager({
             key={activeTab}
             value={current.url}
             onChange={(url) => {
-              if (activeTab === "about") setAboutBannerUrl(url);
-              else if (activeTab === "products") setProductsBannerUrl(url);
-              else if (activeTab === "services") setServicesBannerUrl(url);
+              if (activeTab === "contact") setContactBannerUrl(url);
+              else if (activeTab === "gallery") setGalleryBannerUrl(url);
               else if (activeTab === "process") setProcessBannerUrl(url);
-              else setGalleryBannerUrl(url);
+              else if (activeTab === "services") setServicesBannerUrl(url);
+              else if (activeTab === "products") setProductsBannerUrl(url);
+              else setAboutBannerUrl(url);
               setSaveStatus(null);
             }}
             folder="general"

@@ -479,7 +479,7 @@ export function GalleryClientView({
             </Link>
 
             <a
-              href="https://wa.me/8801819385860"
+              href="https://wa.me/8801352328093"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-xs sm:text-sm text-white bg-white/10 hover:bg-white/15 border border-white/20 transition-all duration-200"

@@ -140,7 +140,7 @@ function InquiryFormInner({ defaultProductSlug }: { defaultProductSlug?: string 
 
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
           <a
-            href={`https://wa.me/8801800000000?text=${encodeURIComponent(`Hello E-Waste Chittagong, I submitted inquiry ${successReference} regarding material procurement.`)}`}
+            href={`https://wa.me/8801352328093?text=${encodeURIComponent(`Hello E-Waste Chittagong, I submitted inquiry ${successReference} regarding material procurement.`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition"
