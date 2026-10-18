@@ -61,7 +61,17 @@
     "draftNotice": "この製品仕様は最終確認中の下書き情報です。",
     "badge": "B2B原料カタログ",
     "pageTitle": "電子スクラップ・リサイクル原料一覧",
-    "pageSubtitle": "サーキュラーエコノミーおよび製錬受入基準に適合するよう選別・梱包されています。"
+    "pageSubtitle": "サーキュラーエコノミーおよび製錬受入基準に適合するよう選別・梱包されています。",
+    "quickSpecs": "クイックスペック",
+    "closeQuickSpecs": "閉じる",
+    "showingCount": "全 {total} ロット中 {count} 件の検証済みロットを表示",
+    "streamMetric": "4大リサイクル原料区分",
+    "streamMetricSub": "厳格に選別されたIT・通信スクラップ",
+    "gradingMetric": "100% 物理選別・解体",
+    "gradingMetricSub": "非公式な薬品リーチングを排除",
+    "logisticsMetric": "チッタゴン港直結",
+    "logisticsMetricSub": "海上コンテナ直積み輸出体制",
+    "clearFilter": "フィルター解除"
   },
   "services": {
     "title": "事業・サービス内容",

@@ -61,7 +61,17 @@
     "draftNotice": "This product specification is awaiting final client confirmation before shipment clearance.",
     "badge": "B2B Scrap Catalogue",
     "pageTitle": "Electronic Scrap & Raw Material Categories",
-    "pageSubtitle": "Sorted, graded, and prepared in accordance with international circular economy and pyrometallurgical refiner guidelines."
+    "pageSubtitle": "Sorted, graded, and prepared in accordance with international circular economy and pyrometallurgical refiner guidelines.",
+    "quickSpecs": "Quick Specs",
+    "closeQuickSpecs": "Close Preview",
+    "showingCount": "Showing {count} of {total} Verified Lots",
+    "streamMetric": "4 Material Streams",
+    "streamMetricSub": "Segregated IT & Telecom Scrap",
+    "gradingMetric": "100% Mechanical",
+    "gradingMetricSub": "Zero Informal Chemical Leaching",
+    "logisticsMetric": "Chittagong Port",
+    "logisticsMetricSub": "Direct Maritime Ocean Freight",
+    "clearFilter": "Reset Filter"
   },
   "services": {
     "title": "Our Specialized Services",

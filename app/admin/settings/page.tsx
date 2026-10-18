@@ -15,20 +15,26 @@ export default async function AdminSettingsPage() {
 
   let aboutBannerUrl =
     "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792327290/ewaste-chittagong/banners/about-hero-banner.jpg";
+  let productsBannerUrl =
+    "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792328119/ewaste-chittagong/banners/products-hero-banner.jpg";
 
   try {
-    const bannerSetting = await prisma.companySetting.findUnique({
-      where: { key: "about_banner" },
-    });
+    const [aboutSetting, productsSetting] = await Promise.all([
+      prisma.companySetting.findUnique({ where: { key: "about_banner" } }),
+      prisma.companySetting.findUnique({ where: { key: "products_banner" } }),
+    ]);
 
-    if (bannerSetting?.value) {
-      const parsed = JSON.parse(bannerSetting.value);
-      if (parsed.url) {
-        aboutBannerUrl = parsed.url;
-      }
+    if (aboutSetting?.value) {
+      const parsed = JSON.parse(aboutSetting.value);
+      if (parsed.url) aboutBannerUrl = parsed.url;
+    }
+
+    if (productsSetting?.value) {
+      const parsed = JSON.parse(productsSetting.value);
+      if (parsed.url) productsBannerUrl = parsed.url;
     }
   } catch (err) {
-    console.error("Failed to read about_banner setting:", err);
+    console.error("Failed to read banner settings:", err);
   }
 
   return (
@@ -45,7 +51,10 @@ export default async function AdminSettingsPage() {
         </div>
       </div>
 
-      <AdminSettingsManager initialAboutBannerUrl={aboutBannerUrl} />
+      <AdminSettingsManager
+        initialAboutBannerUrl={aboutBannerUrl}
+        initialProductsBannerUrl={productsBannerUrl}
+      />
     </div>
   );
 }

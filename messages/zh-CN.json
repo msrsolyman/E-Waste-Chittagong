@@ -61,7 +61,17 @@
     "draftNotice": "该产品规格正等待最终客户确认后执行装运放行。",
     "badge": "B2B 废料目录",
     "pageTitle": "电子废料与再生原料品类",
-    "pageSubtitle": "严格遵照国际循环经济标准与金属精炼冶炼规范执行等级标定与打包。"
+    "pageSubtitle": "严格遵照国际循环经济标准与金属精炼冶炼规范执行等级标定与打包。",
+    "quickSpecs": "快速规格",
+    "closeQuickSpecs": "关闭预览",
+    "showingCount": "显示共 {total} 批次中的 {count} 个已验证批次",
+    "streamMetric": "4 大材料类目",
+    "streamMetricSub": "严格分类的 IT 与通信废料",
+    "gradingMetric": "100% 物理分选",
+    "gradingMetricSub": "杜绝非正规化学浸出工艺",
+    "logisticsMetric": "吉大港海港直运",
+    "logisticsMetricSub": "直接集装箱远洋海运出口",
+    "clearFilter": "重置筛选"
   },
   "services": {
     "title": "核心服务领域",
