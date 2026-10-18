@@ -16,12 +16,14 @@ import {
   Package,
   Layers,
   Wrench,
+  Workflow,
 } from "lucide-react";
 
 interface AdminSettingsManagerProps {
   initialAboutBannerUrl?: string;
   initialProductsBannerUrl?: string;
   initialServicesBannerUrl?: string;
+  initialProcessBannerUrl?: string;
 }
 
 const DEFAULT_ABOUT_BANNER =
@@ -33,12 +35,16 @@ const DEFAULT_PRODUCTS_BANNER =
 const DEFAULT_SERVICES_BANNER =
   "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792329707/ewaste-chittagong/banners/services-hero-banner.jpg";
 
+const DEFAULT_PROCESS_BANNER =
+  "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792330610/ewaste-chittagong/banners/process-hero-banner.jpg";
+
 export function AdminSettingsManager({
   initialAboutBannerUrl = DEFAULT_ABOUT_BANNER,
   initialProductsBannerUrl = DEFAULT_PRODUCTS_BANNER,
   initialServicesBannerUrl = DEFAULT_SERVICES_BANNER,
+  initialProcessBannerUrl = DEFAULT_PROCESS_BANNER,
 }: AdminSettingsManagerProps) {
-  const [activeTab, setActiveTab] = React.useState<"services" | "products" | "about">("services");
+  const [activeTab, setActiveTab] = React.useState<"process" | "services" | "products" | "about">("process");
 
   const [aboutBannerUrl, setAboutBannerUrl] = React.useState<string>(
     initialAboutBannerUrl || DEFAULT_ABOUT_BANNER
@@ -48,6 +54,9 @@ export function AdminSettingsManager({
   );
   const [servicesBannerUrl, setServicesBannerUrl] = React.useState<string>(
     initialServicesBannerUrl || DEFAULT_SERVICES_BANNER
+  );
+  const [processBannerUrl, setProcessBannerUrl] = React.useState<string>(
+    initialProcessBannerUrl || DEFAULT_PROCESS_BANNER
   );
 
   const [isSaving, setIsSaving] = React.useState(false);
@@ -93,7 +102,6 @@ export function AdminSettingsManager({
           caption: "High-Grade Scrap Assortment",
         };
       case "services":
-      default:
         return {
           url: servicesBannerUrl,
           key: "services_banner",
@@ -109,6 +117,24 @@ export function AdminSettingsManager({
           btn1: "Request Consultation",
           btn2: "View Services",
           caption: "Enterprise Decommissioning Hub",
+        };
+      case "process":
+      default:
+        return {
+          url: processBannerUrl,
+          key: "process_banner",
+          defaultUrl: DEFAULT_PROCESS_BANNER,
+          title: "Work Process Hero Banner",
+          desc: "Upload and manage the mechanical sorting and disassembly pipeline banner displayed on the public Work Process page.",
+          liveLink: "/en/process",
+          liveLabel: "Work Process Page",
+          mockBadge: "Chittagong Sorting Floor",
+          mockTitle: "Compliant & Traceable Recycling Process",
+          mockDesc:
+            "Every stage adheres to transparency, worker safety, mechanical segregation, and systematic resource recovery.",
+          btn1: "Facility Audit",
+          btn2: "Explore Journey",
+          caption: "Mechanical Sorting Pipeline",
         };
     }
   };
@@ -154,14 +180,31 @@ export function AdminSettingsManager({
   const handleResetToDefault = () => {
     if (activeTab === "about") setAboutBannerUrl(DEFAULT_ABOUT_BANNER);
     else if (activeTab === "products") setProductsBannerUrl(DEFAULT_PRODUCTS_BANNER);
-    else setServicesBannerUrl(DEFAULT_SERVICES_BANNER);
+    else if (activeTab === "services") setServicesBannerUrl(DEFAULT_SERVICES_BANNER);
+    else setProcessBannerUrl(DEFAULT_PROCESS_BANNER);
     setSaveStatus(null);
   };
 
   return (
     <div className="space-y-6 max-w-4xl">
-      {/* 3-Tab Switcher */}
+      {/* 4-Tab Switcher */}
       <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-200/60 dark:bg-slate-800/60 w-fit">
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab("process");
+            setSaveStatus(null);
+          }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            activeTab === "process"
+              ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+          }`}
+        >
+          <Workflow className="w-3.5 h-3.5 text-emerald-600" />
+          <span>Work Process Banner</span>
+        </button>
+
         <button
           type="button"
           onClick={() => {
@@ -174,7 +217,7 @@ export function AdminSettingsManager({
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
-          <Wrench className="w-3.5 h-3.5 text-emerald-600" />
+          <Wrench className="w-3.5 h-3.5 text-teal-600" />
           <span>Corporate Services Banner</span>
         </button>
 
@@ -262,7 +305,8 @@ export function AdminSettingsManager({
             onChange={(url) => {
               if (activeTab === "about") setAboutBannerUrl(url);
               else if (activeTab === "products") setProductsBannerUrl(url);
-              else setServicesBannerUrl(url);
+              else if (activeTab === "services") setServicesBannerUrl(url);
+              else setProcessBannerUrl(url);
               setSaveStatus(null);
             }}
             folder="general"

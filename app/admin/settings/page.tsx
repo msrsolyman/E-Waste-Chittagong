@@ -19,12 +19,15 @@ export default async function AdminSettingsPage() {
     "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792328119/ewaste-chittagong/banners/products-hero-banner.jpg";
   let servicesBannerUrl =
     "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792329707/ewaste-chittagong/banners/services-hero-banner.jpg";
+  let processBannerUrl =
+    "https://res.cloudinary.com/jpzhmh1r/image/upload/v1792330610/ewaste-chittagong/banners/process-hero-banner.jpg";
 
   try {
-    const [aboutSetting, productsSetting, servicesSetting] = await Promise.all([
+    const [aboutSetting, productsSetting, servicesSetting, processSetting] = await Promise.all([
       prisma.companySetting.findUnique({ where: { key: "about_banner" } }),
       prisma.companySetting.findUnique({ where: { key: "products_banner" } }),
       prisma.companySetting.findUnique({ where: { key: "services_banner" } }),
+      prisma.companySetting.findUnique({ where: { key: "process_banner" } }),
     ]);
 
     if (aboutSetting?.value) {
@@ -40,6 +43,11 @@ export default async function AdminSettingsPage() {
     if (servicesSetting?.value) {
       const parsed = JSON.parse(servicesSetting.value);
       if (parsed.url) servicesBannerUrl = parsed.url;
+    }
+
+    if (processSetting?.value) {
+      const parsed = JSON.parse(processSetting.value);
+      if (parsed.url) processBannerUrl = parsed.url;
     }
   } catch (err) {
     console.error("Failed to read banner settings:", err);
@@ -63,6 +71,7 @@ export default async function AdminSettingsPage() {
         initialAboutBannerUrl={aboutBannerUrl}
         initialProductsBannerUrl={productsBannerUrl}
         initialServicesBannerUrl={servicesBannerUrl}
+        initialProcessBannerUrl={processBannerUrl}
       />
     </div>
   );
