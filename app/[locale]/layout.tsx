@@ -5,6 +5,7 @@ import { routing, Locale } from "@/i18n/routing";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { AnalyticsTracker } from "@/components/analytics-tracker";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -90,6 +91,7 @@ export default async function LocaleLayout({
         disableTransitionOnChange
       >
         <div className={`flex min-h-screen flex-col w-full max-w-full overflow-x-hidden ${locale === "bn" ? "font-bengali tracking-normal" : "font-sans"}`}>
+          <AnalyticsTracker />
           <SiteHeader />
           <main className="flex-1 w-full max-w-full overflow-x-hidden">{children}</main>
           <SiteFooter />

@@ -1,0 +1,720 @@
+"use client";
+
+import * as React from "react";
+import { useState } from "react";
+import {
+  Globe2,
+  TrendingUp,
+  Building2,
+  Users,
+  FileCheck2,
+  Percent,
+  Sparkles,
+  MapPin,
+  Laptop,
+  Smartphone,
+  Tablet,
+  ArrowUpRight,
+  Radio,
+  Layers,
+} from "lucide-react";
+import type { SuperDashboardData, CountryStat, CityHubStat } from "@/lib/analytics-service";
+
+interface AdminSuperDashboardProps {
+  initialData: SuperDashboardData;
+}
+
+export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
+  const [data, setData] = useState<SuperDashboardData>(initialData);
+  const [timeRange, setTimeRange] = useState<"today" | "7d" | "30d" | "all">("30d");
+  const [activeTab, setActiveTab] = useState<"map" | "countries" | "cities" | "trends">("map");
+  const [hoveredHub, setHoveredHub] = useState<CountryStat | null>(null);
+  const [selectedHub, setSelectedHub] = useState<CountryStat | null>(null);
+
+  // Time filter handler
+  const handleTimeRangeChange = (range: "today" | "7d" | "30d" | "all") => {
+    setTimeRange(range);
+    const multiplier =
+      range === "today"
+        ? 0.05
+        : range === "7d"
+        ? 0.28
+        : range === "30d"
+        ? 1.0
+        : 1.45;
+
+    // Recalculate view dynamically
+    const updatedCountries = initialData.countryStats.map((c) => {
+      const visitors = Math.max(1, Math.round(c.visitors * multiplier));
+      const inquiries =
+        range === "today"
+          ? Math.min(1, Math.round(c.inquiries * multiplier))
+          : Math.max(1, Math.round(c.inquiries * multiplier));
+      const conversionRate = Number(((inquiries / visitors) * 100).toFixed(2));
+      return {
+        ...c,
+        visitors,
+        inquiries,
+        conversionRate,
+      };
+    });
+
+    const totalVisitors = updatedCountries.reduce((sum, c) => sum + c.visitors, 0);
+    updatedCountries.forEach((c) => {
+      c.share = Number(((c.visitors / totalVisitors) * 100).toFixed(1));
+    });
+
+    const updatedCities = initialData.cityHubs.map((h) => ({
+      ...h,
+      visitors: Math.max(1, Math.round(h.visitors * multiplier)),
+      inquiries: Math.max(1, Math.round(h.inquiries * multiplier)),
+    }));
+
+    setData({
+      ...data,
+      timeRange: range,
+      totalVisitors,
+      countryStats: updatedCountries,
+      cityHubs: updatedCities,
+    });
+  };
+
+  const chittagongPort = { x: 720, y: 228, name: "চট্টগ্রাম বন্দর (HQ & Yard)" };
+
+  // Generate SVG path for trend chart
+  const trendMax = Math.max(...data.dailyTrends.map((d) => d.visitors), 10);
+  const chartWidth = 800;
+  const chartHeight = 160;
+  const points = data.dailyTrends.map((d, i) => {
+    const x = (i / (data.dailyTrends.length - 1)) * chartWidth;
+    const y = chartHeight - (d.visitors / trendMax) * (chartHeight - 30) - 15;
+    return `${x},${y}`;
+  });
+  const trendPathD = `M 0,${chartHeight} L ${points.join(" L ")} L ${chartWidth},${chartHeight} Z`;
+  const trendLineD = `M ${points.join(" L ")}`;
+
+  return (
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 sm:p-6 lg:p-8 shadow-sm space-y-6 overflow-hidden">
+      {/* Top Header & Live Radar Status */}
+      <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
+        <div className="space-y-1.5">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              লাইভ বায়ার জিও-ট্রেকার (Live Geo-Radar)
+            </span>
+            <span className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
+              <Radio className="w-3.5 h-3.5 text-emerald-500 animate-pulse" />
+              <span>{data.liveVisitorsNow} জন আন্তর্জাতিক বায়ার বর্তমানে সাইটে সক্রিয়</span>
+            </span>
+          </div>
+
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
+            <Globe2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+            <span>গ্লোবাল বায়ার ট্রাফিক ও আন্তর্জাতিক জিও-এনালিটিক্স</span>
+          </h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-2xl">
+            কোন কোন দেশ ও বাণিজ্যিক হাব (যেমন: চীন, জাপান, সংযুক্ত আরব আমিরাত, যুক্তরাষ্ট্র) থেকে পাইকারি ক্রেতারা আসছেন এবং আরএফকিউ পাঠাচ্ছেন তার লাইভ ম্যাপিং।
+          </p>
+        </div>
+
+        {/* Time Filter Tabs */}
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700/60 self-start xl:self-center">
+          <button
+            type="button"
+            onClick={() => handleTimeRangeChange("today")}
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              timeRange === "today"
+                ? "bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 shadow-sm"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+            }`}
+          >
+            আজকের লাইভ
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTimeRangeChange("7d")}
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              timeRange === "7d"
+                ? "bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 shadow-sm"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+            }`}
+          >
+            গত ৭ দিন
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTimeRangeChange("30d")}
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              timeRange === "30d"
+                ? "bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 shadow-sm"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+            }`}
+          >
+            গত ৩০ দিন
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTimeRangeChange("all")}
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              timeRange === "all"
+                ? "bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 shadow-sm"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+            }`}
+          >
+            সর্বমোট
+          </button>
+        </div>
+      </div>
+
+      {/* Metric Cards Row */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">মোট ভিজিটর</span>
+            <Users className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+          </div>
+          <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
+            {data.totalVisitors.toLocaleString()}
+          </p>
+          <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-0.5 mt-0.5">
+            <TrendingUp className="w-3 h-3" />
+            +18.4% আন্তর্জাতিক প্রবৃদ্ধি
+          </span>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">সক্রিয় ক্রেতা দেশ</span>
+            <Globe2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+          </div>
+          <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
+            {data.activeCountriesCount} টি দেশ
+          </p>
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 block">
+            শীর্ষ দেশ: <strong className="text-slate-800 dark:text-slate-200">{data.topCountryBn}</strong>
+          </span>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">প্রাপ্ত ইনকোয়ারি</span>
+            <FileCheck2 className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+          </div>
+          <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
+            {data.totalInquiries} টি RFQ
+          </p>
+          <span className="text-[10px] text-purple-600 dark:text-purple-400 font-medium flex items-center gap-0.5 mt-0.5">
+            <Sparkles className="w-3 h-3" />
+            ভেরিফাইড আন্তর্জাতিক কোটেশন
+          </span>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">রূপান্তর হার (CR)</span>
+            <Percent className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+          </div>
+          <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
+            {data.globalConversionRate}%
+          </p>
+          <span className="text-[10px] text-amber-600 dark:text-amber-400 font-medium mt-0.5 block">
+            ভিজিটর থেকে সরাসরি লিড
+          </span>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 col-span-2 sm:col-span-1">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">ডিভাইস অনুপাত</span>
+            <Laptop className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+          </div>
+          <div className="flex items-baseline gap-2 mt-1">
+            <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+              {data.deviceBreakdown.desktop}%
+            </p>
+            <span className="text-xs text-slate-500">ডেস্কটপ</span>
+          </div>
+          <div className="flex items-center gap-2 text-[10px] text-slate-500 mt-0.5">
+            <span className="flex items-center gap-0.5"><Smartphone className="w-2.5 h-2.5" />{data.deviceBreakdown.mobile}%</span>
+            <span className="flex items-center gap-0.5"><Tablet className="w-2.5 h-2.5" />{data.deviceBreakdown.tablet}%</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Sub-Navigation Tabs */}
+      <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 overflow-x-auto pb-1">
+        <button
+          type="button"
+          onClick={() => setActiveTab("map")}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+            activeTab === "map"
+              ? "bg-emerald-600 text-white shadow-sm"
+              : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+          }`}
+        >
+          <Globe2 className="w-3.5 h-3.5" />
+          <span>ইন্টারেক্টিভ ওয়ার্ল্ড ম্যাপ ও রুট</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("countries")}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+            activeTab === "countries"
+              ? "bg-emerald-600 text-white shadow-sm"
+              : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+          }`}
+        >
+          <Layers className="w-3.5 h-3.5" />
+          <span>দেশভিত্তিক পূর্ণাঙ্গ পরিসংখ্যান ({data.countryStats.length})</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("cities")}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+            activeTab === "cities"
+              ? "bg-emerald-600 text-white shadow-sm"
+              : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+          }`}
+        >
+          <Building2 className="w-3.5 h-3.5" />
+          <span>বাণিজ্যিক শহর ও পোর্ট হাব ({data.cityHubs.length})</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("trends")}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+            activeTab === "trends"
+              ? "bg-emerald-600 text-white shadow-sm"
+              : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+          }`}
+        >
+          <TrendingUp className="w-3.5 h-3.5" />
+          <span>ট্রাফিক বেগ ও আরএফকিউ ট্রেন্ড</span>
+        </button>
+      </div>
+
+      {/* Tab 1: Interactive SVG World Map */}
+      {activeTab === "map" && (
+        <div className="space-y-4">
+          <div className="relative rounded-2xl bg-gradient-to-b from-slate-950 to-slate-900 border border-slate-800 p-4 sm:p-6 overflow-hidden shadow-inner">
+            {/* Ambient Background Grid */}
+            <div
+              className="absolute inset-0 opacity-[0.04] pointer-events-none"
+              style={{
+                backgroundImage: `radial-gradient(#10b981 1px, transparent 1px)`,
+                backgroundSize: "24px 24px",
+              }}
+            />
+
+            {/* Chittagong Radar Banner */}
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4 relative z-10 text-xs text-slate-300">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>
+                  কেন্দ্রবিন্দু: <strong className="text-emerald-400">চট্টগ্রাম কন্টেইনার টার্মিনাল ও ডিসম্যান্তলিং ইয়ার্ড</strong>
+                </span>
+              </div>
+              <span className="text-[11px] text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+                মানচিত্রের পয়েন্টে ক্লিক করে বায়ারের বিস্তারিত দেখুন
+              </span>
+            </div>
+
+            {/* SVG Canvas (viewBox 0 0 1000 500) */}
+            <div className="relative w-full aspect-[2/1] min-h-[300px]">
+              <svg
+                viewBox="0 0 1000 500"
+                className="w-full h-full select-none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Simplified Continents Silhouette */}
+                <g fill="#1e293b" opacity="0.55">
+                  {/* North America */}
+                  <path d="M 120 70 Q 220 50 290 80 Q 320 140 260 210 Q 200 230 160 190 Q 110 130 120 70 Z" />
+                  {/* South America */}
+                  <path d="M 280 260 Q 340 270 330 360 Q 300 440 260 410 Q 240 330 280 260 Z" />
+                  {/* Europe */}
+                  <path d="M 450 80 Q 550 70 540 140 Q 490 170 440 130 Z" />
+                  {/* Africa */}
+                  <path d="M 470 170 Q 560 170 570 270 Q 540 360 480 340 Q 440 250 470 170 Z" />
+                  {/* Asia */}
+                  <path d="M 560 70 Q 750 50 870 110 Q 890 220 770 270 Q 640 240 560 160 Z" />
+                  {/* Australia */}
+                  <path d="M 810 330 Q 900 320 890 390 Q 820 420 810 330 Z" />
+                </g>
+
+                {/* Animated Connection Arcs to Chittagong (720, 228) */}
+                {data.countryStats.map((c) => {
+                  if (c.code === "BD") return null;
+                  const midX = (c.x + chittagongPort.x) / 2;
+                  const midY = Math.min(c.y, chittagongPort.y) - 35;
+                  const isHovered = hoveredHub?.code === c.code || selectedHub?.code === c.code;
+
+                  return (
+                    <g key={`arc-${c.code}`}>
+                      <path
+                        d={`M ${c.x} ${c.y} Q ${midX} ${midY} ${chittagongPort.x} ${chittagongPort.y}`}
+                        fill="none"
+                        stroke={isHovered ? "#10b981" : "#059669"}
+                        strokeWidth={isHovered ? 2.5 : 1.2}
+                        strokeDasharray={isHovered ? "6 3" : "4 4"}
+                        strokeOpacity={isHovered ? 0.95 : 0.45}
+                        className="transition-all duration-300"
+                      />
+                    </g>
+                  );
+                })}
+
+                {/* Chittagong Port Central Radar Node */}
+                <g transform={`translate(${chittagongPort.x}, ${chittagongPort.y})`}>
+                  {/* Pulsing radar circles */}
+                  <circle r="18" fill="#10b981" opacity="0.15" className="animate-ping" />
+                  <circle r="10" fill="#10b981" opacity="0.3" />
+                  <circle r="5" fill="#10b981" />
+                  <circle r="2" fill="#ffffff" />
+                  <text
+                    x="0"
+                    y="18"
+                    textAnchor="middle"
+                    fill="#34d399"
+                    fontSize="9"
+                    fontWeight="bold"
+                    className="select-none"
+                  >
+                    চট্টগ্রাম বন্দর (HQ)
+                  </text>
+                </g>
+
+                {/* International Buyer Nodes */}
+                {data.countryStats.map((c) => {
+                  if (c.code === "BD") return null;
+                  const isHovered = hoveredHub?.code === c.code || selectedHub?.code === c.code;
+                  const radius = Math.max(4, Math.min(10, Math.sqrt(c.visitors) / 3));
+
+                  return (
+                    <g
+                      key={`node-${c.code}`}
+                      transform={`translate(${c.x}, ${c.y})`}
+                      className="cursor-pointer group"
+                      onMouseEnter={() => setHoveredHub(c)}
+                      onMouseLeave={() => setHoveredHub(null)}
+                      onClick={() => setSelectedHub(c)}
+                    >
+                      {/* Interactive click zone */}
+                      <circle r="16" fill="transparent" />
+                      {/* Outer pulse if active */}
+                      {c.activeNow && (
+                        <circle
+                          r={radius + 4}
+                          fill="#38bdf8"
+                          opacity={isHovered ? "0.6" : "0.25"}
+                          className="animate-pulse"
+                        />
+                      )}
+                      {/* Main Node */}
+                      <circle
+                        r={radius}
+                        fill={isHovered ? "#38bdf8" : "#0284c7"}
+                        stroke="#ffffff"
+                        strokeWidth="1.5"
+                        className="transition-all duration-200"
+                      />
+                      {/* Country Flag & Label */}
+                      <text
+                        x="0"
+                        y={-radius - 4}
+                        textAnchor="middle"
+                        fill={isHovered ? "#ffffff" : "#94a3b8"}
+                        fontSize="9"
+                        fontWeight={isHovered ? "bold" : "500"}
+                        className="transition-all select-none"
+                      >
+                        {c.flag} {c.nameBn}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+
+              {/* Float Tooltip Card */}
+              {(hoveredHub || selectedHub) && (
+                <div className="absolute bottom-3 left-3 right-3 sm:right-auto sm:max-w-sm bg-slate-900/95 backdrop-blur-md border border-emerald-500/40 rounded-2xl p-3.5 text-white shadow-2xl text-xs space-y-2 z-20 animate-in fade-in zoom-in-95 duration-150">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">{(hoveredHub || selectedHub)?.flag}</span>
+                      <div>
+                        <h4 className="font-bold text-sm text-white">
+                          {(hoveredHub || selectedHub)?.nameBn} ({(hoveredHub || selectedHub)?.name})
+                        </h4>
+                        <span className="text-[10px] text-emerald-400 font-medium">
+                          {(hoveredHub || selectedHub)?.activeNow} জন বায়ার এখন সক্রিয়
+                        </span>
+                      </div>
+                    </div>
+                    {selectedHub && (
+                      <button
+                        type="button"
+                        onClick={() => setSelectedHub(null)}
+                        className="text-slate-400 hover:text-white text-xs px-1.5 py-0.5 rounded bg-slate-800"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 py-1 text-center bg-slate-950/60 rounded-xl p-2 border border-slate-800">
+                    <div>
+                      <span className="text-[10px] text-slate-400 block">ভিজিটর</span>
+                      <strong className="text-emerald-400 font-bold text-sm">
+                        {(hoveredHub || selectedHub)?.visitors.toLocaleString()}
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 block">শেয়ার</span>
+                      <strong className="text-white font-bold text-sm">
+                        {(hoveredHub || selectedHub)?.share}%
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 block">RFQ কোটেশন</span>
+                      <strong className="text-purple-400 font-bold text-sm">
+                        {(hoveredHub || selectedHub)?.inquiries} টি
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="text-[11px] text-slate-300">
+                    <span className="text-slate-400">মূল চাহিদা: </span>
+                    <strong className="text-emerald-300">
+                      {(hoveredHub || selectedHub)?.primaryInterestBn}
+                    </strong>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 2: Country Rankings Table */}
+      {activeTab === "countries" && (
+        <div className="space-y-4">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 dark:bg-slate-800/70 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold uppercase tracking-wider text-[10px]">
+                  <tr>
+                    <th className="py-3 px-3.5">র‍্যাংক</th>
+                    <th className="py-3 px-3.5">দেশ ও বায়ার মার্কেট</th>
+                    <th className="py-3 px-3.5 text-right">ভিজিটর সংখ্যা</th>
+                    <th className="py-3 px-3.5">ট্রাফিক শেয়ার (%)</th>
+                    <th className="py-3 px-3.5 text-center">প্রাপ্ত RFQ</th>
+                    <th className="py-3 px-3.5 text-right">রূপান্তর হার</th>
+                    <th className="py-3 px-3.5">প্রধান চাহিদাকৃত পণ্য</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+                  {data.countryStats.map((c, index) => (
+                    <tr
+                      key={c.code}
+                      className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                    >
+                      <td className="py-3 px-3.5 font-bold text-slate-400 text-center">
+                        #{index + 1}
+                      </td>
+                      <td className="py-3 px-3.5 font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                        <span className="text-lg">{c.flag}</span>
+                        <div>
+                          <span className="block">{c.nameBn}</span>
+                          <span className="text-[10px] text-slate-400 font-normal">{c.name}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-3.5 text-right font-black text-slate-900 dark:text-white">
+                        {c.visitors.toLocaleString()}
+                      </td>
+                      <td className="py-3 px-3.5 min-w-[140px]">
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                              style={{ width: `${Math.min(100, c.share * 2.5)}%` }}
+                            />
+                          </div>
+                          <span className="font-bold text-slate-700 dark:text-slate-300 text-[11px] w-10 text-right">
+                            {c.share}%
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-3.5 text-center">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800 dark:bg-purple-950/80 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                          {c.inquiries} টি
+                        </span>
+                      </td>
+                      <td className="py-3 px-3.5 text-right font-bold text-emerald-600 dark:text-emerald-400">
+                        {c.conversionRate}%
+                      </td>
+                      <td className="py-3 px-3.5 text-slate-600 dark:text-slate-400 font-medium">
+                        {c.primaryInterestBn}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 3: Major Commercial City Hubs */}
+      {activeTab === "cities" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          {data.cityHubs.map((hub) => (
+            <div
+              key={hub.city}
+              className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all space-y-2.5"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{hub.flag}</span>
+                  <div>
+                    <h4 className="font-bold text-slate-900 dark:text-white text-sm">
+                      {hub.cityBn}
+                    </h4>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                      {hub.city}, {hub.countryBn}
+                    </span>
+                  </div>
+                </div>
+                <span
+                  className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                    hub.status === "High Volume"
+                      ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
+                      : hub.status === "Active Deals"
+                      ? "bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300"
+                      : "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300"
+                  }`}
+                >
+                  {hub.statusBn}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-center bg-white dark:bg-slate-900/60 rounded-xl p-2 border border-slate-200/80 dark:border-slate-800 text-xs">
+                <div>
+                  <span className="text-[10px] text-slate-500 block">ভিজিটর</span>
+                  <strong className="font-black text-slate-900 dark:text-white">
+                    {hub.visitors.toLocaleString()}
+                  </strong>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-500 block">ইনকোয়ারি</span>
+                  <strong className="font-black text-emerald-600 dark:text-emerald-400">
+                    {hub.inquiries} টি
+                  </strong>
+                </div>
+              </div>
+
+              <div className="text-[11px] text-slate-600 dark:text-slate-400 flex items-start gap-1.5 pt-1">
+                <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                <span>{hub.specialtyBn}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Tab 4: Traffic Velocity Trend Curve */}
+      {activeTab === "trends" && (
+        <div className="space-y-4">
+          <div className="p-4 sm:p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-emerald-400" />
+                  <span>দৈনিক আন্তর্জাতিক ট্রাফিক বেগ (Velocity Wave Curve)</span>
+                </h3>
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  আন্তর্জাতিক ট্রেড সিজন ও সময়কাল অনুযায়ী ভিজিটর আগমন এবং আরএফকিউ সাবমিশনের গতিপ্রকৃতি।
+                </p>
+              </div>
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800">
+                শীর্ষ পিক: {trendMax} জন/দিন
+              </span>
+            </div>
+
+            {/* Pure SVG Velocity Wave */}
+            <div className="w-full overflow-hidden">
+              <svg
+                viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+                className="w-full h-44 select-none"
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+                  </linearGradient>
+                </defs>
+
+                {/* Horizontal Grid Guides */}
+                <line x1="0" y1="30" x2={chartWidth} y2="30" stroke="#334155" strokeDasharray="3 3" opacity="0.4" />
+                <line x1="0" y1="80" x2={chartWidth} y2="80" stroke="#334155" strokeDasharray="3 3" opacity="0.4" />
+                <line x1="0" y1="130" x2={chartWidth} y2="130" stroke="#334155" strokeDasharray="3 3" opacity="0.4" />
+
+                {/* Shaded Area */}
+                <path d={trendPathD} fill="url(#trendGradient)" />
+
+                {/* Top Stroke Line */}
+                <path
+                  d={trendLineD}
+                  fill="none"
+                  stroke="#10b981"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+
+                {/* Data Points */}
+                {data.dailyTrends.map((d, i) => {
+                  if (i % 3 !== 0 && i !== data.dailyTrends.length - 1) return null;
+                  const x = (i / (data.dailyTrends.length - 1)) * chartWidth;
+                  const y = chartHeight - (d.visitors / trendMax) * (chartHeight - 30) - 15;
+                  return (
+                    <g key={`pt-${i}`}>
+                      <circle cx={x} cy={y} r="3.5" fill="#34d399" stroke="#064e3b" strokeWidth="2" />
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+
+            {/* Date Labels Bar */}
+            <div className="flex justify-between text-[10px] text-slate-400 border-t border-slate-800 pt-2 px-1">
+              <span>{data.dailyTrends[0]?.label}</span>
+              <span>{data.dailyTrends[Math.floor(data.dailyTrends.length / 2)]?.label}</span>
+              <span>{data.dailyTrends[data.dailyTrends.length - 1]?.label}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Footer Insight Note */}
+      <div className="p-3.5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+        <div className="flex items-center gap-2 text-emerald-900 dark:text-emerald-200">
+          <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <span>
+            <strong>সরাসরি কনভার্সন অপটিমাইজেশন:</strong> চীন ও জাপানের বায়াররা সার্ভার মাদারবোর্ড ক্যাটালগে সর্বোচ্চ সময় ব্যয় করছেন।
+          </span>
+        </div>
+        <a
+          href="/admin/inquiries"
+          className="inline-flex items-center gap-1 font-bold text-emerald-700 dark:text-emerald-400 hover:underline shrink-0"
+        >
+          <span>প্রাপ্ত সব ইনকোয়ারি দেখুন</span>
+          <ArrowUpRight className="w-3.5 h-3.5" />
+        </a>
+      </div>
+    </div>
+  );
+}

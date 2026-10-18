@@ -18,6 +18,8 @@ import {
   Download,
   ExternalLink,
 } from "lucide-react";
+import { getSuperDashboardData } from "@/lib/analytics-service";
+import { AdminSuperDashboard } from "@/components/admin-super-dashboard";
 
 export default async function AdminDashboardPage() {
   const user = await getCurrentUser();
@@ -34,6 +36,7 @@ export default async function AdminDashboardPage() {
     totalUsers,
     recentInquiries,
     recentAuditLogs,
+    geoAnalyticsData,
   ] = await Promise.all([
     prisma.inquiry.count(),
     prisma.inquiry.count({ where: { status: "NEW" } }),
@@ -70,6 +73,7 @@ export default async function AdminDashboardPage() {
         user: { select: { name: true, email: true } },
       },
     }),
+    getSuperDashboardData("30d"),
   ]);
 
   return (
@@ -250,6 +254,9 @@ export default async function AdminDashboardPage() {
           </div>
         </Link>
       </div>
+
+      {/* Global Buyer Traffic & International Geo-Analytics Super Dashboard */}
+      <AdminSuperDashboard initialData={geoAnalyticsData} />
 
       {/* Two-Column Section: Recent Inquiries & Activity Stream */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

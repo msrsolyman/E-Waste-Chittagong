@@ -149,3 +149,20 @@ model AuditLog {
   ipAddress   String?
   createdAt   DateTime @default(now())
 }
+
+model VisitorLog {
+  id          String   @id @default(cuid())
+  ip          String?
+  country     String   @default("Bangladesh")
+  countryCode String   @default("BD")
+  city        String?
+  region      String?
+  path        String   @default("/")
+  device      String   @default("Desktop") // "Desktop" | "Mobile" | "Tablet"
+  browser     String?
+  referer     String?
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([country])
+}
