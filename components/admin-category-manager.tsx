@@ -42,14 +42,6 @@ export interface CategoryData {
   };
 }
 
-const PRESET_IMAGES = [
-  { url: "/images/products/pcb-motherboards.jpg", label: "PCBs & Motherboards" },
-  { url: "/images/products/cpu-scrap.jpg", label: "CPU Processors & ICs" },
-  { url: "/images/products/telecom-boards.jpg", label: "Telecom & Networking" },
-  { url: "/images/products/facility-dismantling.jpg", label: "Dismantling & Metals" },
-  { url: "/images/concepts/circular-hero.jpg", label: "Circular Economy Hero" },
-];
-
 export function AdminCategoryManager({
   initialCategories,
 }: {
@@ -92,7 +84,7 @@ export function AdminCategoryManager({
     descriptionBn: "",
     descriptionZh: "",
     descriptionJa: "",
-    imageUrl: PRESET_IMAGES[0].url,
+    imageUrl: "",
     displayOrder: 1,
   });
 
@@ -109,7 +101,7 @@ export function AdminCategoryManager({
       descriptionBn: "",
       descriptionZh: "",
       descriptionJa: "",
-      imageUrl: PRESET_IMAGES[0].url,
+      imageUrl: "",
       displayOrder: categories.length + 1,
     });
     setModalError(null);
@@ -130,7 +122,7 @@ export function AdminCategoryManager({
       descriptionBn: cat.descriptionBn || "",
       descriptionZh: cat.descriptionZh || "",
       descriptionJa: cat.descriptionJa || "",
-      imageUrl: cat.imageUrl || PRESET_IMAGES[0].url,
+      imageUrl: cat.imageUrl || "",
       displayOrder: cat.displayOrder || 1,
     });
     setModalError(null);
@@ -383,7 +375,7 @@ export function AdminCategoryManager({
                   {/* Card Image Banner */}
                   <div className="relative aspect-[16/9] w-full bg-slate-100 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-800">
                     <Image
-                      src={cat.imageUrl || PRESET_IMAGES[0].url}
+                      src={cat.imageUrl || "/images/products/pcb-motherboards.jpg"}
                       alt={cat.nameEn}
                       fill
                       className="object-cover"
@@ -795,37 +787,6 @@ export function AdminCategoryManager({
                       acceptVideo={false}
                       helperText="Upload category thumbnail or banner (JPG, PNG, WebP) to Cloudinary CDN"
                     />
-
-                    {/* Preset Selector */}
-                    <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-                      <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                        Or pick from default photography presets:
-                      </label>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        {PRESET_IMAGES.map((preset) => {
-                          const isSelected = formState.imageUrl === preset.url;
-                          return (
-                            <button
-                              key={preset.url}
-                              type="button"
-                              onClick={() => setFormState({ ...formState, imageUrl: preset.url })}
-                              className={`p-2 rounded-xl border text-left flex items-center gap-2.5 transition ${
-                                isSelected
-                                  ? "border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 ring-1 ring-emerald-500"
-                                  : "border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
-                              }`}
-                            >
-                              <div className="relative w-10 h-8 rounded-lg overflow-hidden bg-slate-100 shrink-0">
-                                <Image src={preset.url} alt={preset.label} fill className="object-cover" />
-                              </div>
-                              <span className="text-[11px] font-medium text-slate-700 dark:text-slate-200 line-clamp-1">
-                                {preset.label}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
                   </div>
                 </div>
               )}

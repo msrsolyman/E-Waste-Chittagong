@@ -61,6 +61,7 @@ export default async function AdminLayout({
         <nav className="flex-1 p-3 space-y-1 text-xs font-medium">
           <Link
             href="/admin"
+            prefetch={true}
             className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           >
             <LayoutDashboard className="w-4 h-4 text-emerald-600" />
@@ -69,6 +70,7 @@ export default async function AdminLayout({
 
           <Link
             href="/admin/inquiries"
+            prefetch={true}
             className="flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           >
             <div className="flex items-center gap-2.5">
@@ -79,6 +81,7 @@ export default async function AdminLayout({
 
           <Link
             href="/admin/products"
+            prefetch={true}
             className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           >
             <Package className="w-4 h-4 text-amber-600" />
@@ -87,6 +90,7 @@ export default async function AdminLayout({
 
           <Link
             href="/admin/categories"
+            prefetch={true}
             className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           >
             <Layers className="w-4 h-4 text-purple-600" />
@@ -95,6 +99,7 @@ export default async function AdminLayout({
 
           <Link
             href="/admin/gallery"
+            prefetch={true}
             className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           >
             <ExternalLink className="w-4 h-4 text-emerald-600" />
@@ -103,6 +108,7 @@ export default async function AdminLayout({
 
           <Link
             href="/admin/settings"
+            prefetch={true}
             className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           >
             <Sliders className="w-4 h-4 text-cyan-600" />
@@ -112,6 +118,7 @@ export default async function AdminLayout({
           {user?.role === "SUPER_ADMIN" && (
             <Link
               href="/admin/users"
+              prefetch={true}
               className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
             >
               <User className="w-4 h-4 text-indigo-600" />
@@ -121,6 +128,7 @@ export default async function AdminLayout({
 
           <Link
             href="/admin/audit-logs"
+            prefetch={true}
             className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           >
             <FileClock className="w-4 h-4 text-slate-500" />

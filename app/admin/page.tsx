@@ -46,11 +46,29 @@ export default async function AdminDashboardPage() {
     prisma.inquiry.findMany({
       take: 5,
       orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        referenceNo: true,
+        status: true,
+        companyName: true,
+        name: true,
+        email: true,
+        country: true,
+        estimatedQty: true,
+        createdAt: true,
+      },
     }),
     prisma.auditLog.findMany({
       take: 5,
       orderBy: { createdAt: "desc" },
-      include: { user: { select: { name: true, email: true } } },
+      select: {
+        id: true,
+        action: true,
+        details: true,
+        ipAddress: true,
+        createdAt: true,
+        user: { select: { name: true, email: true } },
+      },
     }),
   ]);
 

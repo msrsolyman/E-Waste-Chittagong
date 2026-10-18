@@ -12,13 +12,6 @@ interface Category {
   nameEn: string;
 }
 
-const availableImages = [
-  { url: "/images/products/pcb-motherboards.jpg", label: "Server Motherboard PCBs" },
-  { url: "/images/products/cpu-scrap.jpg", label: "CPU & IC Processor Scrap" },
-  { url: "/images/products/telecom-boards.jpg", label: "Telecom Network Boards" },
-  { url: "/images/products/facility-dismantling.jpg", label: "Facility Dismantling Workstation" },
-];
-
 export function AdminProductForm({ categories }: { categories: Category[] }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = React.useState<"en" | "bn" | "zh" | "ja">("en");
@@ -32,7 +25,7 @@ export function AdminProductForm({ categories }: { categories: Category[] }) {
     origin: "Chittagong, Bangladesh",
     packaging: "1 Metric Ton Super Sacks / Wooden Pallets",
     minOrderQuantity: "1 Metric Ton",
-    imageUrl: availableImages[0].url,
+    imageUrl: "",
 
     // Localized fields
     titleEn: "",
@@ -185,36 +178,6 @@ export function AdminProductForm({ categories }: { categories: Category[] }) {
             required
             helperText="Drag & drop or browse high-res product photo or video (Cloudinary CDN)"
           />
-
-          <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mb-2">
-              Or pick from default photography presets:
-            </span>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              {availableImages.map((img) => {
-                const isSelected = formData.imageUrl === img.url;
-                return (
-                  <button
-                    type="button"
-                    key={img.url}
-                    onClick={() => setFormData({ ...formData, imageUrl: img.url })}
-                    className={`relative rounded-xl overflow-hidden border-2 text-left transition ${
-                      isSelected
-                        ? "border-emerald-600 ring-2 ring-emerald-500/30"
-                        : "border-slate-200 dark:border-slate-800 opacity-60 hover:opacity-100"
-                    }`}
-                  >
-                    <div className="relative aspect-[16/10] w-full">
-                      <Image src={img.url} alt={img.label} fill className="object-cover" />
-                    </div>
-                    <div className="p-1.5 text-[10px] font-medium text-slate-700 dark:text-slate-300 truncate bg-white dark:bg-slate-900">
-                      {img.label}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
         </div>
       </div>
 

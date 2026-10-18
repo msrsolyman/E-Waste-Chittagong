@@ -38,14 +38,6 @@ export interface GalleryItemData {
   createdAt: string | Date;
 }
 
-const PRESET_IMAGES = [
-  { url: "/images/products/pcb-motherboards.jpg", label: "PCB Motherboards", category: "MATERIAL" },
-  { url: "/images/products/cpu-scrap.jpg", label: "CPU Processors & ICs", category: "MATERIAL" },
-  { url: "/images/products/telecom-boards.jpg", label: "Telecom Base Station Boards", category: "DISMANTLING" },
-  { url: "/images/products/facility-dismantling.jpg", label: "Facility Dismantling Workstation", category: "FACILITY" },
-  { url: "/images/concepts/circular-hero.jpg", label: "Circular Resource Recovery", category: "PROCESSING" },
-];
-
 const CATEGORIES = ["ALL", "VIDEOS", "PHOTOS", "MATERIAL", "FACILITY", "DISMANTLING", "PROCESSING"];
 
 export const isVideoUrl = (url: string) => {
@@ -96,7 +88,7 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
     titleZh: "",
     titleJa: "",
     category: "MATERIAL",
-    imageUrl: PRESET_IMAGES[0].url,
+    imageUrl: "",
     isVerified: false,
     caption: "",
   });
@@ -154,7 +146,7 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
       titleZh: "",
       titleJa: "",
       category: "MATERIAL",
-      imageUrl: PRESET_IMAGES[0].url,
+      imageUrl: "",
       isVerified: false,
       caption: "",
     });
@@ -173,7 +165,7 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
       titleZh: item.titleZh || "",
       titleJa: item.titleJa || "",
       category: item.category || "MATERIAL",
-      imageUrl: item.imageUrl || PRESET_IMAGES[0].url,
+      imageUrl: item.imageUrl || "",
       isVerified: Boolean(item.isVerified),
       caption: item.caption || "",
     });
@@ -921,43 +913,6 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                       acceptVideo
                       helperText="Upload real facility photos (JPG, PNG, WebP) or video (MP4, WebM) to Cloudinary CDN"
                     />
-
-                    {/* Presets */}
-                    <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-                      <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                        Or pick from facility media presets:
-                      </label>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        {PRESET_IMAGES.map((preset) => {
-                          const isSelected = formData.imageUrl === preset.url;
-                          return (
-                            <button
-                              key={preset.url}
-                              type="button"
-                              onClick={() =>
-                                setFormData({
-                                  ...formData,
-                                  imageUrl: preset.url,
-                                  category: preset.category,
-                                })
-                              }
-                              className={`p-2 rounded-xl border text-left flex items-center gap-2.5 transition ${
-                                isSelected
-                                  ? "border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 ring-1 ring-emerald-500"
-                                  : "border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
-                              }`}
-                            >
-                              <div className="relative w-10 h-8 rounded-lg overflow-hidden bg-slate-100 shrink-0">
-                                <Image src={preset.url} alt={preset.label} fill className="object-cover" />
-                              </div>
-                              <span className="text-[11px] font-medium text-slate-700 dark:text-slate-200 line-clamp-1">
-                                {preset.label}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
                   </div>
                 </div>
               )}

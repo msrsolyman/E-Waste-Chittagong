@@ -55,14 +55,6 @@ export interface CategoryOption {
   nameEn: string;
 }
 
-const PRESET_IMAGES = [
-  { label: "PCB Motherboards", url: "/images/products/pcb-motherboards.jpg" },
-  { label: "CPU Processors", url: "/images/products/cpu-scrap.jpg" },
-  { label: "Telecom Boards", url: "/images/products/telecom-boards.jpg" },
-  { label: "Facility Dismantling", url: "/images/products/facility-dismantling.jpg" },
-  { label: "Circular Concept", url: "/images/concepts/circular-hero.jpg" },
-];
-
 export function AdminProductsTable({
   initialProducts,
   categories = [],
@@ -1165,37 +1157,6 @@ export function AdminProductsTable({
                     acceptVideo
                     helperText="Upload high-res photos (JPG, PNG, WebP) or video (MP4, WebM) directly to Cloudinary CDN"
                   />
-
-                  {/* Preset Library as secondary choice */}
-                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-                    <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                      Or pick from verified media presets:
-                    </label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                      {PRESET_IMAGES.map((preset) => {
-                        const isSelected = formData.imageUrl === preset.url;
-                        return (
-                          <button
-                            key={preset.url}
-                            type="button"
-                            onClick={() => setFormData({ ...formData, imageUrl: preset.url })}
-                            className={`p-2 rounded-xl border text-left flex items-center gap-2.5 transition ${
-                              isSelected
-                                ? "border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 ring-1 ring-emerald-500"
-                                : "border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
-                            }`}
-                          >
-                            <div className="relative w-10 h-8 rounded-lg overflow-hidden bg-slate-100 shrink-0">
-                              <Image src={preset.url} alt={preset.label} fill className="object-cover" />
-                            </div>
-                            <span className="text-[11px] font-medium text-slate-700 dark:text-slate-200 line-clamp-1">
-                              {preset.label}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
                 </div>
               )}
 
