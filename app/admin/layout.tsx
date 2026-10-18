@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { getCurrentUser } from "@/lib/auth";
 import { BrandLogo } from "@/components/brand-logo";
 import { AdminLogoutButton } from "@/components/admin-logout-button";
+import { AdminMobileNav } from "@/components/admin-mobile-nav";
 import {
   LayoutDashboard,
   Inbox,
@@ -36,8 +37,11 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex flex-col md:flex-row text-slate-900 dark:text-slate-100">
-      {/* Sidebar */}
-      <aside className="w-full md:w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0">
+      {/* Mobile Sticky Top Header, Drawer, and Bottom Bar */}
+      <AdminMobileNav user={user} />
+
+      {/* Desktop Sidebar (Hidden on mobile) */}
+      <aside className="hidden md:flex md:w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex-col shrink-0">
         <div className="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <BrandLogo size="sm" href="/admin" />
         </div>
@@ -153,7 +157,7 @@ export default async function AdminLayout({
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto p-6 md:p-8">
+      <main className="flex-1 overflow-y-auto p-3.5 sm:p-6 md:p-8 pb-24 md:pb-8">
         <div className="max-w-6xl mx-auto space-y-6">{children}</div>
       </main>
     </div>
