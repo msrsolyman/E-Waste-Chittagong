@@ -22,6 +22,7 @@ import {
   Radio,
 } from "lucide-react";
 import type { CountryStat } from "@/lib/analytics-service";
+import { useAdminLocale } from "@/lib/admin-i18n";
 
 interface CountryIntelligenceDrawerProps {
   country: CountryStat | null;
@@ -32,6 +33,7 @@ export function CountryIntelligenceDrawer({
   country,
   onClose,
 }: CountryIntelligenceDrawerProps) {
+  const { locale, t } = useAdminLocale();
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   if (!country) return null;
@@ -62,10 +64,10 @@ export function CountryIntelligenceDrawer({
                 </span>
                 <div>
                   <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">
-                    {country.nameBn}
+                    {locale === "bn" ? country.nameBn : country.name}
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                    {country.name} • আন্তর্জাতিক বায়ার পোর্ট
+                    {locale === "bn" ? `${country.name} • ${t("drawer.port")}` : `${country.nameBn} • ${t("drawer.port")}`}
                   </p>
                 </div>
               </div>
@@ -74,7 +76,7 @@ export function CountryIntelligenceDrawer({
                 type="button"
                 onClick={onClose}
                 className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-                aria-label="Close drawer"
+                aria-label={locale === "bn" ? "ড্রয়ার বন্ধ করুন" : "Close drawer"}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -87,11 +89,11 @@ export function CountryIntelligenceDrawer({
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                {country.activeNow ?? 2} জন বায়ার বর্তমানে সক্রিয়
+                {country.activeNow ?? 2} {t("drawer.active_now")}
               </span>
               <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1 font-medium">
                 <Radio className="w-3.5 h-3.5 text-blue-500 animate-pulse" />
-                <span>লাইভ সোর্সিং সেশন</span>
+                <span>{t("drawer.live_sourcing")}</span>
               </span>
             </div>
           </div>
@@ -102,20 +104,20 @@ export function CountryIntelligenceDrawer({
             <div className="grid grid-cols-2 gap-2.5">
               <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 space-y-1">
                 <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500">
-                  <span>মোট ভিজিটর</span>
+                  <span>{t("drawer.total_visitors")}</span>
                   <Users className="w-3.5 h-3.5 text-emerald-600" />
                 </div>
                 <div className="text-xl font-black text-slate-900 dark:text-white">
                   {country.visitors.toLocaleString()}
                 </div>
                 <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium block">
-                  আন্তর্জাতিক ভলিউম
+                  {t("drawer.global_volume")}
                 </span>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 space-y-1">
                 <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500">
-                  <span>ট্রাফিক শেয়ার</span>
+                  <span>{t("drawer.traffic_share")}</span>
                   <Percent className="w-3.5 h-3.5 text-blue-600" />
                 </div>
                 <div className="text-xl font-black text-slate-900 dark:text-white">
@@ -131,27 +133,27 @@ export function CountryIntelligenceDrawer({
 
               <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 space-y-1">
                 <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500">
-                  <span>প্রাপ্ত আরএফকিউ</span>
+                  <span>{t("drawer.rfqs_received")}</span>
                   <FileCheck2 className="w-3.5 h-3.5 text-purple-600" />
                 </div>
                 <div className="text-xl font-black text-purple-600 dark:text-purple-400">
-                  {country.inquiries} টি
+                  {country.inquiries} {t("table.unit_rfq")}
                 </div>
                 <span className="text-[10px] text-purple-600 dark:text-purple-400 font-medium block">
-                  ভেরিফাইড কোটেশন
+                  {t("drawer.verified_quotations")}
                 </span>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 space-y-1">
                 <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500">
-                  <span>কনভার্সন রেট</span>
+                  <span>{t("drawer.conversion_rate")}</span>
                   <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                 </div>
                 <div className="text-xl font-black text-amber-600 dark:text-amber-400">
                   {country.conversionRate}%
                 </div>
                 <span className="text-[10px] text-slate-500 block">
-                  ভিজিটর টু বায়ার
+                  {t("drawer.visitor_to_buyer")}
                 </span>
               </div>
             </div>
@@ -160,13 +162,13 @@ export function CountryIntelligenceDrawer({
             <div className="p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60 space-y-1.5">
               <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
                 <PackageCheck className="w-3.5 h-3.5" />
-                <span>প্রধান চাহিদাকৃত স্ক্র্যাপ ক্যাটাগরি</span>
+                <span>{t("drawer.primary_commodity")}</span>
               </span>
               <p className="text-sm font-black text-emerald-950 dark:text-emerald-100">
-                {country.primaryInterestBn}
+                {locale === "bn" ? country.primaryInterestBn : country.primaryInterest}
               </p>
               <p className="text-[11px] text-emerald-700/80 dark:text-emerald-400">
-                {country.primaryInterest}
+                {locale === "bn" ? country.primaryInterest : country.primaryInterestBn}
               </p>
             </div>
 
@@ -175,10 +177,12 @@ export function CountryIntelligenceDrawer({
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
                   <Building2 className="w-4 h-4 text-emerald-600" />
-                  <span>সাম্প্রতিক আরএফকিউ ও বায়ার লিস্ট ({country.recentLeads?.length || 0})</span>
+                  <span>
+                    {t("drawer.recent_leads")} ({country.recentLeads?.length || 0})
+                  </span>
                 </h4>
                 <span className="text-[10px] font-semibold text-slate-400">
-                  সরাসরি যোগাযোগ
+                  {t("drawer.direct_contact")}
                 </span>
               </div>
 
@@ -208,7 +212,7 @@ export function CountryIntelligenceDrawer({
                               {lead.companyName}
                             </h5>
                             <span className="text-xs text-slate-600 dark:text-slate-300 font-medium">
-                              ব্যক্তি: {lead.contactPerson}
+                              {t("drawer.person")} {lead.contactPerson}
                             </span>
                           </div>
                           <span
@@ -227,11 +231,13 @@ export function CountryIntelligenceDrawer({
                         {/* Order Specifications */}
                         <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 text-xs space-y-1">
                           <div className="text-slate-700 dark:text-slate-300">
-                            <span className="text-slate-400 text-[11px]">পণ্য: </span>
-                            <strong className="text-slate-900 dark:text-white">{lead.materialBn}</strong>
+                            <span className="text-slate-400 text-[11px]">{t("drawer.product")} </span>
+                            <strong className="text-slate-900 dark:text-white">
+                              {locale === "bn" ? lead.materialBn : lead.material}
+                            </strong>
                           </div>
                           <div className="text-slate-700 dark:text-slate-300">
-                            <span className="text-slate-400 text-[11px]">ভলিউম: </span>
+                            <span className="text-slate-400 text-[11px]">{t("drawer.volume")} </span>
                             <strong className="text-emerald-600 dark:text-emerald-400 font-bold">
                               {lead.quantity}
                             </strong>
@@ -247,14 +253,14 @@ export function CountryIntelligenceDrawer({
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-xs transition active:scale-95"
                           >
                             <MessageSquare className="w-3.5 h-3.5" />
-                            <span>WhatsApp চ্যাট</span>
+                            <span>{t("drawer.whatsapp")}</span>
                           </a>
                           <a
                             href={mailtoUrl}
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition active:scale-95"
                           >
                             <Mail className="w-3.5 h-3.5 text-blue-500" />
-                            <span>ইমেইল পাঠান</span>
+                            <span>{t("drawer.email")}</span>
                           </a>
                           <button
                             type="button"
@@ -265,7 +271,7 @@ export function CountryIntelligenceDrawer({
                               )
                             }
                             className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-                            title="কোটেশন তথ্য কপি করুন"
+                            title={t("drawer.copy_title")}
                           >
                             {copiedId === lead.id ? (
                               <Check className="w-4 h-4 text-emerald-500" />
@@ -280,9 +286,9 @@ export function CountryIntelligenceDrawer({
                 </div>
               ) : (
                 <div className="p-6 text-center rounded-2xl bg-slate-50 dark:bg-slate-800/30 border border-dashed border-slate-200 dark:border-slate-800 text-xs text-slate-500 space-y-1">
-                  <p>এই মুহূর্তে এই দেশের কোনো পেন্ডিং আরএফকিউ নেই।</p>
+                  <p>{t("drawer.no_leads")}</p>
                   <span className="text-[10px] text-slate-400">
-                    নতুন আরএফকিউ আসলে তা সরাসরি এখানে ও লিড পাইপলাইনে দেখা যাবে।
+                    {t("drawer.no_leads_desc")}
                   </span>
                 </div>
               )}
@@ -292,13 +298,13 @@ export function CountryIntelligenceDrawer({
           {/* Drawer Footer */}
           <div className="p-4 sm:p-5 border-t border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/80 flex items-center justify-between gap-3">
             <span className="text-[11px] text-slate-500 dark:text-slate-400">
-              চট্টগ্রাম ডিসম্যান্তলিং ইয়ার্ড ইন্টেলিজেন্স
+              {t("drawer.yard_intel")}
             </span>
             <Link
               href="/admin/inquiries"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition active:scale-98"
             >
-              <span>সকল আরএফকিউ পাইপলাইনে যান</span>
+              <span>{t("drawer.view_all_rfq")}</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
           </div>

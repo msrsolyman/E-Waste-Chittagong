@@ -23,12 +23,14 @@ import type { SuperDashboardData, CountryStat, CityHubStat } from "@/lib/analyti
 import { RealisticWorldMap } from "@/components/realistic-world-map";
 import { CountryIntelligenceDrawer } from "@/components/country-intelligence-drawer";
 import { CHITTAGONG_EPICENTER } from "@/lib/world-gis-data";
+import { useAdminLocale } from "@/lib/admin-i18n";
 
 interface AdminSuperDashboardProps {
   initialData: SuperDashboardData;
 }
 
 export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
+  const { locale, t } = useAdminLocale();
   const [data, setData] = useState<SuperDashboardData>(initialData);
   const [timeRange, setTimeRange] = useState<"today" | "7d" | "30d" | "all">("30d");
   const [activeTab, setActiveTab] = useState<"map" | "countries" | "cities" | "trends">("map");
@@ -108,20 +110,22 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-              লাইভ বায়ার জিও-ট্রেকার (Live Geo-Radar)
+              {t("radar.badge")}
             </span>
             <span className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
               <Radio className="w-3.5 h-3.5 text-emerald-500 animate-pulse" />
-              <span>{data.liveVisitorsNow} জন আন্তর্জাতিক বায়ার বর্তমানে সাইটে সক্রিয়</span>
+              <span>
+                {data.liveVisitorsNow} {t("radar.active_now")}
+              </span>
             </span>
           </div>
 
           <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
             <Globe2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-            <span>গ্লোবাল বায়ার ট্রাফিক ও আন্তর্জাতিক জিও-এনালিটিক্স</span>
+            <span>{t("radar.heading")}</span>
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 max-w-2xl">
-            কোন কোন দেশ ও বাণিজ্যিক হাব (যেমন: চীন, জাপান, সংযুক্ত আরব আমিরাত, যুক্তরাষ্ট্র) থেকে পাইকারি ক্রেতারা আসছেন এবং আরএফকিউ পাঠাচ্ছেন তার লাইভ ম্যাপিং।
+            {t("radar.subheading")}
           </p>
         </div>
 
@@ -136,7 +140,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
-            আজকের লাইভ
+            {t("time.today")}
           </button>
           <button
             type="button"
@@ -147,7 +151,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
-            গত ৭ দিন
+            {t("time.7d")}
           </button>
           <button
             type="button"
@@ -158,7 +162,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
-            গত ৩০ দিন
+            {t("time.30d")}
           </button>
           <button
             type="button"
@@ -169,7 +173,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
-            সর্বমোট
+            {t("time.all")}
           </button>
         </div>
       </div>
@@ -178,7 +182,9 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
         <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">মোট ভিজিটর</span>
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              {t("metric.total_visitors")}
+            </span>
             <Users className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           </div>
           <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
@@ -186,64 +192,81 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
           </p>
           <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-0.5 mt-0.5">
             <TrendingUp className="w-3 h-3" />
-            +18.4% আন্তর্জাতিক প্রবৃদ্ধি
+            {t("metric.growth")}
           </span>
         </div>
 
         <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">সক্রিয় ক্রেতা দেশ</span>
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              {t("metric.active_countries")}
+            </span>
             <Globe2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
           </div>
           <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
-            {data.activeCountriesCount} টি দেশ
+            {data.activeCountriesCount} {t("metric.countries_count")}
           </p>
           <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 block">
-            শীর্ষ দেশ: <strong className="text-slate-800 dark:text-slate-200">{data.topCountryBn}</strong>
+            {t("metric.top_country")}{" "}
+            <strong className="text-slate-800 dark:text-slate-200">
+              {locale === "bn" ? data.topCountryBn : data.topCountry}
+            </strong>
           </span>
         </div>
 
         <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">প্রাপ্ত ইনকোয়ারি</span>
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              {t("metric.inquiries_received")}
+            </span>
             <FileCheck2 className="w-4 h-4 text-purple-600 dark:text-purple-400" />
           </div>
           <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
-            {data.totalInquiries} টি RFQ
+            {data.totalInquiries} {t("metric.rfq_count")}
           </p>
           <span className="text-[10px] text-purple-600 dark:text-purple-400 font-medium flex items-center gap-0.5 mt-0.5">
             <Sparkles className="w-3 h-3" />
-            ভেরিফাইড আন্তর্জাতিক কোটেশন
+            {t("metric.verified_quotations")}
           </span>
         </div>
 
         <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">রূপান্তর হার (CR)</span>
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              {t("metric.conversion_rate")}
+            </span>
             <Percent className="w-4 h-4 text-amber-600 dark:text-amber-400" />
           </div>
           <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
             {data.globalConversionRate}%
           </p>
           <span className="text-[10px] text-amber-600 dark:text-amber-400 font-medium mt-0.5 block">
-            ভিজিটর থেকে সরাসরি লিড
+            {t("metric.visitor_to_lead")}
           </span>
         </div>
 
         <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 col-span-2 sm:col-span-1">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">ডিভাইস অনুপাত</span>
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              {t("metric.device_split")}
+            </span>
             <Laptop className="w-4 h-4 text-slate-600 dark:text-slate-400" />
           </div>
           <div className="flex items-baseline gap-2 mt-1">
             <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
               {data.deviceBreakdown.desktop}%
             </p>
-            <span className="text-xs text-slate-500">ডেস্কটপ</span>
+            <span className="text-xs text-slate-500">{t("metric.desktop")}</span>
           </div>
           <div className="flex items-center gap-2 text-[10px] text-slate-500 mt-0.5">
-            <span className="flex items-center gap-0.5"><Smartphone className="w-2.5 h-2.5" />{data.deviceBreakdown.mobile}%</span>
-            <span className="flex items-center gap-0.5"><Tablet className="w-2.5 h-2.5" />{data.deviceBreakdown.tablet}%</span>
+            <span className="flex items-center gap-0.5">
+              <Smartphone className="w-2.5 h-2.5" />
+              {data.deviceBreakdown.mobile}% {t("metric.mobile")}
+            </span>
+            <span className="flex items-center gap-0.5">
+              <Tablet className="w-2.5 h-2.5" />
+              {data.deviceBreakdown.tablet}% {t("metric.tablet")}
+            </span>
           </div>
         </div>
       </div>
@@ -260,7 +283,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
           }`}
         >
           <Globe2 className="w-3.5 h-3.5" />
-          <span>ইন্টারেক্টিভ ওয়ার্ল্ড ম্যাপ ও রুট</span>
+          <span>{t("tab.map")}</span>
         </button>
         <button
           type="button"
@@ -272,7 +295,9 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
           }`}
         >
           <Layers className="w-3.5 h-3.5" />
-          <span>দেশভিত্তিক পূর্ণাঙ্গ পরিসংখ্যান ({data.countryStats.length})</span>
+          <span>
+            {t("tab.countries")} ({data.countryStats.length})
+          </span>
         </button>
         <button
           type="button"
@@ -284,7 +309,9 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
           }`}
         >
           <Building2 className="w-3.5 h-3.5" />
-          <span>বাণিজ্যিক শহর ও পোর্ট হাব ({data.cityHubs.length})</span>
+          <span>
+            {t("tab.cities")} ({data.cityHubs.length})
+          </span>
         </button>
         <button
           type="button"
@@ -296,7 +323,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
           }`}
         >
           <TrendingUp className="w-3.5 h-3.5" />
-          <span>ট্রাফিক বেগ ও আরএফকিউ ট্রেন্ড</span>
+          <span>{t("tab.trends")}</span>
         </button>
       </div>
 
@@ -320,14 +347,14 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
               <table className="w-full text-left text-xs">
                 <thead className="bg-slate-50 dark:bg-slate-800/70 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold uppercase tracking-wider text-[10px]">
                   <tr>
-                    <th className="py-3 px-3.5">র‍্যাংক</th>
-                    <th className="py-3 px-3.5">দেশ ও বায়ার মার্কেট</th>
-                    <th className="py-3 px-3.5 text-right">ভিজিটর সংখ্যা</th>
-                    <th className="py-3 px-3.5">ট্রাফিক শেয়ার (%)</th>
-                    <th className="py-3 px-3.5 text-center">প্রাপ্ত RFQ</th>
-                    <th className="py-3 px-3.5 text-right">রূপান্তর হার</th>
-                    <th className="py-3 px-3.5">প্রধান চাহিদাকৃত পণ্য</th>
-                    <th className="py-3 px-3.5 text-right">অ্যাকশন</th>
+                    <th className="py-3 px-3.5">{t("table.rank")}</th>
+                    <th className="py-3 px-3.5">{t("table.country_market")}</th>
+                    <th className="py-3 px-3.5 text-right">{t("table.visitors")}</th>
+                    <th className="py-3 px-3.5">{t("table.traffic_share")}</th>
+                    <th className="py-3 px-3.5 text-center">{t("table.inquiries")}</th>
+                    <th className="py-3 px-3.5 text-right">{t("table.conversion_rate")}</th>
+                    <th className="py-3 px-3.5">{t("table.primary_interest")}</th>
+                    <th className="py-3 px-3.5 text-right">{t("table.action")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
@@ -344,9 +371,11 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                         <span className="text-xl">{c.flag}</span>
                         <div>
                           <span className="block group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                            {c.nameBn}
+                            {locale === "bn" ? c.nameBn : c.name}
                           </span>
-                          <span className="text-[10px] text-slate-400 font-normal">{c.name}</span>
+                          <span className="text-[10px] text-slate-400 font-normal">
+                            {locale === "bn" ? c.name : c.nameBn}
+                          </span>
                         </div>
                       </td>
                       <td className="py-3 px-3.5 text-right font-black text-slate-900 dark:text-white">
@@ -367,14 +396,14 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                       </td>
                       <td className="py-3 px-3.5 text-center">
                         <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800 dark:bg-purple-950/80 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
-                          {c.inquiries} টি
+                          {c.inquiries} {t("table.unit_rfq")}
                         </span>
                       </td>
                       <td className="py-3 px-3.5 text-right font-bold text-emerald-600 dark:text-emerald-400">
                         {c.conversionRate}%
                       </td>
                       <td className="py-3 px-3.5 text-slate-600 dark:text-slate-400 font-medium">
-                        {c.primaryInterestBn}
+                        {locale === "bn" ? c.primaryInterestBn : c.primaryInterest}
                       </td>
                       <td className="py-3 px-3.5 text-right">
                         <div className="flex items-center justify-end gap-1.5">
@@ -386,10 +415,10 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                               setActiveTab("map");
                             }}
                             className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-600 text-emerald-700 hover:text-white dark:text-emerald-300 dark:hover:text-white font-bold text-[11px] flex items-center gap-1 transition"
-                            title="ম্যাপে জুম করে জেলা ও শহর দেখুন"
+                            title={locale === "bn" ? "ম্যাপে জুম করে জেলা ও শহর দেখুন" : "Zoom map to inspect cities & districts"}
                           >
                             <MapPin className="w-3 h-3" />
-                            <span>ম্যাপ জুম</span>
+                            <span>{t("table.map_zoom")}</span>
                           </button>
                           <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 hover:text-emerald-500">
                             <ChevronRight className="w-3.5 h-3.5" />
@@ -427,10 +456,10 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                     <span className="text-xl">{hub.flag}</span>
                     <div>
                       <h4 className="font-bold text-slate-900 dark:text-white text-sm group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                        {hub.cityBn}
+                        {locale === "bn" ? hub.cityBn : hub.city}
                       </h4>
                       <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                        {hub.city}, {hub.countryBn}
+                        {hub.city}, {locale === "bn" ? hub.countryBn : hub.country}
                       </span>
                     </div>
                   </div>
@@ -443,21 +472,21 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                         : "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300"
                     }`}
                   >
-                    {hub.statusBn}
+                    {locale === "bn" ? hub.statusBn : hub.status}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-center bg-white dark:bg-slate-900/60 rounded-xl p-2 border border-slate-200/80 dark:border-slate-800 text-xs">
                   <div>
-                    <span className="text-[10px] text-slate-500 block">ভিজিটর</span>
+                    <span className="text-[10px] text-slate-500 block">{t("cities.visitors")}</span>
                     <strong className="font-black text-slate-900 dark:text-white">
                       {hub.visitors.toLocaleString()}
                     </strong>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 block">ইনকোয়ারি</span>
+                    <span className="text-[10px] text-slate-500 block">{t("cities.inquiries")}</span>
                     <strong className="font-black text-emerald-600 dark:text-emerald-400">
-                      {hub.inquiries} টি
+                      {hub.inquiries} {t("cities.unit_rfq")}
                     </strong>
                   </div>
                 </div>
@@ -465,7 +494,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                 <div className="flex items-center justify-between text-[11px] pt-1">
                   <div className="flex items-start gap-1.5 text-slate-600 dark:text-slate-400">
                     <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>{hub.specialtyBn}</span>
+                    <span>{locale === "bn" ? hub.specialtyBn : hub.specialty}</span>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all" />
                 </div>
@@ -483,14 +512,14 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
               <div>
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-emerald-400" />
-                  <span>দৈনিক আন্তর্জাতিক ট্রাফিক বেগ (Velocity Wave Curve)</span>
+                  <span>{t("trends.title")}</span>
                 </h3>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  আন্তর্জাতিক ট্রেড সিজন ও সময়কাল অনুযায়ী ভিজিটর আগমন এবং আরএফকিউ সাবমিশনের গতিপ্রকৃতি।
+                  {t("trends.subtitle")}
                 </p>
               </div>
               <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800">
-                শীর্ষ পিক: {trendMax} জন/দিন
+                {t("trends.peak")} {trendMax} {t("trends.unit")}
               </span>
             </div>
 
@@ -555,14 +584,14 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
         <div className="flex items-center gap-2 text-emerald-900 dark:text-emerald-200">
           <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
           <span>
-            <strong>স্মার্ট বায়ার ইন্টেলিজেন্স:</strong> মানচিত্রের নোড বা দেশের নামের ওপর ক্লিক করে ওই দেশের বায়ারদের আরএফকিউ এবং সরাসরি WhatsApp/ইমেইলে যোগাযোগ করুন।
+            <strong>{t("insight.smart_badge")}</strong> {t("insight.text")}
           </span>
         </div>
         <a
           href="/admin/inquiries"
           className="inline-flex items-center gap-1 font-bold text-emerald-700 dark:text-emerald-400 hover:underline shrink-0"
         >
-          <span>প্রাপ্ত সব ইনকোয়ারি দেখুন</span>
+          <span>{t("insight.view_all")}</span>
           <ArrowUpRight className="w-3.5 h-3.5" />
         </a>
       </div>

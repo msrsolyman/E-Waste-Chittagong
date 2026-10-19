@@ -487,6 +487,20 @@ const OVERVIEWS_BN = {
   GB: "লন্ডন মেটাল এক্সচেঞ্জ (LME) লিঙ্কড আন্তর্জাতিক ট্রেডিং ও নন-ফেরাস কমোডিটি সোর্সিং।"
 };
 
+const OVERVIEWS_EN = {
+  BD: "Chittagong Port-based recycling dismantling yard and Dhaka-Narayanganj corporate intake hub.",
+  CN: "World's largest semiconductor and motherboard scrap processing hub across Shenzhen and Guangzhou corridors.",
+  JP: "High-tech pyrometallurgical precious metal (gold, silver, palladium) refining lots in Tokyo & Osaka.",
+  AE: "Middle East premier re-export and mixed scrap container transshipment terminal in Jebel Ali & Sharjah.",
+  US: "North American telecom infrastructure, heavy transformer, and enterprise data center decommissioning.",
+  DE: "EU WEEE compliant certified electronics dismantling and copper metallurgy cluster in Frankfurt & Hamburg.",
+  SG: "ASEAN international commodity brokerage and refined copper contract clearing hub.",
+  VN: "Southeast Asia's fastest-growing SMT electronics assembly offcuts and PCB trimmings hub.",
+  KR: "World-class memory semiconductor (DRAM and NAND Flash) circuit board recovery in Seoul & Busan.",
+  IN: "South Asian heavy industrial scrap, transformers, and copper cable recovery belt in Mumbai & Chennai.",
+  GB: "London Metal Exchange (LME) linked international trading and non-ferrous commodity sourcing desk."
+};
+
 function main() {
   console.log("Generating 100% authentic Natural Earth GIS world map data...");
 
@@ -624,6 +638,7 @@ const COUNTRY_COORDINATES = {
       zoomBounds: customBounds,
       cities: projectedCities,
       overviewBn: OVERVIEWS_BN[code] || "",
+      overviewEn: OVERVIEWS_EN[code] || "",
       pathD: countryGeo.d,
     };
   }
@@ -635,7 +650,8 @@ const COUNTRY_COORDINATES = {
     lon: 91.8317,
     x: Number(ctgX.toFixed(1)),
     y: Number(ctgY.toFixed(1)),
-    name: "চট্টগ্রাম বন্দর (HQ & Yard)",
+    name: "Chittagong Port (HQ & Yard)",
+    nameBn: "চট্টগ্রাম বন্দর (HQ ও রিসাইক্লিং ইয়ার্ড)",
   };
 
   const tsContent = `// 100% Authentic Natural Earth GIS World Map Data
@@ -670,6 +686,7 @@ export interface GisCountryDetail {
   zoomBounds: { x: number; y: number; width: number; height: number };
   cities: GisCityPoint[];
   overviewBn: string;
+  overviewEn: string;
   pathD: string;
 }
 
