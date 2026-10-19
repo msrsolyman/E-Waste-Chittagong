@@ -17,8 +17,11 @@ import {
   ArrowUpRight,
   Radio,
   Layers,
+  ChevronRight,
 } from "lucide-react";
 import type { SuperDashboardData, CountryStat, CityHubStat } from "@/lib/analytics-service";
+import { RealisticWorldMap } from "@/components/realistic-world-map";
+import { CountryIntelligenceDrawer } from "@/components/country-intelligence-drawer";
 
 interface AdminSuperDashboardProps {
   initialData: SuperDashboardData;
@@ -29,7 +32,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
   const [timeRange, setTimeRange] = useState<"today" | "7d" | "30d" | "all">("30d");
   const [activeTab, setActiveTab] = useState<"map" | "countries" | "cities" | "trends">("map");
   const [hoveredHub, setHoveredHub] = useState<CountryStat | null>(null);
-  const [selectedHub, setSelectedHub] = useState<CountryStat | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<CountryStat | null>(null);
 
   // Time filter handler
   const handleTimeRangeChange = (range: "today" | "7d" | "30d" | "all") => {
@@ -79,7 +82,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
     });
   };
 
-  const chittagongPort = { x: 720, y: 228, name: "চট্টগ্রাম বন্দর (HQ & Yard)" };
+  const chittagongPort = { x: 720, y: 245, name: "চট্টগ্রাম বন্দর (HQ & Yard)" };
 
   // Generate SVG path for trend chart
   const trendMax = Math.max(...data.dailyTrends.map((d) => d.visitors), 10);
@@ -94,7 +97,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
   const trendLineD = `M ${points.join(" L ")}`;
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 sm:p-6 lg:p-8 shadow-sm space-y-6 overflow-hidden">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 sm:p-6 lg:p-8 shadow-sm space-y-6 overflow-hidden relative">
       {/* Top Header & Live Radar Status */}
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
         <div className="space-y-1.5">
@@ -296,209 +299,19 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
         </button>
       </div>
 
-      {/* Tab 1: Interactive SVG World Map */}
+      {/* Tab 1: Realistic High-Definition World Map with Flowing Comets */}
       {activeTab === "map" && (
-        <div className="space-y-4">
-          <div className="relative rounded-2xl bg-gradient-to-b from-slate-950 to-slate-900 border border-slate-800 p-4 sm:p-6 overflow-hidden shadow-inner">
-            {/* Ambient Background Grid */}
-            <div
-              className="absolute inset-0 opacity-[0.04] pointer-events-none"
-              style={{
-                backgroundImage: `radial-gradient(#10b981 1px, transparent 1px)`,
-                backgroundSize: "24px 24px",
-              }}
-            />
-
-            {/* Chittagong Radar Banner */}
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-4 relative z-10 text-xs text-slate-300">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>
-                  কেন্দ্রবিন্দু: <strong className="text-emerald-400">চট্টগ্রাম কন্টেইনার টার্মিনাল ও ডিসম্যান্তলিং ইয়ার্ড</strong>
-                </span>
-              </div>
-              <span className="text-[11px] text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
-                মানচিত্রের পয়েন্টে ক্লিক করে বায়ারের বিস্তারিত দেখুন
-              </span>
-            </div>
-
-            {/* SVG Canvas (viewBox 0 0 1000 500) */}
-            <div className="relative w-full aspect-[2/1] min-h-[300px]">
-              <svg
-                viewBox="0 0 1000 500"
-                className="w-full h-full select-none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* Simplified Continents Silhouette */}
-                <g fill="#1e293b" opacity="0.55">
-                  {/* North America */}
-                  <path d="M 120 70 Q 220 50 290 80 Q 320 140 260 210 Q 200 230 160 190 Q 110 130 120 70 Z" />
-                  {/* South America */}
-                  <path d="M 280 260 Q 340 270 330 360 Q 300 440 260 410 Q 240 330 280 260 Z" />
-                  {/* Europe */}
-                  <path d="M 450 80 Q 550 70 540 140 Q 490 170 440 130 Z" />
-                  {/* Africa */}
-                  <path d="M 470 170 Q 560 170 570 270 Q 540 360 480 340 Q 440 250 470 170 Z" />
-                  {/* Asia */}
-                  <path d="M 560 70 Q 750 50 870 110 Q 890 220 770 270 Q 640 240 560 160 Z" />
-                  {/* Australia */}
-                  <path d="M 810 330 Q 900 320 890 390 Q 820 420 810 330 Z" />
-                </g>
-
-                {/* Animated Connection Arcs to Chittagong (720, 228) */}
-                {data.countryStats.map((c) => {
-                  if (c.code === "BD") return null;
-                  const midX = (c.x + chittagongPort.x) / 2;
-                  const midY = Math.min(c.y, chittagongPort.y) - 35;
-                  const isHovered = hoveredHub?.code === c.code || selectedHub?.code === c.code;
-
-                  return (
-                    <g key={`arc-${c.code}`}>
-                      <path
-                        d={`M ${c.x} ${c.y} Q ${midX} ${midY} ${chittagongPort.x} ${chittagongPort.y}`}
-                        fill="none"
-                        stroke={isHovered ? "#10b981" : "#059669"}
-                        strokeWidth={isHovered ? 2.5 : 1.2}
-                        strokeDasharray={isHovered ? "6 3" : "4 4"}
-                        strokeOpacity={isHovered ? 0.95 : 0.45}
-                        className="transition-all duration-300"
-                      />
-                    </g>
-                  );
-                })}
-
-                {/* Chittagong Port Central Radar Node */}
-                <g transform={`translate(${chittagongPort.x}, ${chittagongPort.y})`}>
-                  {/* Pulsing radar circles */}
-                  <circle r="18" fill="#10b981" opacity="0.15" className="animate-ping" />
-                  <circle r="10" fill="#10b981" opacity="0.3" />
-                  <circle r="5" fill="#10b981" />
-                  <circle r="2" fill="#ffffff" />
-                  <text
-                    x="0"
-                    y="18"
-                    textAnchor="middle"
-                    fill="#34d399"
-                    fontSize="9"
-                    fontWeight="bold"
-                    className="select-none"
-                  >
-                    চট্টগ্রাম বন্দর (HQ)
-                  </text>
-                </g>
-
-                {/* International Buyer Nodes */}
-                {data.countryStats.map((c) => {
-                  if (c.code === "BD") return null;
-                  const isHovered = hoveredHub?.code === c.code || selectedHub?.code === c.code;
-                  const radius = Math.max(4, Math.min(10, Math.sqrt(c.visitors) / 3));
-
-                  return (
-                    <g
-                      key={`node-${c.code}`}
-                      transform={`translate(${c.x}, ${c.y})`}
-                      className="cursor-pointer group"
-                      onMouseEnter={() => setHoveredHub(c)}
-                      onMouseLeave={() => setHoveredHub(null)}
-                      onClick={() => setSelectedHub(c)}
-                    >
-                      {/* Interactive click zone */}
-                      <circle r="16" fill="transparent" />
-                      {/* Outer pulse if active */}
-                      {c.activeNow && (
-                        <circle
-                          r={radius + 4}
-                          fill="#38bdf8"
-                          opacity={isHovered ? "0.6" : "0.25"}
-                          className="animate-pulse"
-                        />
-                      )}
-                      {/* Main Node */}
-                      <circle
-                        r={radius}
-                        fill={isHovered ? "#38bdf8" : "#0284c7"}
-                        stroke="#ffffff"
-                        strokeWidth="1.5"
-                        className="transition-all duration-200"
-                      />
-                      {/* Country Flag & Label */}
-                      <text
-                        x="0"
-                        y={-radius - 4}
-                        textAnchor="middle"
-                        fill={isHovered ? "#ffffff" : "#94a3b8"}
-                        fontSize="9"
-                        fontWeight={isHovered ? "bold" : "500"}
-                        className="transition-all select-none"
-                      >
-                        {c.flag} {c.nameBn}
-                      </text>
-                    </g>
-                  );
-                })}
-              </svg>
-
-              {/* Float Tooltip Card */}
-              {(hoveredHub || selectedHub) && (
-                <div className="absolute bottom-3 left-3 right-3 sm:right-auto sm:max-w-sm bg-slate-900/95 backdrop-blur-md border border-emerald-500/40 rounded-2xl p-3.5 text-white shadow-2xl text-xs space-y-2 z-20 animate-in fade-in zoom-in-95 duration-150">
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">{(hoveredHub || selectedHub)?.flag}</span>
-                      <div>
-                        <h4 className="font-bold text-sm text-white">
-                          {(hoveredHub || selectedHub)?.nameBn} ({(hoveredHub || selectedHub)?.name})
-                        </h4>
-                        <span className="text-[10px] text-emerald-400 font-medium">
-                          {(hoveredHub || selectedHub)?.activeNow} জন বায়ার এখন সক্রিয়
-                        </span>
-                      </div>
-                    </div>
-                    {selectedHub && (
-                      <button
-                        type="button"
-                        onClick={() => setSelectedHub(null)}
-                        className="text-slate-400 hover:text-white text-xs px-1.5 py-0.5 rounded bg-slate-800"
-                      >
-                        ✕
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-2 py-1 text-center bg-slate-950/60 rounded-xl p-2 border border-slate-800">
-                    <div>
-                      <span className="text-[10px] text-slate-400 block">ভিজিটর</span>
-                      <strong className="text-emerald-400 font-bold text-sm">
-                        {(hoveredHub || selectedHub)?.visitors.toLocaleString()}
-                      </strong>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-slate-400 block">শেয়ার</span>
-                      <strong className="text-white font-bold text-sm">
-                        {(hoveredHub || selectedHub)?.share}%
-                      </strong>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-slate-400 block">RFQ কোটেশন</span>
-                      <strong className="text-purple-400 font-bold text-sm">
-                        {(hoveredHub || selectedHub)?.inquiries} টি
-                      </strong>
-                    </div>
-                  </div>
-
-                  <div className="text-[11px] text-slate-300">
-                    <span className="text-slate-400">মূল চাহিদা: </span>
-                    <strong className="text-emerald-300">
-                      {(hoveredHub || selectedHub)?.primaryInterestBn}
-                    </strong>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        <RealisticWorldMap
+          countryStats={data.countryStats}
+          chittagongPort={chittagongPort}
+          hoveredHub={hoveredHub}
+          selectedHub={selectedCountry}
+          onHoverHub={setHoveredHub}
+          onSelectHub={setSelectedCountry}
+        />
       )}
 
-      {/* Tab 2: Country Rankings Table */}
+      {/* Tab 2: Country Rankings Table with Click-to-Drawer Action */}
       {activeTab === "countries" && (
         <div className="space-y-4">
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
@@ -513,21 +326,25 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                     <th className="py-3 px-3.5 text-center">প্রাপ্ত RFQ</th>
                     <th className="py-3 px-3.5 text-right">রূপান্তর হার</th>
                     <th className="py-3 px-3.5">প্রধান চাহিদাকৃত পণ্য</th>
+                    <th className="py-3 px-3.5 text-right">অ্যাকশন</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
                   {data.countryStats.map((c, index) => (
                     <tr
                       key={c.code}
-                      className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                      onClick={() => setSelectedCountry(c)}
+                      className="hover:bg-emerald-50/60 dark:hover:bg-slate-800/60 transition-colors cursor-pointer group"
                     >
                       <td className="py-3 px-3.5 font-bold text-slate-400 text-center">
                         #{index + 1}
                       </td>
                       <td className="py-3 px-3.5 font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                        <span className="text-lg">{c.flag}</span>
+                        <span className="text-xl">{c.flag}</span>
                         <div>
-                          <span className="block">{c.nameBn}</span>
+                          <span className="block group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                            {c.nameBn}
+                          </span>
                           <span className="text-[10px] text-slate-400 font-normal">{c.name}</span>
                         </div>
                       </td>
@@ -558,6 +375,12 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                       <td className="py-3 px-3.5 text-slate-600 dark:text-slate-400 font-medium">
                         {c.primaryInterestBn}
                       </td>
+                      <td className="py-3 px-3.5 text-right">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 transition-transform">
+                          <span>বায়ার আরএফকিউ</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </span>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -567,60 +390,68 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
         </div>
       )}
 
-      {/* Tab 3: Major Commercial City Hubs */}
+      {/* Tab 3: Major Commercial City Hubs with Click Action */}
       {activeTab === "cities" && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-          {data.cityHubs.map((hub) => (
-            <div
-              key={hub.city}
-              className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all space-y-2.5"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl">{hub.flag}</span>
+          {data.cityHubs.map((hub) => {
+            const matchedCountry = data.countryStats.find((c) => c.name === hub.country);
+
+            return (
+              <div
+                key={hub.city}
+                onClick={() => matchedCountry && setSelectedCountry(matchedCountry)}
+                className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 hover:shadow-md transition-all space-y-2.5 cursor-pointer group"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{hub.flag}</span>
+                    <div>
+                      <h4 className="font-bold text-slate-900 dark:text-white text-sm group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        {hub.cityBn}
+                      </h4>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                        {hub.city}, {hub.countryBn}
+                      </span>
+                    </div>
+                  </div>
+                  <span
+                    className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                      hub.status === "High Volume"
+                        ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
+                        : hub.status === "Active Deals"
+                        ? "bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300"
+                        : "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300"
+                    }`}
+                  >
+                    {hub.statusBn}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-center bg-white dark:bg-slate-900/60 rounded-xl p-2 border border-slate-200/80 dark:border-slate-800 text-xs">
                   <div>
-                    <h4 className="font-bold text-slate-900 dark:text-white text-sm">
-                      {hub.cityBn}
-                    </h4>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                      {hub.city}, {hub.countryBn}
-                    </span>
+                    <span className="text-[10px] text-slate-500 block">ভিজিটর</span>
+                    <strong className="font-black text-slate-900 dark:text-white">
+                      {hub.visitors.toLocaleString()}
+                    </strong>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 block">ইনকোয়ারি</span>
+                    <strong className="font-black text-emerald-600 dark:text-emerald-400">
+                      {hub.inquiries} টি
+                    </strong>
                   </div>
                 </div>
-                <span
-                  className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                    hub.status === "High Volume"
-                      ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
-                      : hub.status === "Active Deals"
-                      ? "bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300"
-                      : "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300"
-                  }`}
-                >
-                  {hub.statusBn}
-                </span>
-              </div>
 
-              <div className="grid grid-cols-2 gap-2 text-center bg-white dark:bg-slate-900/60 rounded-xl p-2 border border-slate-200/80 dark:border-slate-800 text-xs">
-                <div>
-                  <span className="text-[10px] text-slate-500 block">ভিজিটর</span>
-                  <strong className="font-black text-slate-900 dark:text-white">
-                    {hub.visitors.toLocaleString()}
-                  </strong>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-500 block">ইনকোয়ারি</span>
-                  <strong className="font-black text-emerald-600 dark:text-emerald-400">
-                    {hub.inquiries} টি
-                  </strong>
+                <div className="flex items-center justify-between text-[11px] pt-1">
+                  <div className="flex items-start gap-1.5 text-slate-600 dark:text-slate-400">
+                    <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                    <span>{hub.specialtyBn}</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all" />
                 </div>
               </div>
-
-              <div className="text-[11px] text-slate-600 dark:text-slate-400 flex items-start gap-1.5 pt-1">
-                <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                <span>{hub.specialtyBn}</span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -704,7 +535,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
         <div className="flex items-center gap-2 text-emerald-900 dark:text-emerald-200">
           <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
           <span>
-            <strong>সরাসরি কনভার্সন অপটিমাইজেশন:</strong> চীন ও জাপানের বায়াররা সার্ভার মাদারবোর্ড ক্যাটালগে সর্বোচ্চ সময় ব্যয় করছেন।
+            <strong>স্মার্ট বায়ার ইন্টেলিজেন্স:</strong> মানচিত্রের নোড বা দেশের নামের ওপর ক্লিক করে ওই দেশের বায়ারদের আরএফকিউ এবং সরাসরি WhatsApp/ইমেইলে যোগাযোগ করুন।
           </span>
         </div>
         <a
@@ -715,6 +546,12 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
           <ArrowUpRight className="w-3.5 h-3.5" />
         </a>
       </div>
+
+      {/* Slide-Over Country Intelligence Drawer */}
+      <CountryIntelligenceDrawer
+        country={selectedCountry}
+        onClose={() => setSelectedCountry(null)}
+      />
     </div>
   );
 }
