@@ -376,10 +376,24 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                         {c.primaryInterestBn}
                       </td>
                       <td className="py-3 px-3.5 text-right">
-                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 transition-transform">
-                          <span>বায়ার আরএফকিউ</span>
-                          <ChevronRight className="w-3.5 h-3.5" />
-                        </span>
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedCountry(c);
+                              setActiveTab("map");
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-600 text-emerald-700 hover:text-white dark:text-emerald-300 dark:hover:text-white font-bold text-[11px] flex items-center gap-1 transition"
+                            title="ম্যাপে জুম করে জেলা ও শহর দেখুন"
+                          >
+                            <MapPin className="w-3 h-3" />
+                            <span>ম্যাপ জুম</span>
+                          </button>
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 hover:text-emerald-500">
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </span>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -399,7 +413,12 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
             return (
               <div
                 key={hub.city}
-                onClick={() => matchedCountry && setSelectedCountry(matchedCountry)}
+                onClick={() => {
+                  if (matchedCountry) {
+                    setSelectedCountry(matchedCountry);
+                    setActiveTab("map");
+                  }
+                }}
                 className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 hover:shadow-md transition-all space-y-2.5 cursor-pointer group"
               >
                 <div className="flex items-center justify-between">
