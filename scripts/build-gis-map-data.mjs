@@ -576,6 +576,20 @@ function main() {
       customBounds = { x: 130, y: 60, width: 200, height: 135 };
     }
 
+const COUNTRY_COORDINATES = {
+  BD: { lat: 23.6850, lon: 90.3563, zoom: 7 },
+  CN: { lat: 35.8617, lon: 104.1954, zoom: 4 },
+  JP: { lat: 36.2048, lon: 138.2529, zoom: 5 },
+  AE: { lat: 24.4539, lon: 54.3773, zoom: 7 },
+  US: { lat: 37.0902, lon: -95.7129, zoom: 4 },
+  DE: { lat: 51.1657, lon: 10.4515, zoom: 6 },
+  SG: { lat: 1.3521, lon: 103.8198, zoom: 11 },
+  VN: { lat: 14.0583, lon: 108.2772, zoom: 6 },
+  KR: { lat: 35.9078, lon: 127.7669, zoom: 7 },
+  IN: { lat: 20.5937, lon: 78.9629, zoom: 5 },
+  GB: { lat: 54.3781, lon: -2.4360, zoom: 6 },
+};
+
     const projectedCities = rawCityList.map((city) => {
       const [px, py] = projection([city.lon, city.lat]);
       return {
@@ -584,6 +598,8 @@ function main() {
         nameBn: city.nameBn,
         role: city.role,
         roleBn: city.roleBn,
+        lat: city.lat,
+        lon: city.lon,
         x: Number(px.toFixed(1)),
         y: Number(py.toFixed(1)),
         isHq: Boolean(city.isHq),
@@ -594,11 +610,16 @@ function main() {
       };
     });
 
+    const coords = COUNTRY_COORDINATES[code] || { lat: 20, lon: 0, zoom: 4 };
+
     buyerCountriesData[code] = {
       code,
       name: countryGeo.name,
       nameBn: COUNTRY_NAMES_BN[code] || countryGeo.nameBn,
       flag: COUNTRY_FLAGS[code] || "🌐",
+      lat: coords.lat,
+      lon: coords.lon,
+      defaultZoom: coords.zoom,
       centroid: { x: countryGeo.centroid[0], y: countryGeo.centroid[1] },
       zoomBounds: customBounds,
       cities: projectedCities,
@@ -610,6 +631,8 @@ function main() {
   // Chittagong Port Projected Epicenter
   const [ctgX, ctgY] = projection([91.8317, 22.3384]);
   const chittagongEpicenter = {
+    lat: 22.3384,
+    lon: 91.8317,
     x: Number(ctgX.toFixed(1)),
     y: Number(ctgY.toFixed(1)),
     name: "চট্টগ্রাম বন্দর (HQ & Yard)",
@@ -624,6 +647,8 @@ export interface GisCityPoint {
   nameBn: string;
   role: string;
   roleBn: string;
+  lat: number;
+  lon: number;
   x: number;
   y: number;
   isHq?: boolean;
@@ -638,6 +663,9 @@ export interface GisCountryDetail {
   name: string;
   nameBn: string;
   flag: string;
+  lat: number;
+  lon: number;
+  defaultZoom: number;
   centroid: { x: number; y: number };
   zoomBounds: { x: number; y: number; width: number; height: number };
   cities: GisCityPoint[];

@@ -567,11 +567,13 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
         </a>
       </div>
 
-      {/* Slide-Over Country Intelligence Drawer */}
-      <CountryIntelligenceDrawer
-        country={selectedCountry}
-        onClose={() => setSelectedCountry(null)}
-      />
+      {/* Slide-Over Country Intelligence Drawer (Only opens on non-map tabs to keep the map 100% unobstructed) */}
+      {activeTab !== "map" && (
+        <CountryIntelligenceDrawer
+          country={selectedCountry}
+          onClose={() => setSelectedCountry(null)}
+        />
+      )}
     </div>
   );
 }

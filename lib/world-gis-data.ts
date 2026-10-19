@@ -7,6 +7,8 @@ export interface GisCityPoint {
   nameBn: string;
   role: string;
   roleBn: string;
+  lat: number;
+  lon: number;
   x: number;
   y: number;
   isHq?: boolean;
@@ -21,6 +23,9 @@ export interface GisCountryDetail {
   name: string;
   nameBn: string;
   flag: string;
+  lat: number;
+  lon: number;
+  defaultZoom: number;
   centroid: { x: number; y: number };
   zoomBounds: { x: number; y: number; width: number; height: number };
   cities: GisCityPoint[];
@@ -40,6 +45,8 @@ export interface WorldCountryFeature {
 }
 
 export const CHITTAGONG_EPICENTER = {
+  "lat": 22.3384,
+  "lon": 91.8317,
   "x": 733.5,
   "y": 178.8,
   "name": "চট্টগ্রাম বন্দর (HQ & Yard)"
@@ -51,6 +58,9 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
     "name": "Bangladesh",
     "nameBn": "বাংলাদেশ",
     "flag": "🇧🇩",
+    "lat": 23.685,
+    "lon": 90.3563,
+    "defaultZoom": 7,
     "centroid": {
       "x": 729,
       "y": 174
@@ -68,6 +78,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "চট্টগ্রাম বন্দর (HQ ও রিসাইক্লিং ইয়ার্ড)",
         "role": "Main Processing Yard & Maritime Container Terminal",
         "roleBn": "প্রধান ডিসম্যান্তলিং ইয়ার্ড ও কন্টেইনার টার্মিনাল",
+        "lat": 22.3384,
+        "lon": 91.8317,
         "x": 733.5,
         "y": 178.8,
         "isHq": true,
@@ -82,6 +94,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "ঢাকা মহানগর (করপোরেট অফিস)",
         "role": "Headquarters & Commercial Liaison Desk",
         "roleBn": "বাণিজ্যিক যোগাযোগ ডেস্ক ও কর্পোরেট সোর্সিং",
+        "lat": 23.8103,
+        "lon": 90.4125,
         "x": 729.2,
         "y": 174.4,
         "isHq": false,
@@ -96,6 +110,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "নারায়ণগঞ্জ স্ক্র্যাপ হাব",
         "role": "Regional Metal Aggregation & Sorting",
         "roleBn": "আঞ্চলিক মেটাল বাছাই ও সেকেন্ডারি প্রসেসিং",
+        "lat": 23.6238,
+        "lon": 90.5,
         "x": 729.5,
         "y": 174.9,
         "isHq": false,
@@ -110,6 +126,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "খুলনা ও মোংলা বন্দর হাব",
         "role": "Secondary Riverine Logistics Gateway",
         "roleBn": "নদী বন্দর ও দক্ষিণ-পশ্চিমাঞ্চলীয় স্ক্র্যাপ ইনটেক",
+        "lat": 22.8456,
+        "lon": 89.54,
         "x": 727.5,
         "y": 177.3,
         "isHq": false,
@@ -127,6 +145,9 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
     "name": "China",
     "nameBn": "চীন",
     "flag": "🇨🇳",
+    "lat": 35.8617,
+    "lon": 104.1954,
+    "defaultZoom": 4,
     "centroid": {
       "x": 752,
       "y": 137
@@ -144,6 +165,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "শেনঝেন (Shenzhen)",
         "role": "High-Density IC Chips & Server Motherboard Hub",
         "roleBn": "হাই-ডেনসিটি আইসি চিপস ও সার্ভার মাদারবোর্ড মার্কেট",
+        "lat": 22.5431,
+        "lon": 114.0579,
         "x": 789.9,
         "y": 178.2,
         "isHq": false,
@@ -158,6 +181,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "গুয়াংজু (Guangzhou)",
         "role": "Precious Metals Smelting & Bulk PCB Ingestion",
         "roleBn": "মূল্যবান ধাতু স্মেল্টিং ও বাল্ক পিসিবি প্রসেসিং",
+        "lat": 23.1291,
+        "lon": 113.2644,
         "x": 787.5,
         "y": 176.4,
         "isHq": false,
@@ -172,6 +197,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "সাংহাই বন্দর (Shanghai Port)",
         "role": "International Maritime Gateway & Import Brokerage",
         "roleBn": "আন্তর্জাতিক কন্টেইনার বন্দর ও ট্রেডিং ডেস্ক",
+        "lat": 31.2304,
+        "lon": 121.4737,
         "x": 801.6,
         "y": 151.9,
         "isHq": false,
@@ -186,6 +213,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "বেইজিং (Beijing)",
         "role": "State Environmental Enterprise Compliance",
         "roleBn": "পরিবেশগত ট্রেড কমপ্লায়েন্স ও এন্টারপ্রাইজ পার্টনার",
+        "lat": 39.9042,
+        "lon": 116.4074,
         "x": 779.7,
         "y": 125.6,
         "isHq": false,
@@ -203,6 +232,9 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
     "name": "Japan",
     "nameBn": "জাপান",
     "flag": "🇯🇵",
+    "lat": 36.2048,
+    "lon": 138.2529,
+    "defaultZoom": 5,
     "centroid": {
       "x": 834,
       "y": 133
@@ -220,6 +252,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "টোকিও (Tokyo Metro)",
         "role": "Commodity Trading Exchange & Executive Brokerage",
         "roleBn": "কমোডিটি ট্রেডিং ডেস্ক ও এক্সিকিউটিভ ব্রোকারেজ",
+        "lat": 35.6895,
+        "lon": 139.6917,
         "x": 841.5,
         "y": 138.3,
         "isHq": false,
@@ -234,6 +268,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "ওসাকা (Osaka)",
         "role": "Industrial Metal Smelting & Secondary Refining",
         "roleBn": "শিল্প স্মেল্টিং ও সেকেন্ডারি রিফাইনিং সেন্টার",
+        "lat": 34.6937,
+        "lon": 135.5023,
         "x": 832.5,
         "y": 141.4,
         "isHq": false,
@@ -248,6 +284,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "নাগোয়া (Nagoya)",
         "role": "Automotive & Industrial Electronics Recovery",
         "roleBn": "অটোমোটিভ ইলেকট্রনিক্স ও হেভি কেবলস রিকভারি",
+        "lat": 35.1815,
+        "lon": 136.9066,
         "x": 835.3,
         "y": 139.9,
         "isHq": false,
@@ -262,6 +300,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "ইয়োকোহামা বন্দর (Yokohama Port)",
         "role": "Maritime Bulk Intake Terminal",
         "roleBn": "আন্তর্জাতিক সামুদ্রিক বাল্ক ইনটেক টার্মিনাল",
+        "lat": 35.4437,
+        "lon": 139.638,
         "x": 841.7,
         "y": 139.1,
         "isHq": false,
@@ -279,6 +319,9 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
     "name": "United Arab Emirates",
     "nameBn": "সংযুক্ত আরব আমিরাত",
     "flag": "🇦🇪",
+    "lat": 24.4539,
+    "lon": 54.3773,
+    "defaultZoom": 7,
     "centroid": {
       "x": 637,
       "y": 174
@@ -296,6 +339,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "দুবাই (জাবাল আলী পোর্ট ও ফ্রিজোন)",
         "role": "Middle East Mega Transshipment Freezone",
         "roleBn": "মধ্যপ্রাচ্য রি-এক্সপোর্ট হাব ও ফ্রন্টলাইন ফ্রিজোন",
+        "lat": 24.9857,
+        "lon": 55.0273,
         "x": 639.1,
         "y": 170.8,
         "isHq": false,
@@ -310,6 +355,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "শারজাহ ইন্ডাস্ট্রিয়াল স্ক্র্যাপ বেল্ট",
         "role": "Secondary Segregation & Dismantling Yards",
         "roleBn": "সেকেন্ডারি বাছাইকরণ ও ডিসম্যান্তলিং ইয়ার্ডস",
+        "lat": 25.3463,
+        "lon": 55.4033,
         "x": 639.9,
         "y": 169.7,
         "isHq": false,
@@ -324,6 +371,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "আবুধাবি (Abu Dhabi)",
         "role": "Petrochemical & Industrial Electronics Sourcing",
         "roleBn": "শিল্প অবকাঠামো ও হেভি ইলেকট্রনিক্স সোর্সিং",
+        "lat": 24.4539,
+        "lon": 54.3773,
         "x": 637.6,
         "y": 172.4,
         "isHq": false,
@@ -341,6 +390,9 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
     "name": "United States of America",
     "nameBn": "যুক্তরাষ্ট্র",
     "flag": "🇺🇸",
+    "lat": 37.0902,
+    "lon": -95.7129,
+    "defaultZoom": 4,
     "centroid": {
       "x": 246,
       "y": 113
@@ -358,6 +410,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "হিউস্টন (Houston / Gulf Coast)",
         "role": "Industrial Oilfield & Heavy Transformer Scrap Gateway",
         "roleBn": "শিল্প তেলক্ষেত্র ও হেভি ট্রান্সফরমার স্ক্র্যাপ গেটওয়ে",
+        "lat": 29.7604,
+        "lon": -95.3698,
         "x": 262.1,
         "y": 156.3,
         "isHq": false,
@@ -372,6 +426,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "লস অ্যাঞ্জেলেস বন্দর (Los Angeles Port)",
         "role": "Trans-Pacific Scrap Export Port",
         "roleBn": "প্রশান্ত মহাসাগরীয় স্ক্র্যাপ রপ্তানি বন্দর",
+        "lat": 34.0522,
+        "lon": -118.2437,
         "x": 209.2,
         "y": 143.3,
         "isHq": false,
@@ -386,6 +442,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "ডালাস (Dallas / Fort Worth)",
         "role": "Data Center Decommissioning Hub",
         "roleBn": "ডাটা সেন্টার ডিকমিশনিং ও টেলিকম বেল্ট",
+        "lat": 32.7767,
+        "lon": -96.797,
         "x": 260.9,
         "y": 147.2,
         "isHq": false,
@@ -400,6 +458,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "নিউ ইয়র্ক / নিউয়ার্ক পোর্ট",
         "role": "Atlantic Financial IT Recycling Logistics",
         "roleBn": "আটলান্টিক করপোরেট আইটি রিসাইক্লিং গেটওয়ে",
+        "lat": 40.7128,
+        "lon": -74.006,
         "x": 322.8,
         "y": 123.2,
         "isHq": false,
@@ -417,6 +477,9 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
     "name": "Germany",
     "nameBn": "জার্মানি",
     "flag": "🇩🇪",
+    "lat": 51.1657,
+    "lon": 10.4515,
+    "defaultZoom": 6,
     "centroid": {
       "x": 523,
       "y": 92
@@ -434,6 +497,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "ফ্রাঙ্কফুর্ট (Frankfurt Metro)",
         "role": "Central European Financial & Data Center Hub",
         "roleBn": "ইউরোপীয় আর্থিক কেন্দ্র ও ডাটা সেন্টার হাব",
+        "lat": 50.1109,
+        "lon": 8.6821,
         "x": 519.8,
         "y": 95.3,
         "isHq": false,
@@ -448,6 +513,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "হামবুর্গ বন্দর (Hamburg Port)",
         "role": "Major Maritime Scrap Intake Terminal",
         "roleBn": "বৃহত্তম সামুদ্রিক স্ক্র্যাপ ইনটেক টার্মিনাল",
+        "lat": 53.5511,
+        "lon": 9.9937,
         "x": 522.3,
         "y": 85.4,
         "isHq": false,
@@ -462,6 +529,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "ডুসেলডর্ফ ও রুর শিল্পাঞ্চল",
         "role": "Heavy Metallurgy & Smelting Cluster",
         "roleBn": "মেটালার্জি ও স্মেল্টিং শিল্পাঞ্চল",
+        "lat": 51.2277,
+        "lon": 6.7735,
         "x": 515.3,
         "y": 92.1,
         "isHq": false,
@@ -479,6 +548,9 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
     "name": "Vietnam",
     "nameBn": "ভিয়েতনাম",
     "flag": "🇻🇳",
+    "lat": 14.0583,
+    "lon": 108.2772,
+    "defaultZoom": 6,
     "centroid": {
       "x": 773,
       "y": 196
@@ -496,6 +568,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "হো চি মিন সিটি (Ho Chi Minh City)",
         "role": "Southern Electronics Manufacturing Hub",
         "roleBn": "দক্ষিণ ভিয়েতনাম ইলেকট্রনিক্স ম্যানুফ্যাকচারিং হাব",
+        "lat": 10.8231,
+        "lon": 106.6297,
         "x": 776.2,
         "y": 213.6,
         "isHq": false,
@@ -510,6 +584,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "হ্যানয় ও হাইফং বন্দর (Hanoi & Hai Phong)",
         "role": "Northern Industrial Corridor & Export Port",
         "roleBn": "উত্তরাঞ্চলীয় শিল্পাঞ্চল ও রপ্তানি বন্দর",
+        "lat": 21.0285,
+        "lon": 105.8542,
         "x": 769.9,
         "y": 182.8,
         "isHq": false,
@@ -527,6 +603,9 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
     "name": "South Korea",
     "nameBn": "দক্ষিণ কোরিয়া",
     "flag": "🇰🇷",
+    "lat": 35.9078,
+    "lon": 127.7669,
+    "defaultZoom": 7,
     "centroid": {
       "x": 812,
       "y": 136
@@ -544,6 +623,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "সিউল মহানগর (Seoul Metro)",
         "role": "Advanced Semiconductor Refinement Desk",
         "roleBn": "উন্নত সেমিকন্ডাক্টর রিফাইনিং ডেস্ক ও ট্রেড হাব",
+        "lat": 37.5665,
+        "lon": 126.978,
         "x": 808.2,
         "y": 132.7,
         "isHq": false,
@@ -558,6 +639,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "বুসান বন্দর (Busan Port)",
         "role": "Global Marine Transshipment Port",
         "roleBn": "আন্তর্জাতিক সামুদ্রিক ট্রান্সশিপমেন্ট বন্দর",
+        "lat": 35.1796,
+        "lon": 129.0756,
         "x": 816.2,
         "y": 139.9,
         "isHq": false,
@@ -575,6 +658,9 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
     "name": "India",
     "nameBn": "ভারত",
     "flag": "🇮🇳",
+    "lat": 20.5937,
+    "lon": 78.9629,
+    "defaultZoom": 5,
     "centroid": {
       "x": 702,
       "y": 177
@@ -592,6 +678,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "মুম্বাই (জেএনপিটি বন্দর)",
         "role": "Western Coast Metal Trade & Port Gateway",
         "roleBn": "পশ্চিম উপকূলীয় মেটাল ট্রেড ও কন্টেইনার বন্দর",
+        "lat": 19.076,
+        "lon": 72.8777,
         "x": 686.6,
         "y": 188.7,
         "isHq": false,
@@ -606,6 +694,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "চেন্নাই বন্দর (Chennai Port)",
         "role": "Automotive & Telecom Scrap Corridor",
         "roleBn": "অটোমোটিভ ও টেলিকম স্ক্র্যাপ করিডোর",
+        "lat": 13.0827,
+        "lon": 80.2707,
         "x": 707.4,
         "y": 206.8,
         "isHq": false,
@@ -623,6 +713,9 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
     "name": "United Kingdom",
     "nameBn": "যুক্তরাজ্য",
     "flag": "🇬🇧",
+    "lat": 54.3781,
+    "lon": -2.436,
+    "defaultZoom": 6,
     "centroid": {
       "x": 494,
       "y": 85
@@ -640,6 +733,8 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
         "nameBn": "লন্ডন (LME ট্রেডিং হাব)",
         "role": "Global Non-Ferrous Metals Brokerage",
         "roleBn": "আন্তর্জাতিক নন-ফেরাস মেটাল ব্রোকারেজ",
+        "lat": 51.5074,
+        "lon": -0.1278,
         "x": 499.7,
         "y": 91.3,
         "isHq": false,
