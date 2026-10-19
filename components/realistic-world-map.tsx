@@ -3,27 +3,22 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import {
-  ZoomIn,
-  ZoomOut,
-  RotateCcw,
-  Search,
+  ArrowLeft,
+  ChevronRight,
+  FileCheck2,
   MapPin,
   Building2,
-  Ship,
   Sparkles,
-  ExternalLink,
-  ChevronRight,
-  ArrowLeft,
-  Radio,
-  FileCheck2,
-  Users,
 } from "lucide-react";
 import type { CountryStat } from "@/lib/analytics-service";
 import {
-  COUNTRIES_GEO_DATA,
-  type CountryGeoDetail,
-  type CityDistrictPoint,
-} from "@/lib/world-geo-data";
+  GIS_WORLD_COUNTRIES,
+  GIS_BUYER_COUNTRIES,
+  CHITTAGONG_EPICENTER,
+  type GisCountryDetail,
+  type GisCityPoint,
+  type WorldCountryFeature,
+} from "@/lib/world-gis-data";
 
 interface RealisticWorldMapProps {
   countryStats: CountryStat[];
@@ -46,19 +41,19 @@ export function RealisticWorldMap({
 }: RealisticWorldMapProps) {
   const [filter, setFilter] = useState<"all" | "top" | "active">(activeFilter);
   const [zoomedCountryCode, setZoomedCountryCode] = useState<string | null>(null);
-  const [hoveredCity, setHoveredCity] = useState<CityDistrictPoint | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [hoveredCity, setHoveredCity] = useState<GisCityPoint | null>(null);
+  const [hoveredCountryFeature, setHoveredCountryFeature] = useState<WorldCountryFeature | null>(null);
 
   // Sync with parent selectedHub if passed
   useEffect(() => {
-    if (selectedHub?.code && COUNTRIES_GEO_DATA[selectedHub.code]) {
+    if (selectedHub?.code && GIS_BUYER_COUNTRIES[selectedHub.code]) {
       setZoomedCountryCode(selectedHub.code);
     }
   }, [selectedHub]);
 
   // Current active zoom geo
-  const activeGeo: CountryGeoDetail | null = zoomedCountryCode
-    ? COUNTRIES_GEO_DATA[zoomedCountryCode] || null
+  const activeGeo: GisCountryDetail | null = zoomedCountryCode
+    ? GIS_BUYER_COUNTRIES[zoomedCountryCode] || null
     : null;
 
   // Filter countries according to filter toggle
@@ -74,18 +69,6 @@ export function RealisticWorldMap({
     ? `${activeGeo.zoomBounds.x} ${activeGeo.zoomBounds.y} ${activeGeo.zoomBounds.width} ${activeGeo.zoomBounds.height}`
     : defaultViewBox;
 
-  // Search filtered list of countries
-  const filteredCountryOptions = Object.values(COUNTRIES_GEO_DATA).filter((item) => {
-    if (!searchQuery.trim()) return true;
-    const q = searchQuery.toLowerCase();
-    return (
-      item.name.toLowerCase().includes(q) ||
-      item.nameBn.includes(q) ||
-      item.code.toLowerCase().includes(q) ||
-      item.cities.some((c) => c.name.toLowerCase().includes(q) || c.nameBn.includes(q))
-    );
-  });
-
   const handleCountryZoom = (countryCode: string) => {
     setZoomedCountryCode(countryCode);
     setHoveredCity(null);
@@ -94,36 +77,32 @@ export function RealisticWorldMap({
   const handleResetZoom = () => {
     setZoomedCountryCode(null);
     setHoveredCity(null);
+    setHoveredCountryFeature(null);
   };
 
+  // Center coordinate of Chittagong Epicenter
+  const ctgCenter = CHITTAGONG_EPICENTER;
+
   return (
-    <div className="relative w-full rounded-3xl bg-gradient-to-b from-slate-950 via-[#020b18] to-slate-950 border border-slate-800 p-3 sm:p-5 overflow-hidden shadow-2xl">
-      {/* Glow filters definition */}
+    <div className="relative w-full rounded-3xl bg-gradient-to-b from-[#020617] via-[#050e21] to-[#020617] border border-slate-800 p-3 sm:p-5 overflow-hidden shadow-2xl">
+      {/* SVG Filters & Gradients Definition */}
       <svg className="absolute w-0 h-0 overflow-hidden" aria-hidden="true">
         <defs>
-          <filter id="emeraldGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
+          <filter id="emeraldGlow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3.5" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
-          <filter id="cyanGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="2.5" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-          <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <filter id="cyanGlow" x="-30%" y="-30%" width="160%" height="160%">
             <feGaussianBlur stdDeviation="3" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
           <linearGradient id="oceanGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#08101e" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#020617" stopOpacity="0.98" />
+            <stop offset="0%" stopColor="#050e1f" />
+            <stop offset="100%" stopColor="#020617" />
           </linearGradient>
-          <linearGradient id="landGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#1e293b" />
-            <stop offset="100%" stopColor="#0f172a" />
-          </linearGradient>
-          <linearGradient id="highlightGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#065f46" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#047857" stopOpacity="0.75" />
+          <linearGradient id="buyerCountryGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#064e3b" stopOpacity="0.95" />
+            <stop offset="100%" stopColor="#022c22" stopOpacity="0.9" />
           </linearGradient>
         </defs>
       </svg>
@@ -137,7 +116,7 @@ export function RealisticWorldMap({
               <button
                 type="button"
                 onClick={handleResetZoom}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-slate-700/80 font-bold transition-all shadow-sm active:scale-95"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-slate-700 font-bold transition-all shadow-sm active:scale-95"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>গ্লোবাল ম্যাপে ফিরুন</span>
@@ -180,7 +159,7 @@ export function RealisticWorldMap({
               className="bg-slate-900/90 text-slate-200 border border-slate-700 rounded-xl px-3 py-1.5 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-emerald-500 pr-7 cursor-pointer"
             >
               <option value="">🌐 বিশ্ব মানচিত্র (গ্লোবাল ভিউ)</option>
-              {Object.values(COUNTRIES_GEO_DATA).map((country) => (
+              {Object.values(GIS_BUYER_COUNTRIES).map((country) => (
                 <option key={country.code} value={country.code}>
                   {country.flag} {country.nameBn} ({country.cities.length} টি জোন)
                 </option>
@@ -230,141 +209,102 @@ export function RealisticWorldMap({
       </div>
 
       {/* Interactive Map SVG Canvas with Smooth Dynamic ViewBox */}
-      <div className="relative w-full aspect-[2/1] min-h-[350px] sm:min-h-[420px] select-none rounded-2xl overflow-hidden border border-slate-800/80 bg-[#020714]">
+      <div className="relative w-full aspect-[2/1] min-h-[350px] sm:min-h-[440px] select-none rounded-2xl overflow-hidden border border-slate-800/80 bg-[#020617]">
         <svg
           viewBox={currentViewBox}
           className="w-full h-full select-none transition-all duration-700 ease-in-out"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Ocean Background Gradient */}
-          <rect x="-200" y="-100" width="1400" height="700" fill="url(#oceanGrad)" />
+          {/* Ocean Background Canvas */}
+          <rect x="-300" y="-150" width="1600" height="800" fill="url(#oceanGrad)" />
 
           {/* Precision Lat/Long Graticule Grid */}
-          <g stroke="#334155" strokeWidth={activeGeo ? "0.2" : "0.5"} strokeDasharray="3 3" opacity="0.25">
+          <g stroke="#1e293b" strokeWidth={activeGeo ? "0.2" : "0.5"} strokeDasharray="3 3" opacity="0.3">
             <line x1="0" y1="100" x2="1000" y2="100" />
             <line x1="0" y1="180" x2="1000" y2="180" />
-            <line x1="0" y1="250" x2="1000" y2="250" strokeDasharray="none" strokeWidth={activeGeo ? "0.3" : "0.8"} opacity="0.35" />
+            <line x1="0" y1="250" x2="1000" y2="250" strokeDasharray="none" strokeWidth={activeGeo ? "0.3" : "0.7"} opacity="0.4" />
             <line x1="0" y1="330" x2="1000" y2="330" />
             <line x1="0" y1="410" x2="1000" y2="410" />
             <line x1="160" y1="0" x2="160" y2="500" />
             <line x1="330" y1="0" x2="330" y2="500" />
-            <line x1="500" y1="0" x2="500" y2="500" strokeDasharray="none" strokeWidth={activeGeo ? "0.3" : "0.8"} opacity="0.35" />
+            <line x1="500" y1="0" x2="500" y2="500" strokeDasharray="none" strokeWidth={activeGeo ? "0.3" : "0.7"} opacity="0.4" />
             <line x1="670" y1="0" x2="670" y2="500" />
             <line x1="840" y1="0" x2="840" y2="500" />
           </g>
 
-          {/* HIGH-PRECISION REALISTIC WORLD CONTINENTS */}
-          <g fill="url(#landGrad)" stroke="#334155" strokeWidth={activeGeo ? "0.3" : "0.6"} strokeLinejoin="round" opacity="0.88">
-            {/* 1. NORTH AMERICA (Alaska, Canada, USA, Florida, Mexico, Baja) */}
-            <path d="M 68 85 C 75 75 88 68 115 62 C 140 58 165 52 195 56 C 220 60 250 68 280 80 C 300 88 310 102 295 116 C 280 125 260 120 250 140 C 242 155 255 170 248 186 C 242 200 245 215 235 220 C 225 224 212 210 205 225 C 195 232 182 225 175 238 C 168 226 156 215 146 195 C 132 175 120 155 102 138 C 85 122 72 105 68 85 Z" />
-            {/* Greenland */}
-            <path d="M 330 40 C 350 35 380 32 395 55 C 392 75 382 90 355 94 C 338 88 330 65 330 40 Z" />
-            {/* Florida Peninsula */}
-            <path d="M 235 185 C 240 195 245 208 242 220 C 236 220 230 205 232 190 Z" />
-            {/* Caribbean Islands */}
-            <circle cx="260" cy="230" r="2.5" />
-            <circle cx="275" cy="235" r="2" />
+          {/* 100% AUTHENTIC GIS NATURAL EARTH SOVEREIGN COUNTRY POLYGONS (All 177 Countries) */}
+          <g strokeLinejoin="round" strokeLinecap="round">
+            {GIS_WORLD_COUNTRIES.map((feat) => {
+              const alpha2 = feat.alpha2;
+              const isBuyerCountry = Boolean(alpha2 && GIS_BUYER_COUNTRIES[alpha2]);
+              const isCurrentZoomed = activeGeo?.code === alpha2;
+              const isHovered = hoveredCountryFeature?.numId === feat.numId;
 
-            {/* 2. SOUTH AMERICA */}
-            <path d="M 245 240 C 270 234 305 242 335 260 C 355 280 358 315 340 345 C 325 385 305 425 292 455 C 282 452 275 435 278 405 C 272 370 258 330 244 285 C 238 260 240 245 245 240 Z" />
+              // Stroke width adjusts to zoom scale
+              const baseStrokeWidth = activeGeo ? 0.35 : 0.55;
 
-            {/* 3. EUROPE & SCANDINAVIA */}
-            {/* Scandinavia */}
-            <path d="M 495 55 C 515 48 535 52 546 68 C 540 92 528 112 510 115 C 495 105 488 80 495 55 Z" />
-            {/* British Isles (UK & Ireland) */}
-            <path d="M 466 112 C 476 104 485 110 487 122 C 484 134 472 138 466 130 Z" />
-            <path d="M 452 118 C 460 115 463 125 458 132 C 452 130 450 124 452 118 Z" />
-            {/* Western & Central Europe */}
-            <path d="M 478 126 C 505 120 535 122 555 142 C 548 162 525 160 508 174 C 492 170 478 158 468 142 Z" />
-            {/* Iberian Peninsula (Spain/Portugal) */}
-            <path d="M 455 165 C 475 160 486 175 480 192 C 462 196 450 185 455 165 Z" />
-            {/* Italy */}
-            <path d="M 512 166 C 522 178 534 195 528 204 C 522 202 516 182 512 166 Z" />
+              // Colors based on country status
+              let fill = "#151e2e";
+              let stroke = "#243247";
+              let opacity = 0.88;
 
-            {/* 4. AFRICA & MADAGASCAR */}
-            <path d="M 465 200 C 500 192 550 200 580 220 C 605 245 615 275 600 315 C 585 355 565 395 532 414 C 510 395 492 340 472 295 C 450 260 445 225 465 200 Z" />
-            {/* Madagascar */}
-            <path d="M 610 348 C 622 355 620 385 612 396 C 602 388 602 365 610 348 Z" />
+              if (isBuyerCountry) {
+                fill = isCurrentZoomed ? "#064e3b" : "url(#buyerCountryGrad)";
+                stroke = isCurrentZoomed ? "#34d399" : isHovered ? "#38bdf8" : "#10b981";
+                opacity = isCurrentZoomed ? 0.98 : 0.92;
+              } else if (isHovered) {
+                fill = "#1e293b";
+                stroke = "#475569";
+              }
 
-            {/* 5. MIDDLE EAST & ASIA */}
-            {/* Arabian Peninsula */}
-            <path d="M 570 202 C 605 205 632 222 638 248 C 625 268 595 265 578 245 C 568 225 565 210 570 202 Z" />
-            {/* Indian Subcontinent */}
-            <path d="M 645 210 C 675 212 702 230 698 268 C 688 295 675 305 664 285 C 650 255 642 228 645 210 Z" />
-            {/* Sri Lanka */}
-            <circle cx="690" cy="305" r="3" />
-            {/* Central & Northern Asia (Siberia to East Coast) */}
-            <path d="M 550 120 C 620 88 710 75 800 78 C 880 92 925 115 905 145 C 860 160 805 172 755 186 C 690 196 615 182 550 120 Z" />
-            {/* China & East Coast */}
-            <path d="M 720 185 C 765 180 815 192 824 225 C 810 252 770 258 732 232 Z" />
-            {/* Korean Peninsula */}
-            <path d="M 830 180 C 844 184 842 202 832 205 C 826 195 826 186 830 180 Z" />
-            {/* Japanese Archipelago */}
-            <path d="M 865 168 C 885 158 892 175 870 208 C 856 205 855 185 865 168 Z" />
-            {/* Taiwan */}
-            <circle cx="810" cy="245" r="2.5" />
-
-            {/* 6. SOUTHEAST ASIA & MARITIME */}
-            {/* Indochina (Vietnam, Thailand, Malaysia) */}
-            <path d="M 725 230 C 755 232 774 255 765 285 C 748 285 735 260 725 230 Z" />
-            {/* Maritime Southeast Asia */}
-            <path d="M 730 305 C 755 320 748 335 722 318 Z" /> {/* Sumatra */}
-            <path d="M 770 300 C 802 304 795 328 772 324 Z" /> {/* Borneo */}
-            <path d="M 760 340 C 800 345 788 355 756 350 Z" /> {/* Java */}
-            <path d="M 812 242 C 830 255 825 282 812 268 Z" /> {/* Philippines */}
-
-            {/* 7. AUSTRALIA & OCEANIA */}
-            <path d="M 815 330 C 850 318 890 332 905 370 C 892 415 842 425 808 385 C 798 355 802 338 815 330 Z" />
-            {/* Tasmania */}
-            <circle cx="875" cy="445" r="3.5" />
-            {/* New Zealand */}
-            <path d="M 940 405 C 955 418 948 448 935 435 Z" />
+              return (
+                <path
+                  key={`country-${feat.numId}`}
+                  d={feat.d}
+                  fill={fill}
+                  stroke={stroke}
+                  strokeWidth={isCurrentZoomed ? baseStrokeWidth * 1.5 : isHovered ? baseStrokeWidth * 1.3 : baseStrokeWidth}
+                  opacity={opacity}
+                  filter={isCurrentZoomed ? "url(#emeraldGlow)" : undefined}
+                  className="transition-colors duration-200 cursor-pointer"
+                  onMouseEnter={() => {
+                    setHoveredCountryFeature(feat);
+                    if (alpha2) {
+                      const stat = countryStats.find((s) => s.code === alpha2) || null;
+                      onHoverHub(stat);
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredCountryFeature(null);
+                    onHoverHub(null);
+                  }}
+                  onClick={() => {
+                    if (alpha2 && GIS_BUYER_COUNTRIES[alpha2]) {
+                      handleCountryZoom(alpha2);
+                    }
+                  }}
+                />
+              );
+            })}
           </g>
-
-          {/* HIGHLIGHTED ACTIVE ZOOM COUNTRY REGIONAL OVERLAY */}
-          {activeGeo && (
-            <g>
-              {/* Regional Ambient Backdrop Glow */}
-              <rect
-                x={activeGeo.zoomBounds.x}
-                y={activeGeo.zoomBounds.y}
-                width={activeGeo.zoomBounds.width}
-                height={activeGeo.zoomBounds.height}
-                fill="none"
-                stroke="#10b981"
-                strokeWidth={activeGeo.zoomBounds.width * 0.008}
-                strokeDasharray={`${activeGeo.zoomBounds.width * 0.03} ${activeGeo.zoomBounds.width * 0.02}`}
-                opacity="0.3"
-              />
-
-              {/* Centroid Radar Pulse in Zoom Mode */}
-              <circle
-                cx={activeGeo.centroid.x}
-                cy={activeGeo.centroid.y}
-                r={activeGeo.zoomBounds.width * 0.3}
-                fill="#10b981"
-                opacity="0.04"
-              />
-              <circle
-                cx={activeGeo.centroid.x}
-                cy={activeGeo.centroid.y}
-                r={activeGeo.zoomBounds.width * 0.15}
-                fill="#10b981"
-                opacity="0.08"
-              />
-            </g>
-          )}
 
           {/* DYNAMIC ANIMATED CARGO PATHS & FLOW COMETS (Global View) */}
           {!activeGeo &&
             visibleCountries.map((c, index) => {
               if (c.code === "BD") return null;
+              const buyerGeo = GIS_BUYER_COUNTRIES[c.code];
+              if (!buyerGeo) return null;
 
-              // Generate curved Bezier arc
-              const midX = (c.x + chittagongPort.x) / 2;
-              const midY = Math.min(c.y, chittagongPort.y) - 45 - (index % 3) * 6;
-              const arcId = `cargo-arc-${c.code}`;
-              const pathD = `M ${c.x} ${c.y} Q ${midX} ${midY} ${chittagongPort.x} ${chittagongPort.y}`;
+              const startX = buyerGeo.centroid.x;
+              const startY = buyerGeo.centroid.y;
+              const endX = ctgCenter.x;
+              const endY = ctgCenter.y;
+
+              // Generate graceful curved Bezier arc
+              const midX = (startX + endX) / 2;
+              const midY = Math.min(startY, endY) - 35 - (index % 3) * 5;
+              const arcId = `cargo-arc-gis-${c.code}`;
+              const pathD = `M ${startX} ${startY} Q ${midX} ${midY} ${endX} ${endY}`;
               const isHovered = hoveredHub?.code === c.code || selectedHub?.code === c.code;
               const duration = `${(3.2 + (index % 4) * 0.4).toFixed(1)}s`;
 
@@ -377,7 +317,7 @@ export function RealisticWorldMap({
                     stroke={isHovered ? "#10b981" : "#059669"}
                     strokeWidth={isHovered ? 2.5 : 1.2}
                     strokeDasharray={isHovered ? "6 3" : "4 5"}
-                    strokeOpacity={isHovered ? 0.95 : 0.4}
+                    strokeOpacity={isHovered ? 0.95 : 0.45}
                     className="transition-all duration-300"
                   />
 
@@ -408,17 +348,17 @@ export function RealisticWorldMap({
           {/* CHITTAGONG PORT (HQ) CENTRAL RADAR EPICENTER (Global View) */}
           {!activeGeo && (
             <g
-              transform={`translate(${chittagongPort.x}, ${chittagongPort.y})`}
+              transform={`translate(${ctgCenter.x}, ${ctgCenter.y})`}
               className="cursor-pointer"
               onClick={() => handleCountryZoom("BD")}
             >
-              <circle r="26" fill="#10b981" opacity="0.1" className="animate-ping" />
-              <circle r="16" fill="#10b981" opacity="0.25" />
-              <circle r="9" fill="#059669" stroke="#34d399" strokeWidth="1.5" />
-              <circle r="4" fill="#ffffff" />
+              <circle r="24" fill="#10b981" opacity="0.1" className="animate-ping" />
+              <circle r="15" fill="#10b981" opacity="0.25" />
+              <circle r="8" fill="#059669" stroke="#34d399" strokeWidth="1.5" />
+              <circle r="3.5" fill="#ffffff" />
 
               {/* HQ Label Tag */}
-              <g transform="translate(0, 18)">
+              <g transform="translate(0, 16)">
                 <rect
                   x="-62"
                   y="-3"
@@ -449,24 +389,29 @@ export function RealisticWorldMap({
           {!activeGeo &&
             visibleCountries.map((c) => {
               if (c.code === "BD") return null;
+              const buyerGeo = GIS_BUYER_COUNTRIES[c.code];
+              if (!buyerGeo) return null;
+
               const isHovered = hoveredHub?.code === c.code || selectedHub?.code === c.code;
               const radius = Math.max(5, Math.min(10, Math.sqrt(c.visitors) / 3));
+              const cx = buyerGeo.centroid.x;
+              const cy = buyerGeo.centroid.y;
 
               return (
                 <g
                   key={`hub-node-${c.code}`}
-                  transform={`translate(${c.x}, ${c.y})`}
+                  transform={`translate(${cx}, ${cy})`}
                   className="cursor-pointer group"
                   onMouseEnter={() => onHoverHub(c)}
                   onMouseLeave={() => onHoverHub(null)}
                   onClick={() => handleCountryZoom(c.code)}
                 >
-                  <circle r="20" fill="transparent" />
+                  <circle r="18" fill="transparent" />
 
                   {/* Activity Pulse */}
                   {c.activeNow && (
                     <circle
-                      r={radius + 5}
+                      r={radius + 4}
                       fill={isHovered ? "#38bdf8" : "#0284c7"}
                       opacity={isHovered ? 0.6 : 0.3}
                       className="animate-pulse"
@@ -494,7 +439,7 @@ export function RealisticWorldMap({
                       fill={isHovered ? "#0f172a" : "#020617"}
                       stroke={isHovered ? "#38bdf8" : "#334155"}
                       strokeWidth="0.8"
-                      opacity={isHovered ? 1 : 0.88}
+                      opacity={isHovered ? 1 : 0.9}
                     />
                     <text
                       x="0"
@@ -512,33 +457,34 @@ export function RealisticWorldMap({
               );
             })}
 
-          {/* ZOOMED COUNTRY VIEW: DISTRICT & CITY PINPOINTS */}
+          {/* ZOOMED COUNTRY VIEW: MATHEMATICALLY EXACT DISTRICT & CITY PINPOINTS */}
           {activeGeo && (
             <g>
-              {/* Trade Line connecting country cities to Chittagong Port (HQ) if within bounds */}
+              {/* Internal Transit Arcs for Bangladesh (HQ to Regional Zones) */}
               {activeGeo.code === "BD" && (
-                <g stroke="#10b981" strokeWidth="0.8" strokeDasharray="2 2" opacity="0.6">
-                  {/* Internal transit lines between Chittagong HQ and Dhaka/Narayanganj/Khulna */}
-                  <line x1="724" y1="248" x2="712" y2="236" />
-                  <line x1="724" y1="248" x2="716" y2="240" />
-                  <line x1="724" y1="248" x2="698" y2="252" />
+                <g stroke="#10b981" strokeWidth="0.6" strokeDasharray="1.5 1.5" opacity="0.7">
+                  <line x1={ctgCenter.x} y1={ctgCenter.y} x2={728.9} y2={173.3} />
+                  <line x1={ctgCenter.x} y1={ctgCenter.y} x2={729.2} y2={173.9} />
+                  <line x1={ctgCenter.x} y1={ctgCenter.y} x2={726.0} y2={176.7} />
                 </g>
               )}
 
-              {/* Render City and District Nodes */}
+              {/* Render Precise City and District Nodes */}
               {activeGeo.cities.map((city, index) => {
                 const isHq = city.isHq;
                 const isHovered = hoveredCity?.id === city.id;
-                // Responsive SVG scaling based on zoom width
+
+                // Scaling relative to country zoom bounding box width
                 const scaleFactor = activeGeo.zoomBounds.width / 1000;
-                const nodeRadius = Math.max(0.8, scaleFactor * 20);
-                const badgeWidth = Math.max(12, scaleFactor * 150);
+                const nodeRadius = Math.max(0.9, scaleFactor * 22);
+                const badgeWidth = Math.max(13, scaleFactor * 160);
                 const badgeHeight = Math.max(2.8, scaleFactor * 32);
-                const fontSize = Math.max(1.1, scaleFactor * 14);
-                // Stagger label position above/below pin to avoid overlap
+                const fontSize = Math.max(1.15, scaleFactor * 15);
+
+                // Alternating vertical offset to prevent any label overlap
                 const isAbove = index % 2 === 0;
                 const yOffset = isAbove
-                  ? -nodeRadius - badgeHeight * 0.65
+                  ? -nodeRadius - badgeHeight * 0.7
                   : nodeRadius + badgeHeight * 0.75;
 
                 return (
@@ -556,26 +502,26 @@ export function RealisticWorldMap({
                     }}
                   >
                     {/* Generous touch target */}
-                    <circle r={nodeRadius * 2.5} fill="transparent" />
+                    <circle r={nodeRadius * 2.8} fill="transparent" />
 
-                    {/* Outer Radar Rings */}
+                    {/* Outer Pulsing Beacon */}
                     <circle
-                      r={nodeRadius * 2}
+                      r={nodeRadius * 2.2}
                       fill={isHq ? "#10b981" : "#38bdf8"}
-                      opacity={isHovered ? 0.45 : 0.2}
+                      opacity={isHovered ? 0.5 : 0.2}
                       className="animate-pulse"
                     />
 
-                    {/* Core Pin */}
+                    {/* Central Solid Pin */}
                     <circle
                       r={nodeRadius}
                       fill={isHq ? "#10b981" : isHovered ? "#38bdf8" : "#0284c7"}
                       stroke="#ffffff"
-                      strokeWidth={Math.max(0.2, scaleFactor * 2)}
+                      strokeWidth={Math.max(0.2, scaleFactor * 2.2)}
                       filter={isHq ? "url(#emeraldGlow)" : "url(#cyanGlow)"}
                     />
 
-                    {/* Small inner dot */}
+                    {/* Core White Dot */}
                     <circle r={nodeRadius * 0.35} fill="#ffffff" />
 
                     {/* City Name & Role Badge */}
@@ -593,12 +539,12 @@ export function RealisticWorldMap({
                       />
                       <text
                         x="0"
-                        y={badgeHeight * 0.18}
+                        y={badgeHeight * 0.2}
                         textAnchor="middle"
                         fill={isHq ? "#34d399" : isHovered ? "#ffffff" : "#e2e8f0"}
                         fontSize={fontSize}
                         fontWeight="bold"
-                        className="select-none"
+                        className="select-none tracking-tight"
                       >
                         {isHq ? "★ " : "📍 "}
                         {city.nameBn.split("(")[0].trim()}
@@ -734,7 +680,7 @@ export function RealisticWorldMap({
 
       {/* Bottom Quick Geo Strip */}
       <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 text-xs">
-        {Object.values(COUNTRIES_GEO_DATA).slice(0, 6).map((item) => {
+        {Object.values(GIS_BUYER_COUNTRIES).slice(0, 6).map((item) => {
           const isSelected = activeGeo?.code === item.code;
           return (
             <button

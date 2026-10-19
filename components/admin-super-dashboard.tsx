@@ -22,6 +22,7 @@ import {
 import type { SuperDashboardData, CountryStat, CityHubStat } from "@/lib/analytics-service";
 import { RealisticWorldMap } from "@/components/realistic-world-map";
 import { CountryIntelligenceDrawer } from "@/components/country-intelligence-drawer";
+import { CHITTAGONG_EPICENTER } from "@/lib/world-gis-data";
 
 interface AdminSuperDashboardProps {
   initialData: SuperDashboardData;
@@ -82,7 +83,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
     });
   };
 
-  const chittagongPort = { x: 720, y: 245, name: "চট্টগ্রাম বন্দর (HQ & Yard)" };
+  const chittagongPort = CHITTAGONG_EPICENTER;
 
   // Generate SVG path for trend chart
   const trendMax = Math.max(...data.dailyTrends.map((d) => d.visitors), 10);
