@@ -36,13 +36,13 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex flex-col md:flex-row text-slate-900 dark:text-slate-100">
+    <div className="h-screen overflow-hidden bg-slate-100 dark:bg-slate-950 flex flex-col md:flex-row text-slate-900 dark:text-slate-100">
       {/* Mobile Sticky Top Header, Drawer, and Bottom Bar */}
       <AdminMobileNav user={user} />
 
-      {/* Desktop Sidebar (Hidden on mobile) */}
-      <aside className="hidden md:flex md:w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex-col shrink-0">
-        <div className="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      {/* Desktop Sidebar (100% Fixed at full viewport height on the left) */}
+      <aside className="hidden md:flex md:w-64 h-screen bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex-col shrink-0 overflow-y-auto z-30 select-none">
+        <div className="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
           <BrandLogo size="sm" href="/admin" />
         </div>
 
@@ -141,7 +141,7 @@ export default async function AdminLayout({
         </nav>
 
         {/* Bottom Actions */}
-        <div className="p-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
+        <div className="p-3 border-t border-slate-200 dark:border-slate-800 space-y-2 shrink-0">
           <Link
             href="/en"
             target="_blank"
@@ -156,8 +156,8 @@ export default async function AdminLayout({
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto p-3.5 sm:p-6 md:p-8 pb-24 md:pb-8">
+      {/* Main Content Area (Independently scrollable) */}
+      <main className="flex-1 h-screen overflow-y-auto p-3.5 sm:p-6 md:p-8 pb-24 md:pb-8">
         <div className="max-w-6xl mx-auto space-y-6">{children}</div>
       </main>
     </div>
