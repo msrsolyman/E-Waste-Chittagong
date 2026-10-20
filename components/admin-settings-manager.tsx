@@ -4,6 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MediaUploader } from "@/components/media-uploader";
+import { useAdminLocale } from "@/lib/admin-i18n";
 import {
   Sliders,
   CheckCircle2,
@@ -56,6 +57,7 @@ export function AdminSettingsManager({
   initialProductsBannerUrl = DEFAULT_PRODUCTS_BANNER,
   initialAboutBannerUrl = DEFAULT_ABOUT_BANNER,
 }: AdminSettingsManagerProps) {
+  const { t, locale } = useAdminLocale();
   const [activeTab, setActiveTab] = React.useState<
     "contact" | "gallery" | "process" | "services" | "products" | "about"
   >("contact");
@@ -251,14 +253,14 @@ export function AdminSettingsManager({
             setActiveTab("contact");
             setSaveStatus(null);
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === "contact"
               ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
           <PhoneCall className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Contact Page Banner</span>
+          <span>{locale === "bn" ? "যোগাযোগ পেজ ব্যানার" : "Contact Page Banner"}</span>
         </button>
 
         <button
@@ -267,14 +269,14 @@ export function AdminSettingsManager({
             setActiveTab("gallery");
             setSaveStatus(null);
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === "gallery"
               ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
           <Camera className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Media Gallery Banner</span>
+          <span>{locale === "bn" ? "মিডিয়া গ্যালারি ব্যানার" : "Media Gallery Banner"}</span>
         </button>
 
         <button
@@ -283,14 +285,14 @@ export function AdminSettingsManager({
             setActiveTab("process");
             setSaveStatus(null);
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === "process"
               ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
           <Workflow className="w-3.5 h-3.5 text-teal-600" />
-          <span>Work Process Banner</span>
+          <span>{locale === "bn" ? "কার্যপ্রক্রিয়া ব্যানার" : "Work Process Banner"}</span>
         </button>
 
         <button
@@ -299,14 +301,14 @@ export function AdminSettingsManager({
             setActiveTab("services");
             setSaveStatus(null);
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === "services"
               ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
           <Wrench className="w-3.5 h-3.5 text-cyan-600" />
-          <span>Corporate Services Banner</span>
+          <span>{locale === "bn" ? "সেবাসমূহ ব্যানার" : "Corporate Services Banner"}</span>
         </button>
 
         <button
@@ -315,14 +317,14 @@ export function AdminSettingsManager({
             setActiveTab("products");
             setSaveStatus(null);
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === "products"
               ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
           <Package className="w-3.5 h-3.5 text-blue-600" />
-          <span>Products Catalogue Banner</span>
+          <span>{locale === "bn" ? "পণ্য ক্যাটালগ ব্যানার" : "Products Catalogue Banner"}</span>
         </button>
 
         <button
@@ -331,14 +333,14 @@ export function AdminSettingsManager({
             setActiveTab("about");
             setSaveStatus(null);
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === "about"
               ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
           <Layers className="w-3.5 h-3.5 text-purple-600" />
-          <span>About Us Page Banner</span>
+          <span>{locale === "bn" ? "আমাদের সম্পর্কে ব্যানার" : "About Us Page Banner"}</span>
         </button>
       </div>
 

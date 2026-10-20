@@ -24,6 +24,7 @@ import {
   Camera,
 } from "lucide-react";
 import { MediaUploader } from "@/components/media-uploader";
+import { useAdminLocale } from "@/lib/admin-i18n";
 
 export interface GalleryItemData {
   id: string;
@@ -52,6 +53,7 @@ export const getVideoPoster = (url: string) => {
 };
 
 export function AdminGalleryManager({ initialItems }: { initialItems: GalleryItemData[] }) {
+  const { t, locale } = useAdminLocale();
   const [items, setItems] = React.useState<GalleryItemData[]>(initialItems);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedCategory, setSelectedCategory] = React.useState("ALL");
@@ -311,7 +313,7 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search gallery assets by title, caption, or path..."
+            placeholder={t("gallery.search_placeholder", "Search gallery assets by title, caption, or path...")}
             className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
           {searchQuery && (
@@ -333,15 +335,25 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
               const isActive = selectedCategory === cat;
               const label =
                 cat === "ALL"
-                  ? "All"
-                  : cat.charAt(0) + cat.slice(1).toLowerCase();
+                  ? (locale === "bn" ? "সব মিডিয়া" : "All")
+                  : cat === "VIDEOS"
+                  ? (locale === "bn" ? "ভিডিও" : "Videos")
+                  : cat === "PHOTOS"
+                  ? (locale === "bn" ? "স্থিরচিত্র" : "Photos")
+                  : cat === "MATERIAL"
+                  ? (locale === "bn" ? "উপাদান / স্ক্র্যাপ" : "Material")
+                  : cat === "FACILITY"
+                  ? (locale === "bn" ? "ইয়ার্ড ফ্যাসিলিটি" : "Facility")
+                  : cat === "DISMANTLING"
+                  ? (locale === "bn" ? "ডিসম্যান্তলিং" : "Dismantling")
+                  : (locale === "bn" ? "প্রসেসিং" : "Processing");
 
               return (
                 <button
                   key={cat}
                   type="button"
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition flex items-center gap-1.5 whitespace-nowrap ${
+                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
                     isActive
                       ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs"
                       : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
@@ -370,17 +382,19 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
             title="Preview Public Gallery"
           >
             <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-            <span className="hidden sm:inline">Public Gallery</span>
+            <span className="hidden sm:inline">
+              {locale === "bn" ? "পাবলিক গ্যালারি" : "Public Gallery"}
+            </span>
           </Link>
 
           {/* Add Media Asset Button */}
           <button
             type="button"
             onClick={openCreateModal}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition whitespace-nowrap cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            <span>Add Media Asset</span>
+            <span>{t("gallery.add_media", "Add Media Asset")}</span>
           </button>
         </div>
       </div>
@@ -388,7 +402,15 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
       {/* Showing count indicator */}
       <div className="flex items-center justify-between text-xs text-slate-500 px-1">
         <span>
-          Showing <b>{filtered.length}</b> of <b>{items.length}</b> registered media assets ({counts.VIDEOS ?? 0} videos, {counts.PHOTOS ?? 0} photos)
+          {locale === "bn" ? (
+            <>
+              মোট <b>{items.length}</b> টির মধ্যে <b>{filtered.length}</b> টি মিডিয়া প্রদর্শিত হচ্ছে ({counts.VIDEOS ?? 0}টি ভিডিও, {counts.PHOTOS ?? 0}টি স্থিরচিত্র)
+            </>
+          ) : (
+            <>
+              Showing <b>{filtered.length}</b> of <b>{items.length}</b> registered media assets ({counts.VIDEOS ?? 0} videos, {counts.PHOTOS ?? 0} photos)
+            </>
+          )}
         </span>
         {(searchQuery || selectedCategory !== "ALL") && (
           <button
@@ -396,9 +418,9 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
               setSearchQuery("");
               setSelectedCategory("ALL");
             }}
-            className="text-emerald-600 dark:text-emerald-400 hover:underline text-[11px]"
+            className="text-emerald-600 dark:text-emerald-400 hover:underline text-[11px] cursor-pointer"
           >
-            Reset Filters
+            {t("inq.reset_filters", "Reset Filters")}
           </button>
         )}
       </div>
@@ -492,12 +514,12 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                         {isVerified ? (
                           <>
                             <ShieldCheck className="w-3.5 h-3.5 text-white" />
-                            <span>Confirmed</span>
+                            <span>{locale === "bn" ? "ভেরিফাইড" : "Confirmed"}</span>
                           </>
                         ) : (
                           <>
                             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                            <span>Illustrative</span>
+                            <span>{locale === "bn" ? "চিত্ররূপ" : "Illustrative"}</span>
                           </>
                         )}
                       </button>
@@ -511,7 +533,7 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                         setLightboxItem(item);
                       }}
                       className="absolute top-2.5 right-2.5 z-10 p-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-900 text-white backdrop-blur-xs transition shadow-sm opacity-90 hover:opacity-100 cursor-pointer"
-                      title={isVideo ? "Play Full Video" : "View Full Resolution"}
+                      title={isVideo ? (locale === "bn" ? "ভিডিও প্লে করুন" : "Play Full Video") : (locale === "bn" ? "বড় করে দেখুন" : "View Full Resolution")}
                     >
                       <Maximize2 className="w-3.5 h-3.5" />
                     </button>
@@ -524,12 +546,14 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                         {item.category}
                       </span>
                       <span className="text-[10px] font-mono font-medium text-slate-400">
-                        {isVideo ? "Video" : "Photo"}
+                        {isVideo
+                          ? (locale === "bn" ? "ভিডিও" : "Video")
+                          : (locale === "bn" ? "স্থিরচিত্র" : "Photo")}
                       </span>
                     </div>
 
                     <h4 className="font-bold text-xs text-slate-900 dark:text-white line-clamp-2 min-h-[32px] group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                      {item.titleEn}
+                      {locale === "bn" && item.titleBn ? item.titleBn : item.titleEn}
                     </h4>
 
                     {item.caption && (
@@ -547,22 +571,22 @@ export function AdminGalleryManager({ initialItems }: { initialItems: GalleryIte
                     <button
                       type="button"
                       onClick={() => handleCopyLink(item.imageUrl)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-white dark:hover:bg-slate-800 font-medium transition"
-                      title="Copy Image URL to use in products"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-white dark:hover:bg-slate-800 font-medium transition cursor-pointer"
+                      title={locale === "bn" ? "ছবির লিংক কপি করুন" : "Copy Image URL to use in products"}
                     >
                       <Copy className="w-3 h-3" />
-                      <span>Copy Link</span>
+                      <span>{locale === "bn" ? "লিংক কপি" : "Copy Link"}</span>
                     </button>
 
                     {/* Edit Button */}
                     <button
                       type="button"
                       onClick={() => openEditModal(item)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-slate-800 font-medium transition"
-                      title="Edit Titles and Category"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-slate-800 font-medium transition cursor-pointer"
+                      title={locale === "bn" ? "শিরোনাম ও বিবরণ সম্পাদনা" : "Edit Titles and Category"}
                     >
                       <Edit2 className="w-3 h-3 text-blue-600" />
-                      <span>Edit</span>
+                      <span>{locale === "bn" ? "সম্পাদনা" : "Edit"}</span>
                     </button>
                   </div>
 

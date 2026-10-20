@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Save, ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { MediaUploader } from "@/components/media-uploader";
+import { useAdminLocale } from "@/lib/admin-i18n";
 
 interface Category {
   id: string;
@@ -13,6 +14,7 @@ interface Category {
 }
 
 export function AdminProductForm({ categories }: { categories: Category[] }) {
+  const { t, locale } = useAdminLocale();
   const router = useRouter();
   const [activeTab, setActiveTab] = React.useState<"en" | "bn" | "zh" | "ja">("en");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -83,13 +85,13 @@ export function AdminProductForm({ categories }: { categories: Category[] }) {
       {/* General Configuration */}
       <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
         <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-          General Attributes & Logistics
+          {locale === "bn" ? "সাধারণ স্পেসিফিকেশন ও লজিস্টিকস" : "General Attributes & Logistics"}
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
           <div>
             <label className="block font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">
-              Category *
+              {locale === "bn" ? "ক্যাটাগরি *" : "Category *"}
             </label>
             <select
               required
@@ -107,15 +109,19 @@ export function AdminProductForm({ categories }: { categories: Category[] }) {
 
           <div>
             <label className="block font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">
-              Initial Status
+              {locale === "bn" ? "প্রাথমিক স্ট্যাটাস" : "Initial Status"}
             </label>
             <select
               value={formData.status}
               onChange={(e) => setFormData({ ...formData, status: e.target.value })}
               className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
             >
-              <option value="DRAFT">DRAFT (Awaiting Confirmation)</option>
-              <option value="PUBLISHED">PUBLISHED (Live on Website)</option>
+              <option value="DRAFT">
+                {locale === "bn" ? "ড্রাফট (অনুমোদনের অপেক্ষায়)" : "DRAFT (Awaiting Confirmation)"}
+              </option>
+              <option value="PUBLISHED">
+                {locale === "bn" ? "পাবলিশড (লাইভ প্রদর্শিত)" : "PUBLISHED (Live on Website)"}
+              </option>
             </select>
           </div>
 
@@ -390,16 +396,20 @@ export function AdminProductForm({ categories }: { categories: Category[] }) {
           className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Products</span>
+          <span>{locale === "bn" ? "পণ্য তালিকায় ফিরুন" : "Back to Products"}</span>
         </Link>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition disabled:opacity-50 cursor-pointer"
         >
           <Save className="w-4 h-4" />
-          <span>{isSubmitting ? "Saving..." : "Save Product Listing"}</span>
+          <span>
+            {isSubmitting
+              ? (locale === "bn" ? "সংরক্ষণ হচ্ছে..." : "Saving...")
+              : (locale === "bn" ? "পণ্য তালিকা সংরক্ষণ করুন" : "Save Product Listing")}
+          </span>
         </button>
       </div>
     </form>

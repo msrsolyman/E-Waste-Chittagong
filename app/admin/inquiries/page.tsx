@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { AdminInquiryPipeline } from "@/components/admin-inquiry-pipeline";
+import { AdminPageHeader } from "@/components/admin-page-header";
 import { Inbox } from "lucide-react";
 
 export default async function AdminInquiriesPage() {
@@ -15,17 +16,13 @@ export default async function AdminInquiriesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
-            <Inbox className="w-6 h-6 text-emerald-600" />
-            <span>Buyer Inquiry & RFQ Pipeline</span>
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Manage incoming international procurement inquiries, update statuses, and log internal quotation progress.
-          </p>
-        </div>
-      </div>
+      <AdminPageHeader
+        icon={<Inbox className="w-6 h-6 text-emerald-600" />}
+        titleKey="page.inquiries.title"
+        defaultTitle="Buyer Inquiry & RFQ Pipeline"
+        subtitleKey="page.inquiries.subtitle"
+        defaultSubtitle="Manage incoming international procurement inquiries, update statuses, and log internal quotation progress."
+      />
 
       <React.Suspense fallback={<div className="p-8 text-center text-xs text-slate-400">Loading inquiry pipeline...</div>}>
         <AdminInquiryPipeline initialInquiries={inquiries} />

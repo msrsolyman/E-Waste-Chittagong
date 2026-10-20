@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { formatDate } from "@/lib/utils";
+import { useAdminLocale } from "@/lib/admin-i18n";
 import {
   Search,
   Download,
@@ -31,6 +32,7 @@ export interface AuditLogRow {
 }
 
 export function AdminAuditLogViewer({ initialLogs }: { initialLogs: AuditLogRow[] }) {
+  const { t, locale } = useAdminLocale();
   const [logs] = React.useState<AuditLogRow[]>(initialLogs);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [actionFilter, setActionFilter] = React.useState("ALL");
@@ -126,7 +128,7 @@ export function AdminAuditLogViewer({ initialLogs }: { initialLogs: AuditLogRow[
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by action, email, name, IP or details..."
+              placeholder={t("audit.search_placeholder", "Search by action, email, name, IP or details...")}
               className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm"
             />
             {searchQuery && (
@@ -143,19 +145,19 @@ export function AdminAuditLogViewer({ initialLogs }: { initialLogs: AuditLogRow[
           <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl text-xs">
             {(
               [
-                { id: "ALL", label: "All Events", count: counts.ALL },
-                { id: "LOGIN", label: "Login", count: counts.LOGIN },
-                { id: "PRODUCT", label: "Product", count: counts.PRODUCT },
-                { id: "INQUIRY", label: "Inquiry", count: counts.INQUIRY },
-                { id: "CATEGORY", label: "Category", count: counts.CATEGORY },
-                { id: "USER", label: "User", count: counts.USER },
-                { id: "GALLERY", label: "Gallery", count: counts.GALLERY },
+                { id: "ALL", label: locale === "bn" ? "সব লগ" : "All Events", count: counts.ALL },
+                { id: "LOGIN", label: locale === "bn" ? "লগইন" : "Login", count: counts.LOGIN },
+                { id: "PRODUCT", label: locale === "bn" ? "পণ্য" : "Product", count: counts.PRODUCT },
+                { id: "INQUIRY", label: locale === "bn" ? "ইনকোয়ারি" : "Inquiry", count: counts.INQUIRY },
+                { id: "CATEGORY", label: locale === "bn" ? "ক্যাটাগরি" : "Category", count: counts.CATEGORY },
+                { id: "USER", label: locale === "bn" ? "ইউজার" : "User", count: counts.USER },
+                { id: "GALLERY", label: locale === "bn" ? "গ্যালারি" : "Gallery", count: counts.GALLERY },
               ] as const
             ).map((pfx) => (
               <button
                 key={pfx.id}
                 onClick={() => setActionFilter(pfx.id)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition flex items-center gap-1.5 ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition flex items-center gap-1.5 cursor-pointer ${
                   actionFilter === pfx.id
                     ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs"
                     : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
@@ -181,10 +183,14 @@ export function AdminAuditLogViewer({ initialLogs }: { initialLogs: AuditLogRow[
           <button
             onClick={handleExportCsv}
             disabled={isExporting}
-            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 shadow-xs transition active:scale-[0.98] disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 shadow-xs transition active:scale-[0.98] disabled:opacity-50 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5 text-emerald-600" />
-            <span>{isExporting ? "Exporting CSV..." : "Export Audit CSV"}</span>
+            <span>
+              {isExporting
+                ? (locale === "bn" ? "এক্সপোর্ট হচ্ছে..." : "Exporting CSV...")
+                : (locale === "bn" ? "অডিট CSV এক্সপোর্ট" : "Export Audit CSV")}
+            </span>
           </button>
         </div>
       </div>
@@ -192,7 +198,15 @@ export function AdminAuditLogViewer({ initialLogs }: { initialLogs: AuditLogRow[
       {/* Counter bar */}
       <div className="flex items-center justify-between text-xs text-slate-500 px-1">
         <span>
-          Displaying <strong>{filtered.length}</strong> of <strong>{logs.length}</strong> recorded security events
+          {locale === "bn" ? (
+            <>
+              মোট <strong>{logs.length}</strong> টির মধ্যে <strong>{filtered.length}</strong> টি অডিট ইভেন্ট প্রদর্শিত হচ্ছে
+            </>
+          ) : (
+            <>
+              Displaying <strong>{filtered.length}</strong> of <strong>{logs.length}</strong> recorded security events
+            </>
+          )}
         </span>
         {(searchQuery || actionFilter !== "ALL") && (
           <button
@@ -200,9 +214,9 @@ export function AdminAuditLogViewer({ initialLogs }: { initialLogs: AuditLogRow[
               setSearchQuery("");
               setActionFilter("ALL");
             }}
-            className="text-emerald-600 hover:underline text-[11px] font-medium"
+            className="text-emerald-600 hover:underline text-[11px] font-medium cursor-pointer"
           >
-            Reset all filters
+            {t("inq.reset_filters", "Reset all filters")}
           </button>
         )}
       </div>
@@ -213,12 +227,12 @@ export function AdminAuditLogViewer({ initialLogs }: { initialLogs: AuditLogRow[
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200/60 dark:border-slate-800">
               <tr>
-                <th className="py-3 px-4">Timestamp</th>
-                <th className="py-3 px-4">Action Code</th>
-                <th className="py-3 px-4">Operator</th>
-                <th className="py-3 px-4">Event Details</th>
-                <th className="py-3 px-4">IP Address</th>
-                <th className="py-3 px-4 text-right">Inspect</th>
+                <th className="py-3 px-4">{locale === "bn" ? "তারিখ ও সময়" : "Timestamp"}</th>
+                <th className="py-3 px-4">{locale === "bn" ? "অপারেশন কোড" : "Action Code"}</th>
+                <th className="py-3 px-4">{locale === "bn" ? "কর্মকর্তা" : "Operator"}</th>
+                <th className="py-3 px-4">{locale === "bn" ? "ইভেন্ট বিবরণ" : "Event Details"}</th>
+                <th className="py-3 px-4">{locale === "bn" ? "আইপি ঠিকানা" : "IP Address"}</th>
+                <th className="py-3 px-4 text-right">{locale === "bn" ? "নিরীক্ষণ" : "Inspect"}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">

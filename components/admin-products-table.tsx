@@ -23,6 +23,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { MediaUploader } from "@/components/media-uploader";
+import { useAdminLocale } from "@/lib/admin-i18n";
 
 export interface ProductRow {
   id: string;
@@ -62,6 +63,7 @@ export function AdminProductsTable({
   initialProducts: ProductRow[];
   categories?: CategoryOption[];
 }) {
+  const { t, locale } = useAdminLocale();
   const [products, setProducts] = React.useState<ProductRow[]>(initialProducts);
   const [updatingId, setUpdatingId] = React.useState<string | null>(null);
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -436,7 +438,7 @@ export function AdminProductsTable({
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="Search products by title, slug, grade, or specs..."
+              placeholder={t("prod.search_placeholder", "Search products by title, slug, grade, or specs...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -456,9 +458,9 @@ export function AdminProductsTable({
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
             >
-              <option value="ALL">All Categories</option>
+              <option value="ALL">{t("prod.all_categories", "All Categories")}</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.nameEn}
@@ -478,19 +480,27 @@ export function AdminProductsTable({
                   ? products.length
                   : products.filter((p) => p.status.toUpperCase() === st).length;
               const isActive = statusFilter === st;
+              const label =
+                st === "ALL"
+                  ? (locale === "bn" ? "সব" : "All")
+                  : st === "PUBLISHED"
+                  ? (locale === "bn" ? "পাবলিশড" : "Published")
+                  : st === "DRAFT"
+                  ? (locale === "bn" ? "ড্রাফট" : "Draft")
+                  : (locale === "bn" ? "আর্কাইভড" : "Archived");
 
               return (
                 <button
                   key={st}
                   type="button"
                   onClick={() => setStatusFilter(st)}
-                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition flex items-center gap-1.5 ${
+                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition flex items-center gap-1.5 cursor-pointer ${
                     isActive
                       ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs"
                       : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
                   }`}
                 >
-                  <span>{st === "ALL" ? "All" : st.charAt(0) + st.slice(1).toLowerCase()}</span>
+                  <span>{label}</span>
                   <span
                     className={`px-1.5 py-0.2 rounded-full text-[9px] ${
                       isActive
@@ -509,21 +519,21 @@ export function AdminProductsTable({
           <a
             href="/api/admin/products/export"
             download
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition shadow-xs cursor-pointer"
             title="Download CSV Catalogue"
           >
             <Download className="w-3.5 h-3.5 text-slate-500" />
-            <span className="hidden sm:inline">Export CSV</span>
+            <span className="hidden sm:inline">{t("inq.export_csv", "Export CSV")}</span>
           </a>
 
           {/* Add Product Button */}
           <button
             type="button"
             onClick={handleAddNew}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-sm whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-sm whitespace-nowrap cursor-pointer"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>Add Product</span>
+            <span>{t("prod.add_product", "Add Product")}</span>
           </button>
         </div>
       </div>
@@ -531,7 +541,15 @@ export function AdminProductsTable({
       {/* Showing count indicator */}
       <div className="flex items-center justify-between text-xs text-slate-500 px-1">
         <span>
-          Showing <b>{filteredProducts.length}</b> of <b>{products.length}</b> registered products
+          {locale === "bn" ? (
+            <>
+              মোট <b>{products.length}</b> টির মধ্যে <b>{filteredProducts.length}</b> টি পণ্য প্রদর্শিত হচ্ছে
+            </>
+          ) : (
+            <>
+              Showing <b>{filteredProducts.length}</b> of <b>{products.length}</b> registered products
+            </>
+          )}
         </span>
         {(searchQuery || statusFilter !== "ALL" || categoryFilter !== "ALL") && (
           <button
@@ -540,9 +558,9 @@ export function AdminProductsTable({
               setStatusFilter("ALL");
               setCategoryFilter("ALL");
             }}
-            className="text-emerald-600 dark:text-emerald-400 hover:underline text-[11px]"
+            className="text-emerald-600 dark:text-emerald-400 hover:underline text-[11px] cursor-pointer"
           >
-            Reset All Filters
+            {t("inq.reset_filters", "Reset All Filters")}
           </button>
         )}
       </div>
@@ -688,13 +706,13 @@ export function AdminProductsTable({
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200/60 dark:border-slate-800">
               <tr>
-                <th className="py-3 px-4">Product</th>
-                <th className="py-3 px-4">Category</th>
-                <th className="py-3 px-4">Languages</th>
-                <th className="py-3 px-4">Grade / MOQ</th>
-                <th className="py-3 px-4 text-center">Featured</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+                <th className="py-3 px-4">{locale === "bn" ? "পণ্য ও শিরোনাম" : "Product"}</th>
+                <th className="py-3 px-4">{locale === "bn" ? "ক্যাটাগরি" : "Category"}</th>
+                <th className="py-3 px-4">{locale === "bn" ? "উপলব্ধ ভাষা" : "Languages"}</th>
+                <th className="py-3 px-4">{locale === "bn" ? "গ্রেড / MOQ" : "Grade / MOQ"}</th>
+                <th className="py-3 px-4 text-center">{locale === "bn" ? "ফিচারড" : "Featured"}</th>
+                <th className="py-3 px-4">{locale === "bn" ? "স্ট্যাটাস" : "Status"}</th>
+                <th className="py-3 px-4 text-right">{locale === "bn" ? "অ্যাকশন" : "Actions"}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">

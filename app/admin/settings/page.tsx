@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { AdminSettingsManager } from "@/components/admin-settings-manager";
+import { AdminPageHeader } from "@/components/admin-page-header";
 import { Sliders } from "lucide-react";
 
 export const metadata = {
@@ -72,17 +73,13 @@ export default async function AdminSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
-            <Sliders className="w-6 h-6 text-emerald-600" />
-            <span>Site Settings & Banners</span>
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Manage public website hero banners, visual branding assets, and dynamic company configurations.
-          </p>
-        </div>
-      </div>
+      <AdminPageHeader
+        icon={<Sliders className="w-6 h-6 text-emerald-600" />}
+        titleKey="page.settings.title"
+        defaultTitle="Site Settings & Banners"
+        subtitleKey="page.settings.subtitle"
+        defaultSubtitle="Manage public website hero banners, visual branding assets, and dynamic company configurations."
+      />
 
       <AdminSettingsManager
         initialContactBannerUrl={contactBannerUrl}

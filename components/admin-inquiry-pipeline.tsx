@@ -28,6 +28,11 @@ import {
   ArrowUpDown,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import {
+  useAdminLocale,
+  translateCommodityCategory,
+  translateInquiryStatus,
+} from "@/lib/admin-i18n";
 
 export interface InquiryData {
   id: string;
@@ -45,20 +50,47 @@ export interface InquiryData {
   createdAt: string | Date;
 }
 
-const statusOptions = [
-  { value: "NEW", label: "New Lead", color: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border-blue-200 dark:border-blue-800" },
-  { value: "CONTACTED", label: "Contacted", color: "bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-800" },
-  { value: "IN_PROGRESS", label: "In Progress", color: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800" },
-  { value: "QUOTED", label: "Quoted", color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800" },
-  { value: "CLOSED", label: "Closed / Done", color: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700" },
-];
+const STATUS_CONFIG: Record<
+  string,
+  { color: string }
+> = {
+  NEW: {
+    color:
+      "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border-blue-200 dark:border-blue-800",
+  },
+  CONTACTED: {
+    color:
+      "bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-800",
+  },
+  IN_PROGRESS: {
+    color:
+      "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800",
+  },
+  QUOTED: {
+    color:
+      "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800",
+  },
+  CLOSED: {
+    color:
+      "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700",
+  },
+};
 
-export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: InquiryData[] }) {
+const STATUS_KEYS = ["NEW", "CONTACTED", "IN_PROGRESS", "QUOTED", "CLOSED"];
+
+export function AdminInquiryPipeline({
+  initialInquiries,
+}: {
+  initialInquiries: InquiryData[];
+}) {
+  const { t, locale } = useAdminLocale();
   const searchParams = useSearchParams();
   const initialStatusParam = searchParams.get("status");
 
   const [inquiries, setInquiries] = React.useState<InquiryData[]>(initialInquiries);
-  const [filterStatus, setFilterStatus] = React.useState<string>(initialStatusParam || "ALL");
+  const [filterStatus, setFilterStatus] = React.useState<string>(
+    initialStatusParam || "ALL"
+  );
   const [filterCountry, setFilterCountry] = React.useState<string>("ALL");
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [sortOrder, setSortOrder] = React.useState<"desc" | "asc">("desc");
@@ -67,7 +99,10 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
   // Structured quotation notes state
   const [notesState, setNotesState] = React.useState<Record<string, string>>({});
   const [updatingId, setUpdatingId] = React.useState<string | null>(null);
-  const [notice, setNotice] = React.useState<{ text: string; type: "success" | "error" | "info" } | null>(null);
+  const [notice, setNotice] = React.useState<{
+    text: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
 
   // Delete modal state
   const [deleteInquiry, setDeleteInquiry] = React.useState<InquiryData | null>(null);
@@ -76,7 +111,10 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
   // Printable RFQ slip state
   const [printInquiry, setPrintInquiry] = React.useState<InquiryData | null>(null);
 
-  const showNotice = (text: string, type: "success" | "error" | "info" = "success") => {
+  const showNotice = (
+    text: string,
+    type: "success" | "error" | "info" = "success"
+  ) => {
     setNotice({ text, type });
     setTimeout(() => setNotice(null), 4000);
   };
@@ -90,8 +128,8 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
   // Status Counts
   const counts = React.useMemo(() => {
     const res: Record<string, number> = { ALL: inquiries.length };
-    statusOptions.forEach((opt) => {
-      res[opt.value] = inquiries.filter((i) => i.status === opt.value).length;
+    STATUS_KEYS.forEach((st) => {
+      res[st] = inquiries.filter((i) => i.status === st).length;
     });
     return res;
   }, [inquiries]);
@@ -109,12 +147,21 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
         setInquiries((prev) =>
           prev.map((inq) => (inq.id === id ? { ...inq, status: newStatus } : inq))
         );
-        showNotice(`Inquiry status updated to ${newStatus}`);
+        const translatedStatus = translateInquiryStatus(newStatus, locale);
+        showNotice(
+          `${t("inq.status_updated", "Inquiry status updated to")} "${translatedStatus}"`
+        );
       } else {
-        showNotice("Failed to update status", "error");
+        showNotice(
+          locale === "bn" ? "স্ট্যাটাস পরিবর্তন ব্যর্থ হয়েছে" : "Failed to update status",
+          "error"
+        );
       }
     } catch {
-      showNotice("Network error updating status", "error");
+      showNotice(
+        locale === "bn" ? "নেটওয়ার্ক ত্রুটি ঘটেছে" : "Network error updating status",
+        "error"
+      );
     } finally {
       setUpdatingId(null);
     }
@@ -139,12 +186,23 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
         setInquiries((prev) =>
           prev.map((inq) => (inq.id === id ? { ...inq, adminNotes: notes } : inq))
         );
-        showNotice("Quotation notes and terms saved successfully!");
+        showNotice(
+          t(
+            "inq.notes_saved",
+            "Quotation notes and terms saved successfully!"
+          )
+        );
       } else {
-        showNotice("Failed to save quotation notes", "error");
+        showNotice(
+          locale === "bn" ? "নোট সংরক্ষণ ব্যর্থ হয়েছে" : "Failed to save quotation notes",
+          "error"
+        );
       }
     } catch {
-      showNotice("Network error saving notes", "error");
+      showNotice(
+        locale === "bn" ? "নেটওয়ার্ক ত্রুটি ঘটেছে" : "Network error saving notes",
+        "error"
+      );
     } finally {
       setUpdatingId(null);
     }
@@ -160,14 +218,21 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
       });
       if (res.ok) {
         setInquiries((prev) => prev.filter((i) => i.id !== deleteInquiry.id));
-        showNotice(`Inquiry ${deleteInquiry.referenceNo} deleted.`);
+        showNotice(
+          locale === "bn"
+            ? `ইনকোয়ারি ${deleteInquiry.referenceNo} মুছে ফেলা হয়েছে।`
+            : `Inquiry ${deleteInquiry.referenceNo} deleted.`
+        );
         setDeleteInquiry(null);
       } else {
         const err = await res.json();
-        showNotice(err.error || "Failed to delete inquiry", "error");
+        showNotice(err.error || (locale === "bn" ? "মুছে ফেলা ব্যর্থ হয়েছে" : "Failed to delete inquiry"), "error");
       }
     } catch {
-      showNotice("Network error deleting inquiry", "error");
+      showNotice(
+        locale === "bn" ? "নেটওয়ার্ক ত্রুটি ঘটেছে" : "Network error deleting inquiry",
+        "error"
+      );
     } finally {
       setDeleteLoading(false);
     }
@@ -176,7 +241,10 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
   // Copy to clipboard helper
   const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
-    showNotice(`${label} copied to clipboard!`, "info");
+    showNotice(
+      `${label} ${t("inq.copied_notice", "copied to clipboard!")}`,
+      "info"
+    );
   };
 
   // Filtered & Sorted Inquiries
@@ -223,7 +291,10 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
             )}
             <span>{notice.text}</span>
           </div>
-          <button onClick={() => setNotice(null)} className="text-slate-400 hover:text-slate-600">
+          <button
+            onClick={() => setNotice(null)}
+            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+          >
             <X className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -239,13 +310,16 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search reference, company, country, category, or email..."
+              placeholder={t(
+                "inq.search_placeholder",
+                "Search reference, company, country, category, or email..."
+              )}
               className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -257,9 +331,9 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
             <select
               value={filterCountry}
               onChange={(e) => setFilterCountry(e.target.value)}
-              className="px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
             >
-              <option value="ALL">All Countries</option>
+              <option value="ALL">{t("inq.all_countries", "All Countries")}</option>
               {distinctCountries.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -272,11 +346,15 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
           <button
             type="button"
             onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
-            title="Toggle Sort by Date"
+            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer"
+            title={t("inq.sort_toggle", "Toggle Sort by Date")}
           >
             <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-            <span>{sortOrder === "desc" ? "Newest First" : "Oldest First"}</span>
+            <span>
+              {sortOrder === "desc"
+                ? t("inq.sort_newest", "Newest First")
+                : t("inq.sort_oldest", "Oldest First")}
+            </span>
           </button>
         </div>
 
@@ -284,25 +362,20 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
         <div className="flex flex-wrap items-center gap-2">
           {/* Status Badges */}
           <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl overflow-x-auto">
-            {["ALL", "NEW", "CONTACTED", "IN_PROGRESS", "QUOTED", "CLOSED"].map((st) => {
+            {["ALL", ...STATUS_KEYS].map((st) => {
               const count = counts[st] ?? 0;
               const isActive = filterStatus === st;
-              const label =
-                st === "ALL"
-                  ? "All"
-                  : st === "IN_PROGRESS"
-                  ? "In Progress"
-                  : st.charAt(0) + st.slice(1).toLowerCase();
+              const label = translateInquiryStatus(st, locale);
 
               return (
                 <button
                   key={st}
                   type="button"
                   onClick={() => setFilterStatus(st)}
-                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition flex items-center gap-1.5 whitespace-nowrap ${
+                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
                     isActive
                       ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                   }`}
                 >
                   <span>{label}</span>
@@ -324,19 +397,30 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
           <a
             href="/api/admin/inquiries/export"
             download
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-sm whitespace-nowrap"
-            title="Download Inquiries Spreadsheet with Formula Injection Defense"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-sm whitespace-nowrap cursor-pointer"
+            title={t(
+              "inq.export_tooltip",
+              "Download Inquiries Spreadsheet with Formula Injection Defense"
+            )}
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Export CSV</span>
+            <span>{t("inq.export_csv", "Export CSV")}</span>
           </a>
         </div>
       </div>
 
       {/* Showing count indicator */}
-      <div className="flex items-center justify-between text-xs text-slate-500 px-1">
+      <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-1">
         <span>
-          Showing <b>{filtered.length}</b> of <b>{inquiries.length}</b> buyer inquiries
+          {locale === "bn" ? (
+            <>
+              মোট <b>{inquiries.length}</b> টির মধ্যে <b>{filtered.length}</b> টি বায়ার ইনকোয়ারি প্রদর্শিত হচ্ছে
+            </>
+          ) : (
+            <>
+              Showing <b>{filtered.length}</b> of <b>{inquiries.length}</b> buyer inquiries
+            </>
+          )}
         </span>
         {(searchQuery || filterStatus !== "ALL" || filterCountry !== "ALL") && (
           <button
@@ -345,9 +429,9 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
               setFilterStatus("ALL");
               setFilterCountry("ALL");
             }}
-            className="text-emerald-600 dark:text-emerald-400 hover:underline text-[11px]"
+            className="text-emerald-600 dark:text-emerald-400 hover:underline text-[11px] cursor-pointer"
           >
-            Reset Filters
+            {t("inq.reset_filters", "Reset Filters")}
           </button>
         )}
       </div>
@@ -355,15 +439,23 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
       {/* Inquiry Cards List */}
       <div className="space-y-3">
         {filtered.length === 0 ? (
-          <div className="p-12 text-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 text-xs">
+          <div className="p-12 text-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 text-xs">
             <Layers className="w-8 h-8 mx-auto text-slate-300 dark:text-slate-700 mb-2" />
-            <div>No inquiries match your current filters.</div>
+            <div>
+              {t("inq.no_results", "No inquiries match your current filters.")}
+            </div>
           </div>
         ) : (
           filtered.map((inq) => {
             const isExpanded = expandedId === inq.id;
-            const currentStatusObj =
-              statusOptions.find((s) => s.value === inq.status) || statusOptions[0];
+            const currentStatusColor =
+              STATUS_CONFIG[inq.status]?.color ||
+              "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700";
+
+            const translatedCat = translateCommodityCategory(
+              inq.interestedCategory,
+              locale
+            );
 
             // WhatsApp link generator with smart pre-filled template
             const rawPhone = inq.phoneOrWhatsApp || "";
@@ -412,17 +504,19 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                         </span>
                         {inq.interestedCategory && (
                           <span className="text-[11px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 px-2 py-0.5 rounded-md">
-                            {inq.interestedCategory}
+                            {translatedCat}
                           </span>
                         )}
                       </div>
 
-                      <div className="text-xs text-slate-500 flex flex-wrap items-center gap-3">
+                      <div className="text-xs text-slate-500 dark:text-slate-400 flex flex-wrap items-center gap-3">
                         <span className="font-medium text-slate-700 dark:text-slate-300">
                           {inq.name}
                         </span>
                         <span>·</span>
-                        <span className="font-mono text-slate-600 dark:text-slate-400">{inq.email}</span>
+                        <span className="font-mono text-slate-600 dark:text-slate-400">
+                          {inq.email}
+                        </span>
                         {inq.phoneOrWhatsApp && (
                           <>
                             <span>·</span>
@@ -444,11 +538,11 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                       value={inq.status}
                       disabled={updatingId === inq.id}
                       onChange={(e) => handleStatusChange(inq.id, e.target.value)}
-                      className={`text-xs font-bold uppercase tracking-wider px-2.5 py-1.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer transition ${currentStatusObj.color}`}
+                      className={`text-xs font-bold uppercase tracking-wider px-2.5 py-1.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer transition ${currentStatusColor}`}
                     >
-                      {statusOptions.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
+                      {STATUS_KEYS.map((st) => (
+                        <option key={st} value={st}>
+                          {translateInquiryStatus(st, locale)}
                         </option>
                       ))}
                     </select>
@@ -459,8 +553,11 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                         href={whatsappUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/80 hover:bg-emerald-100 transition"
-                        title="Open WhatsApp Chat with Pre-filled RFQ Template"
+                        className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/80 hover:bg-emerald-100 transition cursor-pointer"
+                        title={t(
+                          "inq.tooltip_whatsapp",
+                          "Open WhatsApp Chat with Pre-filled RFQ Template"
+                        )}
                       >
                         <MessageCircle className="w-4 h-4" />
                       </a>
@@ -468,8 +565,8 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                       <button
                         type="button"
                         onClick={() => handleCopy(inq.email, "Email")}
-                        className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-slate-600 transition"
-                        title="Copy Email"
+                        className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition cursor-pointer"
+                        title={t("inq.tooltip_copy_email", "Copy Email")}
                       >
                         <Copy className="w-4 h-4" />
                       </button>
@@ -478,8 +575,8 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                     {/* Direct Email Action */}
                     <a
                       href={mailtoUrl}
-                      className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/80 hover:bg-blue-100 transition"
-                      title="Send Quotation Draft Email"
+                      className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/80 hover:bg-blue-100 transition cursor-pointer"
+                      title={t("inq.tooltip_email", "Send Quotation Draft Email")}
                     >
                       <Mail className="w-4 h-4" />
                     </a>
@@ -488,8 +585,8 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                     <button
                       type="button"
                       onClick={() => setPrintInquiry(inq)}
-                      className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
-                      title="Print Official RFQ Slip"
+                      className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer"
+                      title={t("inq.tooltip_print", "Print Official RFQ Slip")}
                     >
                       <Printer className="w-4 h-4" />
                     </button>
@@ -498,8 +595,8 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                     <button
                       type="button"
                       onClick={() => setDeleteInquiry(inq)}
-                      className="p-2 rounded-xl bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 hover:bg-rose-100 transition border border-rose-200 dark:border-rose-900/60"
-                      title="Delete / Remove Spam Inquiry"
+                      className="p-2 rounded-xl bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 hover:bg-rose-100 transition border border-rose-200 dark:border-rose-900/60 cursor-pointer"
+                      title={t("inq.tooltip_delete", "Delete / Remove Spam Inquiry")}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -508,11 +605,17 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                     <button
                       type="button"
                       onClick={() => setExpandedId(isExpanded ? null : inq.id)}
-                      className="px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition flex items-center gap-1.5"
+                      className="px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition flex items-center gap-1.5 cursor-pointer"
                     >
-                      <span>{isExpanded ? "Hide" : "Details"}</span>
+                      <span>
+                        {isExpanded
+                          ? t("inq.hide", "Hide")
+                          : t("inq.details", "Details")}
+                      </span>
                       <ChevronDown
-                        className={`w-3.5 h-3.5 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                        className={`w-3.5 h-3.5 transition-transform ${
+                          isExpanded ? "rotate-180" : ""
+                        }`}
                       />
                     </button>
                   </div>
@@ -525,36 +628,41 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                       <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 space-y-1">
                         <div className="text-[10px] uppercase font-bold text-slate-400">
-                          Estimated Volume / Quantity
+                          {t("inq.volume_qty", "Estimated Volume / Quantity")}
                         </div>
                         <div className="font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
                           <Package className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>{inq.estimatedQty || "Custom / Spot Batch"}</span>
+                          <span>
+                            {inq.estimatedQty ||
+                              t("inq.custom_batch", "Custom / Spot Batch")}
+                          </span>
                         </div>
                       </div>
 
                       <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 space-y-1">
                         <div className="text-[10px] uppercase font-bold text-slate-400">
-                          Target Material Category
+                          {t("inq.target_category", "Target Material Category")}
                         </div>
                         <div className="font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
                           <Layers className="w-3.5 h-3.5 text-blue-600" />
-                          <span>{inq.interestedCategory || "General Scrap"}</span>
+                          <span>{translatedCat}</span>
                         </div>
                       </div>
 
                       <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 space-y-1">
                         <div className="text-[10px] uppercase font-bold text-slate-400">
-                          Contact Info & Country
+                          {t("inq.contact_country", "Contact Info & Country")}
                         </div>
                         <div className="font-medium text-slate-700 dark:text-slate-300 flex items-center justify-between">
                           <span>{inq.phoneOrWhatsApp || inq.email}</span>
                           <button
                             type="button"
-                            onClick={() => handleCopy(inq.phoneOrWhatsApp || inq.email, "Contact")}
-                            className="text-emerald-600 hover:underline text-[10px]"
+                            onClick={() =>
+                              handleCopy(inq.phoneOrWhatsApp || inq.email, "Contact")
+                            }
+                            className="text-emerald-600 hover:underline text-[10px] cursor-pointer"
                           >
-                            Copy
+                            {t("inq.copy", "Copy")}
                           </button>
                         </div>
                       </div>
@@ -563,7 +671,7 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                     {/* Buyer Message Content */}
                     <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 space-y-1.5 text-xs">
                       <div className="text-[10px] uppercase font-bold text-slate-400">
-                        Buyer Inquiry Message
+                        {t("inq.buyer_message", "Buyer Inquiry Message")}
                       </div>
                       <p className="text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
                         {inq.message}
@@ -576,17 +684,26 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                         <div className="flex items-center gap-2">
                           <DollarSign className="w-4 h-4 text-emerald-600" />
                           <h4 className="font-bold text-xs text-slate-900 dark:text-white">
-                            Commercial Quotation & Negotiation Dossier
+                            {t(
+                              "inq.quotation_dossier",
+                              "Commercial Quotation & Negotiation Dossier"
+                            )}
                           </h4>
                         </div>
                         <span className="text-[10px] text-slate-400">
-                          Internal Only · Secure Audit Record
+                          {t(
+                            "inq.internal_record",
+                            "Internal Only · Secure Audit Record"
+                          )}
                         </span>
                       </div>
 
                       <div className="space-y-2">
                         <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-                          Quotation Details, Pricing ($/MT), Incoterms, and Payment Terms:
+                          {t(
+                            "inq.quotation_desc",
+                            "Quotation Details, Pricing ($/MT), Incoterms, and Payment Terms:"
+                          )}
                         </label>
                         <textarea
                           rows={3}
@@ -598,27 +715,35 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                           onChange={(e) =>
                             setNotesState({ ...notesState, [inq.id]: e.target.value })
                           }
-                          placeholder="e.g. Quoted $4,850/MT CIF Yokohama Port. Terms: 30% TT deposit, 70% against BL copy. Assay sample sent via FedEx on Oct 16."
-                          className="w-full p-3 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-sans"
+                          placeholder={t(
+                            "inq.quotation_placeholder",
+                            "e.g. Quoted $4,850/MT CIF Yokohama Port. Terms: 30% TT deposit, 70% against BL copy. Assay sample sent via FedEx on Oct 16."
+                          )}
+                          className="w-full p-3 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         />
                       </div>
 
                       <div className="flex items-center justify-between pt-1">
                         <div className="text-[11px] text-slate-400">
-                          Changes logged to the immutable security audit trail upon saving.
+                          {t(
+                            "inq.audit_notice",
+                            "Changes logged to the immutable security audit trail upon saving."
+                          )}
                         </div>
                         <button
                           type="button"
                           disabled={updatingId === inq.id}
                           onClick={() => handleSaveNotes(inq.id)}
-                          className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition disabled:opacity-60 flex items-center gap-1.5"
+                          className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition disabled:opacity-60 flex items-center gap-1.5 cursor-pointer"
                         >
                           {updatingId === inq.id ? (
                             <Clock className="w-3.5 h-3.5 animate-spin" />
                           ) : (
                             <Save className="w-3.5 h-3.5" />
                           )}
-                          <span>Save Commercial Notes</span>
+                          <span>
+                            {t("inq.save_notes", "Save Commercial Notes")}
+                          </span>
                         </button>
                       </div>
                     </div>
@@ -641,18 +766,24 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                 <Trash2 className="w-6 h-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                Delete Buyer Inquiry?
+                {t("inq.delete_title", "Delete Buyer Inquiry?")}
               </h3>
             </div>
 
             <p className="text-xs text-slate-600 dark:text-slate-300">
-              Are you sure you want to permanently remove inquiry{" "}
-              <b>&ldquo;{deleteInquiry.referenceNo}&rdquo;</b> from{" "}
-              <b>&ldquo;{deleteInquiry.companyName}&rdquo;</b>?
+              {t(
+                "inq.delete_prompt",
+                "Are you sure you want to permanently remove inquiry"
+              )}{" "}
+              <b>&ldquo;{deleteInquiry.referenceNo}&rdquo;</b> (
+              {t("inq.from", "from")} <b>&ldquo;{deleteInquiry.companyName}&rdquo;</b>)?
             </p>
 
             <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 text-[11px] text-amber-800 dark:text-amber-300">
-              <b>Security Notice:</b> This action is recorded in the permanent audit trail. Only test inquiries or confirmed spam should be permanently removed.
+              {t(
+                "inq.delete_security_notice",
+                "Security Notice: This action is recorded in the permanent audit trail. Only test inquiries or confirmed spam should be permanently removed."
+              )}
             </div>
 
             <div className="flex items-center justify-end gap-2.5 pt-2">
@@ -660,18 +791,18 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                 type="button"
                 disabled={deleteLoading}
                 onClick={() => setDeleteInquiry(null)}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
               >
-                Cancel
+                {t("inq.cancel", "Cancel")}
               </button>
               <button
                 type="button"
                 disabled={deleteLoading}
                 onClick={confirmDelete}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 transition shadow-sm flex items-center gap-1.5"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 transition shadow-sm flex items-center gap-1.5 cursor-pointer"
               >
                 {deleteLoading && <Clock className="w-3.5 h-3.5 animate-spin" />}
-                <span>Confirm Delete</span>
+                <span>{t("inq.confirm_delete", "Confirm Delete")}</span>
               </button>
             </div>
           </div>
@@ -691,7 +822,10 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                   E-Waste <span className="text-emerald-600">Chittagong</span>
                 </div>
                 <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">
-                  B2B Scrap Material Procurement & Quotation Slip
+                  {t(
+                    "inq.print_slip_subtitle",
+                    "B2B Scrap Material Procurement & Quotation Slip"
+                  )}
                 </div>
               </div>
 
@@ -699,40 +833,70 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
                 <div className="font-mono text-sm font-bold text-slate-900 dark:text-white">
                   {printInquiry.referenceNo}
                 </div>
-                <div className="text-[11px] text-slate-500">{formatDate(printInquiry.createdAt)}</div>
+                <div className="text-[11px] text-slate-500">
+                  {formatDate(printInquiry.createdAt)}
+                </div>
               </div>
             </div>
 
             {/* Dossier Body */}
             <div className="grid grid-cols-2 gap-4 text-xs">
               <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 space-y-1">
-                <span className="text-[10px] uppercase font-bold text-slate-400">Client / Buyer</span>
-                <div className="font-bold text-slate-900 dark:text-white">{printInquiry.companyName}</div>
-                <div className="text-slate-600 dark:text-slate-300">{printInquiry.name}</div>
-                <div className="font-mono text-[11px] text-slate-500">{printInquiry.country}</div>
+                <span className="text-[10px] uppercase font-bold text-slate-400">
+                  {t("inq.client_buyer", "Client / Buyer")}
+                </span>
+                <div className="font-bold text-slate-900 dark:text-white">
+                  {printInquiry.companyName}
+                </div>
+                <div className="text-slate-600 dark:text-slate-300">
+                  {printInquiry.name}
+                </div>
+                <div className="font-mono text-[11px] text-slate-500">
+                  {printInquiry.country}
+                </div>
               </div>
 
               <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 space-y-1">
-                <span className="text-[10px] uppercase font-bold text-slate-400">Communication</span>
-                <div className="font-mono text-slate-700 dark:text-slate-200">{printInquiry.email}</div>
-                <div className="font-mono text-slate-700 dark:text-slate-200">{printInquiry.phoneOrWhatsApp || "N/A"}</div>
-                <div className="text-slate-500 font-semibold uppercase text-[10px]">Status: {printInquiry.status}</div>
+                <span className="text-[10px] uppercase font-bold text-slate-400">
+                  {t("inq.communication", "Communication")}
+                </span>
+                <div className="font-mono text-slate-700 dark:text-slate-200">
+                  {printInquiry.email}
+                </div>
+                <div className="font-mono text-slate-700 dark:text-slate-200">
+                  {printInquiry.phoneOrWhatsApp || "N/A"}
+                </div>
+                <div className="text-slate-500 font-semibold uppercase text-[10px]">
+                  {t("inq.status_label", "Status:")}{" "}
+                  {translateInquiryStatus(printInquiry.status, locale)}
+                </div>
               </div>
 
               <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 space-y-1">
-                <span className="text-[10px] uppercase font-bold text-slate-400">Category of Interest</span>
-                <div className="font-bold text-slate-900 dark:text-white">{printInquiry.interestedCategory || "General Scrap"}</div>
+                <span className="text-[10px] uppercase font-bold text-slate-400">
+                  {t("inq.category_interest", "Category of Interest")}
+                </span>
+                <div className="font-bold text-slate-900 dark:text-white">
+                  {translateCommodityCategory(printInquiry.interestedCategory, locale)}
+                </div>
               </div>
 
               <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 space-y-1">
-                <span className="text-[10px] uppercase font-bold text-slate-400">Estimated Volume</span>
-                <div className="font-bold text-slate-900 dark:text-white">{printInquiry.estimatedQty || "Not specified"}</div>
+                <span className="text-[10px] uppercase font-bold text-slate-400">
+                  {t("inq.estimated_volume", "Estimated Volume")}
+                </span>
+                <div className="font-bold text-slate-900 dark:text-white">
+                  {printInquiry.estimatedQty ||
+                    t("inq.not_specified", "Not specified")}
+                </div>
               </div>
             </div>
 
             {/* Message */}
             <div className="space-y-1 text-xs">
-              <span className="text-[10px] uppercase font-bold text-slate-400">Original Inquiry Message:</span>
+              <span className="text-[10px] uppercase font-bold text-slate-400">
+                {t("inq.original_message", "Original Inquiry Message:")}
+              </span>
               <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-200 whitespace-pre-wrap">
                 {printInquiry.message}
               </div>
@@ -741,8 +905,13 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
             {/* Internal Notes / Terms */}
             {printInquiry.adminNotes && (
               <div className="space-y-1 text-xs">
-                <span className="text-[10px] uppercase font-bold text-slate-400">Official Quotation Terms & Assay Record:</span>
-                <div className="p-3.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-slate-800 dark:text-slate-200 whitespace-pre-wrap font-sans">
+                <span className="text-[10px] uppercase font-bold text-slate-400">
+                  {t(
+                    "inq.official_quotation_terms",
+                    "Official Quotation Terms & Assay Record:"
+                  )}
+                </span>
+                <div className="p-3.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-slate-800 dark:text-slate-200 whitespace-pre-wrap">
                   {printInquiry.adminNotes}
                 </div>
               </div>
@@ -753,17 +922,17 @@ export function AdminInquiryPipeline({ initialInquiries }: { initialInquiries: I
               <button
                 type="button"
                 onClick={() => setPrintInquiry(null)}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
               >
-                Close
+                {t("inq.close", "Close")}
               </button>
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition flex items-center gap-1.5"
+                className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition flex items-center gap-1.5 cursor-pointer"
               >
                 <Printer className="w-3.5 h-3.5" />
-                <span>Print Dossier Slip</span>
+                <span>{t("inq.print_slip_btn", "Print Dossier Slip")}</span>
               </button>
             </div>
           </div>

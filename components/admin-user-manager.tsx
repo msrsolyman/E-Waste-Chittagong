@@ -22,6 +22,7 @@ import {
   Power,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import { useAdminLocale } from "@/lib/admin-i18n";
 
 export interface UserItem {
   id: string;
@@ -59,6 +60,7 @@ export function AdminUserManager({
   initialUsers: UserItem[];
   currentUserId?: string;
 }) {
+  const { t, locale } = useAdminLocale();
   const [users, setUsers] = React.useState<UserItem[]>(initialUsers);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [roleFilter, setRoleFilter] = React.useState<"ALL" | "SUPER_ADMIN" | "CONTENT_MANAGER">("ALL");
@@ -284,7 +286,7 @@ export function AdminUserManager({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search administrators by name or email..."
+              placeholder={t("users.search_placeholder", "Search administrators by name or email...")}
               className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm"
             />
             {searchQuery && (
@@ -301,35 +303,43 @@ export function AdminUserManager({
           <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl text-xs overflow-x-auto">
             <button
               onClick={() => setRoleFilter("ALL")}
-              className={`px-2.5 py-1 rounded-lg font-medium transition ${
+              className={`px-2.5 py-1 rounded-lg font-medium transition cursor-pointer ${
                 roleFilter === "ALL"
                   ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
-              All Roles ({users.length})
+              {locale === "bn" ? `সব রোল (${users.length})` : `All Roles (${users.length})`}
             </button>
             <button
               onClick={() => setRoleFilter("SUPER_ADMIN")}
-              className={`px-2.5 py-1 rounded-lg font-medium transition flex items-center gap-1 ${
+              className={`px-2.5 py-1 rounded-lg font-medium transition flex items-center gap-1 cursor-pointer ${
                 roleFilter === "SUPER_ADMIN"
                   ? "bg-purple-600 text-white shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-purple-600"
               }`}
             >
               <Shield className="w-3 h-3" />
-              <span>Super Admin ({superAdminCount})</span>
+              <span>
+                {locale === "bn"
+                  ? `সুপার অ্যাডমিন (${superAdminCount})`
+                  : `Super Admin (${superAdminCount})`}
+              </span>
             </button>
             <button
               onClick={() => setRoleFilter("CONTENT_MANAGER")}
-              className={`px-2.5 py-1 rounded-lg font-medium transition flex items-center gap-1 ${
+              className={`px-2.5 py-1 rounded-lg font-medium transition flex items-center gap-1 cursor-pointer ${
                 roleFilter === "CONTENT_MANAGER"
                   ? "bg-blue-600 text-white shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-blue-600"
               }`}
             >
               <UserCheck className="w-3 h-3" />
-              <span>Content ({contentManagerCount})</span>
+              <span>
+                {locale === "bn"
+                  ? `কনটেন্ট (${contentManagerCount})`
+                  : `Content (${contentManagerCount})`}
+              </span>
             </button>
           </div>
 
@@ -337,33 +347,33 @@ export function AdminUserManager({
           <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl text-xs">
             <button
               onClick={() => setStatusFilter("ALL")}
-              className={`px-2.5 py-1 rounded-lg font-medium transition ${
+              className={`px-2.5 py-1 rounded-lg font-medium transition cursor-pointer ${
                 statusFilter === "ALL"
                   ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
               }`}
             >
-              All Status
+              {locale === "bn" ? "সব স্ট্যাটাস" : "All Status"}
             </button>
             <button
               onClick={() => setStatusFilter("ACTIVE")}
-              className={`px-2 py-1 rounded-lg font-medium transition ${
+              className={`px-2 py-1 rounded-lg font-medium transition cursor-pointer ${
                 statusFilter === "ACTIVE"
                   ? "bg-emerald-600 text-white shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-emerald-600"
               }`}
             >
-              Active ({activeCount})
+              {locale === "bn" ? `সক্রিয় (${activeCount})` : `Active (${activeCount})`}
             </button>
             <button
               onClick={() => setStatusFilter("INACTIVE")}
-              className={`px-2 py-1 rounded-lg font-medium transition ${
+              className={`px-2 py-1 rounded-lg font-medium transition cursor-pointer ${
                 statusFilter === "INACTIVE"
                   ? "bg-red-600 text-white shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-red-600"
               }`}
             >
-              Suspended ({inactiveCount})
+              {locale === "bn" ? `নিষ্ক্রিয় (${inactiveCount})` : `Suspended (${inactiveCount})`}
             </button>
           </div>
         </div>
@@ -372,10 +382,14 @@ export function AdminUserManager({
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsAdding(!isAdding)}
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition active:scale-[0.98]"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition active:scale-[0.98] cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            <span>{isAdding ? "Cancel Registration" : "Register Administrator"}</span>
+            <span>
+              {isAdding
+                ? (locale === "bn" ? "নিবন্ধন বাতিল" : "Cancel Registration")
+                : (locale === "bn" ? "কর্মকর্তা নিবন্ধন" : "Register Administrator")}
+            </span>
           </button>
         </div>
       </div>
@@ -508,14 +522,22 @@ export function AdminUserManager({
       <div className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm">
         <div className="p-3.5 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200/60 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
           <span>
-            Showing <strong>{filteredUsers.length}</strong> of <strong>{users.length}</strong> registered accounts
+            {locale === "bn" ? (
+              <>
+                মোট <strong>{users.length}</strong> টির মধ্যে <strong>{filteredUsers.length}</strong> টি অ্যাকাউন্ট প্রদর্শিত হচ্ছে
+              </>
+            ) : (
+              <>
+                Showing <strong>{filteredUsers.length}</strong> of <strong>{users.length}</strong> registered accounts
+              </>
+            )}
           </span>
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="text-emerald-600 hover:underline text-[11px]"
+              className="text-emerald-600 hover:underline text-[11px] cursor-pointer"
             >
-              Clear search filter
+              {t("inq.reset_filters", "Clear search filter")}
             </button>
           )}
         </div>
@@ -524,11 +546,11 @@ export function AdminUserManager({
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200/60 dark:border-slate-800">
               <tr>
-                <th className="py-3 px-4">Name & Email</th>
-                <th className="py-3 px-4">Role Privileges</th>
-                <th className="py-3 px-4">Account Status</th>
-                <th className="py-3 px-4">Registered Date</th>
-                <th className="py-3 px-4 text-right">Administrative Actions</th>
+                <th className="py-3 px-4">{locale === "bn" ? "কর্মকর্তা ও ইমেইল" : "Name & Email"}</th>
+                <th className="py-3 px-4">{locale === "bn" ? "পদবী ও অনুমতি" : "Role Privileges"}</th>
+                <th className="py-3 px-4">{locale === "bn" ? "অ্যাকাউন্ট স্ট্যাটাস" : "Account Status"}</th>
+                <th className="py-3 px-4">{locale === "bn" ? "নিবন্ধন তারিখ" : "Registered Date"}</th>
+                <th className="py-3 px-4 text-right">{locale === "bn" ? "অ্যাকশন" : "Administrative Actions"}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">

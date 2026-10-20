@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { AdminProductsTable } from "@/components/admin-products-table";
+import { AdminPageHeader } from "@/components/admin-page-header";
 import { Package } from "lucide-react";
 
 export default async function AdminProductsPage() {
@@ -26,17 +27,13 @@ export default async function AdminProductsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
-            <Package className="w-6 h-6 text-emerald-600" />
-            <span>Product Catalogue Management</span>
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Manage electronic scrap listings, update 4-language technical descriptions, toggle draft/published/featured status, and clone listings.
-          </p>
-        </div>
-      </div>
+      <AdminPageHeader
+        icon={<Package className="w-6 h-6 text-emerald-600" />}
+        titleKey="page.products.title"
+        defaultTitle="Product Catalogue Management"
+        subtitleKey="page.products.subtitle"
+        defaultSubtitle="Manage electronic scrap listings, update 4-language technical descriptions, toggle draft/published/featured status, and clone listings."
+      />
 
       <AdminProductsTable initialProducts={products} categories={categories} />
     </div>
