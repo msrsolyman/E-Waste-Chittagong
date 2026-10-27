@@ -143,102 +143,89 @@ export default function LeafletWorldMapInner({
 
     ctgMarker.addTo(markersLayer);
 
-    // 2. Buyer Countries and Cities (Strictly driven by live database countryStats)
+    // 2. Verified International Buyer Countries & Trade Routes
+    // Strictly driven by live database countryStats (excluding domestic mock routes)
+    const activeCountriesWithVisitors = countryStats.filter(
+      (c) => c.visitors > 0 && c.code.toUpperCase() !== "BD"
+    );
     const activeCountryCodes = new Set(
-      countryStats.length > 0
-        ? ["BD", ...countryStats.map((c) => c.code.toUpperCase())]
-        : ["BD"]
+      activeCountriesWithVisitors.map((c) => c.code.toUpperCase())
     );
     const buyerCountriesList = Object.values(GIS_BUYER_COUNTRIES).filter((country) =>
       activeCountryCodes.has(country.code.toUpperCase())
     );
 
     buyerCountriesList.forEach((country) => {
-      // Filter logic
       const isSelected = selectedCountryCode === country.code;
+      const stat = countryStats.find((s) => s.code.toUpperCase() === country.code.toUpperCase());
 
-      country.cities.forEach((city) => {
-        if (activeFilter === "top" && city.visitors < 200) return;
-        if (activeFilter === "active" && city.inquiries === 0) return;
+      // Target coordinates for buyer country
+      const targetLat = country.lat || (country.cities[0]?.lat ?? 25);
+      const targetLon = country.lon || (country.cities[0]?.lon ?? 50);
 
-        // Trade route line from Chittagong to city
-        if (!city.isHq) {
-          const latlngs: [number, number][] = [
-            [CHITTAGONG_EPICENTER.lat, CHITTAGONG_EPICENTER.lon],
-            [city.lat, city.lon],
-          ];
+      // Trade route line strictly from Chittagong to verified buyer country
+      const latlngs: [number, number][] = [
+        [CHITTAGONG_EPICENTER.lat, CHITTAGONG_EPICENTER.lon],
+        [targetLat, targetLon],
+      ];
 
-          const polyline = L.polyline(latlngs, {
-            color: isSelected ? "#38bdf8" : "#10b981",
-            weight: isSelected ? 2.5 : 1.2,
-            opacity: isSelected ? 0.9 : 0.4,
-            className: "trade-route-line",
-          });
+      const polyline = L.polyline(latlngs, {
+        color: isSelected ? "#38bdf8" : "#10b981",
+        weight: isSelected ? 2.5 : 1.5,
+        opacity: isSelected ? 0.95 : 0.6,
+        className: "trade-route-line",
+      });
 
-          polyline.addTo(routesLayer);
-        }
+      polyline.addTo(routesLayer);
 
-        // City Marker
-        const isCitySelected = selectedCityId === city.id;
-        const cityIcon = L.divIcon({
-          className: "custom-leaflet-icon",
-          html: `
-            <div class="marker-beacon-city">
-              <div class="w-3.5 h-3.5 rounded-full ${
-                city.isHq
-                  ? "bg-amber-400 border border-white"
-                  : isCitySelected
-                  ? "bg-cyan-400 border-2 border-white shadow-[0_0_12px_#38bdf8] scale-125"
-                  : isSelected
-                  ? "bg-emerald-400 border border-white"
-                  : "bg-emerald-500/90 border border-slate-900"
-              } transition-transform duration-300"></div>
-            </div>
-          `,
-          iconSize: [20, 20],
-          iconAnchor: [10, 10],
-        });
-
-        const marker = L.marker([city.lat, city.lon], {
-          icon: cityIcon,
-          zIndexOffset: isCitySelected ? 500 : 100,
-        });
-
-        marker.bindTooltip(
-          `
-          <div style="padding: 10px 14px; font-family: inherit;">
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-              <span style="font-size: 14px;">${country.flag}</span>
-              <span style="font-weight: 800; font-size: 13px; color: #f8fafc;">${city.nameBn}</span>
-            </div>
-            <div style="font-size: 11px; color: #38bdf8; font-weight: 600; margin-top: 2px;">
-              ${city.roleBn}
-            </div>
-            <div style="margin-top: 8px; display: flex; align-items: center; gap: 10px; font-size: 10px; color: #94a3b8; border-top: 1px solid rgba(51, 65, 85, 0.4); padding-top: 6px;">
-              <span>লাইভ ভিজিটর: <strong style="color: #34d399;">${city.visitors.toLocaleString()} সেশন</strong></span>
-              ${
-                city.inquiries > 0
-                  ? `<span>কোটেশন: <strong style="color: #a855f7;">${city.inquiries} টি RFQ</strong></span>`
-                  : ""
-              }
+      // Marker for buyer country
+      const countryIcon = L.divIcon({
+        className: "custom-leaflet-icon",
+        html: `
+          <div class="marker-beacon-city">
+            <div class="w-5 h-5 rounded-full ${
+              isSelected
+                ? "bg-cyan-400 border-2 border-white shadow-[0_0_14px_#38bdf8] scale-125"
+                : "bg-emerald-500 border-2 border-white shadow-[0_0_8px_rgba(16,185,129,0.8)]"
+            } transition-transform duration-300 flex items-center justify-center text-[10px]">
+              ${country.flag}
             </div>
           </div>
-          `,
-          { direction: "top", offset: [0, -10], opacity: 1 }
-        );
-
-        marker.on("click", () => {
-          onSelectCountryCode(country.code);
-          onSelectCityId(city.id);
-          map.flyTo([city.lat, city.lon], Math.max(map.getZoom(), 7), {
-            duration: 1,
-          });
-        });
-
-        marker.addTo(markersLayer);
+        `,
+        iconSize: [22, 22],
+        iconAnchor: [11, 11],
       });
+
+      const marker = L.marker([targetLat, targetLon], {
+        icon: countryIcon,
+        zIndexOffset: isSelected ? 500 : 100,
+      });
+
+      marker.bindTooltip(
+        `
+        <div style="padding: 10px 14px; font-family: inherit;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13px; color: #fff;">
+              <span>${country.flag}</span>
+              <span>${country.name} (${country.nameBn})</span>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: #38bdf8; margin-top: 4px; font-weight: 700;">
+            ${stat ? stat.visitors : 0} লাইভ ভিজিটর • ${stat ? stat.inquiries : 0} RFQ
+          </div>
+        </div>
+        `,
+        { direction: "top", offset: [0, -10], opacity: 1 }
+      );
+
+      marker.on("click", () => {
+        onSelectCountryCode(country.code);
+        map.flyTo([targetLat, targetLon], country.defaultZoom || 5, { duration: 1.2 });
+      });
+
+      marker.addTo(markersLayer);
     });
-  }, [selectedCountryCode, selectedCityId, activeFilter, onSelectCountryCode, onSelectCityId]);
+  }, [selectedCountryCode, selectedCityId, activeFilter, onSelectCountryCode, onSelectCityId, countryStats]);
 
   // Handle external flyTo requests (e.g. clicking country pill or city button)
   useEffect(() => {

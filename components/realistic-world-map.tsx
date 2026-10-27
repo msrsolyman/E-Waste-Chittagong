@@ -67,11 +67,7 @@ export function RealisticWorldMap({
     lat: number;
     lon: number;
     zoom: number;
-  } | null>({
-    lat: CHITTAGONG_EPICENTER.lat,
-    lon: CHITTAGONG_EPICENTER.lon,
-    zoom: 6,
-  });
+  } | null>(null);
 
   // Sync with parent selectedHub if provided
   useEffect(() => {
