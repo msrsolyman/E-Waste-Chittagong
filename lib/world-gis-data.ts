@@ -758,6 +758,70 @@ export const GIS_BUYER_COUNTRIES: Record<string, GisCountryDetail> = {
     "overviewBn": "লন্ডন মেটাল এক্সচেঞ্জ (LME) লিঙ্কড আন্তর্জাতিক ট্রেডিং ও নন-ফেরাস কমোডিটি সোর্সিং।",
     "overviewEn": "London Metal Exchange (LME) linked international trading and non-ferrous commodity sourcing desk.",
     "pathD": "M486.197,84.463L484.534,83.873L483.156,83.917L483.67,82.387L483.276,80.862L485.133,80.747L487.449,82.503ZM493.088,85.79L493.096,85.79L493.442,84.129L491.985,82.373L491.954,82.334L489.278,81.833L488.772,81.064L489.608,79.797L488.899,79.017L487.68,80.353L487.627,77.632L486.571,76.199L487.458,73.304L489.207,71.044L490.924,71.265L493.528,71.034L491.155,74.046L493.374,73.663L495.748,73.677L495.157,75.956L493.151,78.481L495.417,78.663L495.588,78.959L497.531,82.305L499.046,82.763L500.414,86.018L501.053,87.15L503.776,87.7L503.516,89.544L502.368,90.389L503.281,91.883L501.247,93.406L498.214,93.376L494.337,94.178L493.28,93.607L491.76,94.967L489.659,94.636L488.033,95.751L486.833,95.169L490.235,92.114L492.276,91.491L492.26,91.486L488.737,91.006L488.124,89.856L490.504,88.963L489.309,87.408L489.772,85.529Z"
+  },
+  "FR": {
+    "code": "FR",
+    "name": "France",
+    "nameBn": "ফ্রান্স",
+    "flag": "🇫🇷",
+    "lat": 46.2276,
+    "lon": 2.2137,
+    "defaultZoom": 5,
+    "centroid": { "x": 480, "y": 88 },
+    "zoomBounds": { "x": 460, "y": 70, "width": 50, "height": 50 },
+    "cities": [
+      {
+        "id": "fr-par",
+        "name": "Paris / Lille",
+        "nameBn": "প্যারিস ও লিল (Paris / Lille)",
+        "role": "Western European WEEE & Telecom Recycling Intake",
+        "roleBn": "পশ্চিম ইউরোপীয় টেলিকম ও ইলেকট্রনিক্স স্ক্র্যাপ ইনটেক",
+        "lat": 48.8566,
+        "lon": 2.3522,
+        "x": 482.0,
+        "y": 89.0,
+        "isHq": false,
+        "visitors": 3,
+        "inquiries": 0,
+        "primaryMaterial": "European Telecom & Server PCB Scrap",
+        "primaryMaterialBn": "ইউরোপীয় টেলিকম ও সার্ভার পিসিবি স্ক্র্যাপ"
+      }
+    ],
+    "overviewBn": "ইউরোপীয় টেক রিফাইনিং ও সার্কুলার মেটালস লজিস্টিক চ্যানেল।",
+    "overviewEn": "European tech refining and circular non-ferrous recovery desk.",
+    "pathD": "M485,90 L490,92 L488,96 L482,94 Z"
+  },
+  "CA": {
+    "code": "CA",
+    "name": "Canada",
+    "nameBn": "কানাডা",
+    "flag": "🇨🇦",
+    "lat": 56.1304,
+    "lon": -106.3468,
+    "defaultZoom": 4,
+    "centroid": { "x": 210, "y": 65 },
+    "zoomBounds": { "x": 150, "y": 40, "width": 120, "height": 80 },
+    "cities": [
+      {
+        "id": "ca-mon",
+        "name": "Montréal / Toronto",
+        "nameBn": "মন্ট্রিল ও টরন্টো",
+        "role": "North American Clean Electronics Recovery Corridor",
+        "roleBn": "উত্তর আমেরিকান মেটালস রিকভারি করিডোর",
+        "lat": 45.5017,
+        "lon": -73.5673,
+        "x": 235.0,
+        "y": 75.0,
+        "isHq": false,
+        "visitors": 1,
+        "inquiries": 0,
+        "primaryMaterial": "High-Grade Electronics Refining Lots",
+        "primaryMaterialBn": "উচ্চ গ্রেডের ইলেকট্রনিক্স রিফাইনিং লট"
+      }
+    ],
+    "overviewBn": "কানাডিয়ান হাই-টেক মেটালার্নি ও এন্টারপ্রাইজ স্ক্র্যাপ চ্যানেল।",
+    "overviewEn": "Canadian high-tech metallurgy and enterprise scrap logistics channel.",
+    "pathD": "M200,60 L240,60 L230,80 L190,75 Z"
   }
 };
 

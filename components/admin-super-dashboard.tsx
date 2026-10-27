@@ -37,52 +37,23 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
   const [hoveredHub, setHoveredHub] = useState<CountryStat | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<CountryStat | null>(null);
 
-  // Time filter handler
-  const handleTimeRangeChange = (range: "today" | "7d" | "30d" | "all") => {
+  const [isLoadingRange, setIsLoadingRange] = useState(false);
+
+  // Time filter handler - dynamically queries real live analytics
+  const handleTimeRangeChange = async (range: "today" | "7d" | "30d" | "all") => {
     setTimeRange(range);
-    const multiplier =
-      range === "today"
-        ? 0.05
-        : range === "7d"
-        ? 0.28
-        : range === "30d"
-        ? 1.0
-        : 1.45;
-
-    // Recalculate view dynamically
-    const updatedCountries = initialData.countryStats.map((c) => {
-      const visitors = Math.max(1, Math.round(c.visitors * multiplier));
-      const inquiries =
-        range === "today"
-          ? Math.min(1, Math.round(c.inquiries * multiplier))
-          : Math.max(1, Math.round(c.inquiries * multiplier));
-      const conversionRate = Number(((inquiries / visitors) * 100).toFixed(2));
-      return {
-        ...c,
-        visitors,
-        inquiries,
-        conversionRate,
-      };
-    });
-
-    const totalVisitors = updatedCountries.reduce((sum, c) => sum + c.visitors, 0);
-    updatedCountries.forEach((c) => {
-      c.share = Number(((c.visitors / totalVisitors) * 100).toFixed(1));
-    });
-
-    const updatedCities = initialData.cityHubs.map((h) => ({
-      ...h,
-      visitors: Math.max(1, Math.round(h.visitors * multiplier)),
-      inquiries: Math.max(1, Math.round(h.inquiries * multiplier)),
-    }));
-
-    setData({
-      ...data,
-      timeRange: range,
-      totalVisitors,
-      countryStats: updatedCountries,
-      cityHubs: updatedCities,
-    });
+    setIsLoadingRange(true);
+    try {
+      const res = await fetch(`/api/admin/analytics?range=${range}`);
+      if (res.ok) {
+        const liveData: SuperDashboardData = await res.json();
+        setData(liveData);
+      }
+    } catch (err) {
+      console.error("[Live Analytics Fetch Error]:", err);
+    } finally {
+      setIsLoadingRange(false);
+    }
   };
 
   const chittagongPort = CHITTAGONG_EPICENTER;
@@ -91,8 +62,9 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
   const trendMax = Math.max(...data.dailyTrends.map((d) => d.visitors), 10);
   const chartWidth = 800;
   const chartHeight = 160;
+  const divisor = Math.max(1, data.dailyTrends.length - 1);
   const points = data.dailyTrends.map((d, i) => {
-    const x = (i / (data.dailyTrends.length - 1)) * chartWidth;
+    const x = (i / divisor) * chartWidth;
     const y = chartHeight - (d.visitors / trendMax) * (chartHeight - 30) - 15;
     return `${x},${y}`;
   });
@@ -358,7 +330,16 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
-                  {data.countryStats.map((c, index) => (
+                  {data.countryStats.length === 0 ? (
+                    <tr>
+                      <td colSpan={8} className="py-12 text-center text-xs text-slate-400">
+                        {locale === "bn"
+                          ? "এই সময়ের মধ্যে কোনো আন্তর্জাতিক ভিজিটর লগ পাওয়া যায়নি।"
+                          : "No international visitor records tracked in this time range."}
+                      </td>
+                    </tr>
+                  ) : (
+                    data.countryStats.map((c, index) => (
                     <tr
                       key={c.code}
                       onClick={() => setSelectedCountry(c)}
@@ -426,8 +407,9 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
                         </div>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
+                  ))
+                )}
+              </tbody>
               </table>
             </div>
           </div>
@@ -436,22 +418,29 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
 
       {/* Tab 3: Major Commercial City Hubs with Click Action */}
       {activeTab === "cities" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-          {data.cityHubs.map((hub) => {
-            const matchedCountry = data.countryStats.find((c) => c.name === hub.country);
+        data.cityHubs.length === 0 ? (
+          <div className="p-12 text-center rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 text-xs text-slate-400">
+            {locale === "bn"
+              ? "এই সময়ের জন্য কোনো সক্রিয় বাণিজ্যিক হাব ডেটা রেকর্ড করা নেই।"
+              : "No commercial city hubs recorded in this time range."}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            {data.cityHubs.map((hub) => {
+              const matchedCountry = data.countryStats.find((c) => c.name === hub.country);
 
-            return (
-              <div
-                key={hub.city}
-                onClick={() => {
-                  if (matchedCountry) {
-                    setSelectedCountry(matchedCountry);
-                    setActiveTab("map");
-                  }
-                }}
-                className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 hover:shadow-md transition-all space-y-2.5 cursor-pointer group"
-              >
-                <div className="flex items-center justify-between">
+              return (
+                <div
+                  key={hub.city}
+                  onClick={() => {
+                    if (matchedCountry) {
+                      setSelectedCountry(matchedCountry);
+                      setActiveTab("map");
+                    }
+                  }}
+                  className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 hover:shadow-md transition-all space-y-2.5 cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{hub.flag}</span>
                     <div>
@@ -502,7 +491,7 @@ export function AdminSuperDashboard({ initialData }: AdminSuperDashboardProps) {
             );
           })}
         </div>
-      )}
+      ))}
 
       {/* Tab 4: Traffic Velocity Trend Curve */}
       {activeTab === "trends" && (
