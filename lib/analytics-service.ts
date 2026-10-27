@@ -335,7 +335,7 @@ export async function getSuperDashboardData(
 
   let dbVisitorLogsCount = 0;
   let dbInquiryCountsByCountry: Record<string, number> = {};
-  let totalInquiriesInDb = 23;
+  let totalInquiriesInDb = 0;
   let dbInquiriesByCountry: Record<string, CountryInquiryItem[]> = {};
 
   try {
@@ -347,7 +347,7 @@ export async function getSuperDashboardData(
           _count: { id: true },
         })
         .catch(() => []),
-      prisma.inquiry.count().catch(() => 23),
+      prisma.inquiry.count().catch(() => 0),
       prisma.inquiry
         .findMany({
           select: {
@@ -569,21 +569,16 @@ export async function getSuperDashboardData(
   // Build Country Stats scaled by timeRange
   const countryStats: CountryStat[] = BASELINE_COUNTRIES.map((c) => {
     const rawVisitors = Math.max(1, Math.round(c.visitors * multiplier));
-    // Check if DB has direct inquiry count for this country
-    const matchedInquiries =
-      dbInquiryCountsByCountry[c.name] ??
-      (timeRange === "today"
-        ? Math.min(1, Math.round(c.inquiries * multiplier))
-        : Math.max(1, Math.round(c.inquiries * multiplier)));
+    // Live inquiry count for this country directly from database
+    const matchedInquiries = dbInquiryCountsByCountry[c.name] ?? 0;
 
     const conversionRate = Number(
       ((matchedInquiries / rawVisitors) * 100).toFixed(2)
     );
 
-    // Merge database leads with baseline leads
+    // Only live database inquiries for each country
     const dbLeadsForCountry = dbInquiriesByCountry[c.name] || [];
-    const baselineLeadsForCountry = BASELINE_LEADS[c.name] || [];
-    const mergedLeads = [...dbLeadsForCountry, ...baselineLeadsForCountry].slice(0, 5);
+    const mergedLeads = dbLeadsForCountry.slice(0, 5);
 
     return {
       ...c,

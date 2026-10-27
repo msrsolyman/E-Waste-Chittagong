@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { routing } from "@/i18n/routing";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ewastechittagong.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.ewastechittagong.com";
 
   const staticRoutes = [
     "",
