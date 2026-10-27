@@ -10,6 +10,8 @@ import {
   type GisCountryDetail,
 } from "@/lib/world-gis-data";
 
+import type { CountryStat } from "@/lib/analytics-service";
+
 interface LeafletWorldMapInnerProps {
   selectedCountryCode: string | null;
   onSelectCountryCode: (code: string | null) => void;
@@ -17,6 +19,7 @@ interface LeafletWorldMapInnerProps {
   onSelectCityId: (cityId: string | null) => void;
   flyToTarget: { lat: number; lon: number; zoom: number } | null;
   activeFilter?: "all" | "top" | "active";
+  countryStats?: CountryStat[];
 }
 
 export default function LeafletWorldMapInner({
@@ -26,6 +29,7 @@ export default function LeafletWorldMapInner({
   onSelectCityId,
   flyToTarget,
   activeFilter = "all",
+  countryStats = [],
 }: LeafletWorldMapInnerProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
@@ -139,8 +143,15 @@ export default function LeafletWorldMapInner({
 
     ctgMarker.addTo(markersLayer);
 
-    // 2. Buyer Countries and Cities
-    const buyerCountriesList = Object.values(GIS_BUYER_COUNTRIES);
+    // 2. Buyer Countries and Cities (Strictly driven by live database countryStats)
+    const activeCountryCodes = new Set(
+      countryStats.length > 0
+        ? ["BD", ...countryStats.map((c) => c.code.toUpperCase())]
+        : ["BD"]
+    );
+    const buyerCountriesList = Object.values(GIS_BUYER_COUNTRIES).filter((country) =>
+      activeCountryCodes.has(country.code.toUpperCase())
+    );
 
     buyerCountriesList.forEach((country) => {
       // Filter logic

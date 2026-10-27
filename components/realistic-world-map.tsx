@@ -192,26 +192,36 @@ export function RealisticWorldMap({
           <Navigation className="w-3 h-3 text-emerald-400" />
           {t("map.export_hubs")}
         </span>
-        {Object.values(GIS_BUYER_COUNTRIES).map((country) => {
-          const isActive = selectedCountryCode === country.code;
-          const countryDisplayName = locale === "en" ? country.name : country.nameBn;
-
-          return (
-            <button
-              key={country.code}
-              type="button"
-              onClick={() => handleCountryClick(country)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
-                isActive
-                  ? "bg-emerald-600 text-white shadow-lg shadow-emerald-900/40 border border-emerald-400/50 scale-105"
-                  : "bg-slate-900/90 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800"
-              }`}
-            >
-              <span>{country.flag}</span>
-              <span>{countryDisplayName}</span>
-            </button>
+        {(() => {
+          const liveCodes = new Set(
+            countryStats.length > 0
+              ? ["BD", ...countryStats.map((c) => c.code.toUpperCase())]
+              : ["BD"]
           );
-        })}
+          const displayed = Object.values(GIS_BUYER_COUNTRIES).filter((c) =>
+            liveCodes.has(c.code.toUpperCase())
+          );
+          return displayed.map((country) => {
+            const isActive = selectedCountryCode === country.code;
+            const countryDisplayName = locale === "en" ? country.name : country.nameBn;
+
+            return (
+              <button
+                key={country.code}
+                type="button"
+                onClick={() => handleCountryClick(country)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                  isActive
+                    ? "bg-emerald-600 text-white shadow-lg shadow-emerald-900/40 border border-emerald-400/50 scale-105"
+                    : "bg-slate-900/90 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800"
+                }`}
+              >
+                <span>{country.flag}</span>
+                <span>{countryDisplayName}</span>
+              </button>
+            );
+          });
+        })()}
       </div>
 
       {/* Main Split-Screen Architecture: 100% Unobstructed Map on Left, Dedicated Intel Panel on Right */}
@@ -258,6 +268,7 @@ export function RealisticWorldMap({
           {/* Leaflet Map Component */}
           <LeafletWorldMapInner
             selectedCountryCode={selectedCountryCode}
+            countryStats={countryStats}
             onSelectCountryCode={(code) => {
               if (code) {
                 setSelectedCountryCode(code);
@@ -339,7 +350,7 @@ export function RealisticWorldMap({
                     {t("panel.live_sessions")}
                   </span>
                   <p className="text-base sm:text-lg font-black text-emerald-400 mt-0.5">
-                    {activeStat ? activeStat.visitors.toLocaleString() : "1,200+"}
+                    {activeStat ? activeStat.visitors.toLocaleString() : "0"}
                   </p>
                   <span className="text-[9px] text-emerald-500 font-semibold flex items-center gap-0.5">
                     <TrendingUp className="w-2.5 h-2.5" />
@@ -352,7 +363,7 @@ export function RealisticWorldMap({
                     {t("panel.quotations")}
                   </span>
                   <p className="text-base sm:text-lg font-black text-purple-400 mt-0.5">
-                    {activeStat ? `${activeStat.inquiries} RFQ` : "2 RFQ"}
+                    {activeStat ? `${activeStat.inquiries} RFQ` : "0 RFQ"}
                   </p>
                   <span className="text-[9px] text-purple-400 font-semibold flex items-center gap-0.5">
                     <Sparkles className="w-2.5 h-2.5" />
@@ -372,7 +383,7 @@ export function RealisticWorldMap({
                               1)) *
                           100
                         ).toFixed(1)}%`
-                      : "8.5%"}
+                      : "0%"}
                   </p>
                   <span className="text-[9px] text-cyan-400 font-semibold">
                     {t("panel.global_share")}
