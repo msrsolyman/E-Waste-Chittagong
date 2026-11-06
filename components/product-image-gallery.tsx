@@ -3,6 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { ShieldCheck } from "lucide-react";
+import { trackMetaEvent } from "@/lib/meta-pixel";
 
 export function ProductImageGallery({
   images,
@@ -14,6 +15,14 @@ export function ProductImageGallery({
   verifiedText?: string;
 }) {
   const [selectedImage, setSelectedImage] = React.useState<string>(images[0] || "/images/products/pcb-motherboards.jpg");
+
+  React.useEffect(() => {
+    trackMetaEvent("ViewContent", {
+      content_name: title,
+      content_type: "product",
+      content_category: "Electronic Scrap Lot",
+    });
+  }, [title]);
 
   return (
     <div className="space-y-3">

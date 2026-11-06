@@ -4,6 +4,7 @@ import * as React from "react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/routing";
+import { trackMetaEvent } from "@/lib/meta-pixel";
 import {
   Send,
   CheckCircle2,
@@ -94,6 +95,13 @@ function InquiryFormInner({ defaultProductSlug }: { defaultProductSlug?: string 
       }
 
       setSuccessReference(data.referenceNo);
+      trackMetaEvent("Lead", {
+        content_name: formData.interestedCategory || "General Commercial RFQ",
+        content_category: "E-Waste B2B Sourcing",
+        currency: "USD",
+        country: formData.country || "Global",
+        reference_no: data.referenceNo,
+      });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "An unexpected error occurred.";
       setErrorMessage(msg);
